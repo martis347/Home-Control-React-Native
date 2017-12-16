@@ -11,8 +11,14 @@ export default class RootComponent extends Component {
   render() {
     return (
       <ThemeProvider uiTheme={{palette: {}}}>
-        <View style={{flex: 1, flexDirection: 'column', backgroundColor: 'powderblue'}}>
-          <LightningCard></LightningCard>
+        <View style={{flex: 1, backgroundColor: 'gray'}}>
+          <View style={{flex: 8, flexDirection: 'column'}}>
+            <LightningCard></LightningCard>
+          </View>
+          <View style={{flex: 7}}>
+          </View>
+          <View style={{flex: 7}}>
+          </View>
         </View>
       </ThemeProvider>
     );

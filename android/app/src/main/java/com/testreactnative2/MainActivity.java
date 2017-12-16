@@ -1,4 +1,4 @@
-package com.testreactnative2;
+package com.homecontrol;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "testReactNative2";
+        return "homecontrol";
     }
 }

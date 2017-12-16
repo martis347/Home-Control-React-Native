@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Data from '../data';
 import RGBIndicator from './RGBIndicator';
 import CheckboxesGroup from './CheckboxesGroup';
-import PowerSwitch from './PowerSwitch';
+import PowerButton from './PowerButton';
 import Sliders from './Sliders';
 import {
   StyleSheet,
@@ -50,7 +50,7 @@ export default class LightningCard extends Component {
 
   onPowerClick = v => {
     turnedOn = v;
-    setTimeout(function() { this.setState({turnedOn}, this.sendLightningData); }.bind(this), 3000);
+    setTimeout(function() { this.setState({turnedOn}, this.sendLightningData); }.bind(this), 200);
   }
 
   sendLightningData = () => {
@@ -63,7 +63,7 @@ export default class LightningCard extends Component {
         <Text style={styles.cardTitleStyle}>Apšvietimas</Text>
         <View style={{flex: 2, flexDirection: 'row', paddingTop: 35}}>
           { turnedOn && <CheckboxesGroup width={3} checkboxes={checkboxes} updateCheckbox={this.updateCheckbox}></CheckboxesGroup> }
-          <PowerSwitch checked={this.state.turnedOn} onChange={this.onPowerClick}></PowerSwitch>
+          <PowerButton checked={this.state.turnedOn} onChange={this.onPowerClick}></PowerButton>
           { turnedOn && <Sliders width={5} sliders={sliders[this.state.activeCheckbox.id]} onValueUpdate={(newValue, slider) => this.handleUpdatedSlider(newValue, slider)}></Sliders> }
           { turnedOn && this.rgbShown() && <RGBIndicator color={this.state.rgbValues}></RGBIndicator> }
         </View>
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     paddingTop: 20,
     margin: 10,
-    height: '35%'
+    flex: 1
   },
   cardTitleStyle: {
     backgroundColor: "transparent",

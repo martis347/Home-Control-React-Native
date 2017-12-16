@@ -1,4 +1,4 @@
-package com.testreactnative2;
+package com.homecontrol;
 
 import android.app.Application;
 
