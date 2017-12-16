@@ -11,7 +11,8 @@
     "react-native": "0.51.0",
     "react-native-material-kit": "^0.5.1",
     "react-native-material-ui": "^1.18.0",
-    "react-native-vector-icons": "^4.4.2"
+    "react-native-vector-icons": "^4.4.2",
+    "reconnecting-websocket": "^3.2.2"
   },
   "devDependencies": {
     "babel-jest": "21.2.0",

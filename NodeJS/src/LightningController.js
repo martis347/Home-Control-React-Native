@@ -7,15 +7,16 @@ const lightningMessage = (request, receivers) => request => {
 		return;
 	}
 	console.log('Request received!');
-	
+
 	if(!updateState(req)) {
 		console.error('Received request did not match Interface');
 		console.log(req);
 	} else {
 		const state = getState();
 		receivers.forEach(r => {
-			r.send(JSON.stringify(state));
-			console.log('sending request to: ' + r);
+			const stateToSend = JSON.stringify(state);
+			r.send(stateToSend);
+			console.log(stateToSend);
 		});
 	}
 };
@@ -32,7 +33,7 @@ const tryParseRequest = req => {
 		console.error('Invalid JSON Received');
 		return messageObject;
 	}
-	
+
 	return messageObject;
 };
 
