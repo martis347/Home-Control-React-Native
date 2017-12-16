@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from 'react-native-material-ui';
+import { MKColor, setTheme } from 'react-native-material-kit';
 import { View, StatusBar } from 'react-native';
 import LightningCard from './LightningCard/LightningCard';
+
+setTheme({
+   primaryColor: MKColor.Cyan,
+   primaryColorRGB: MKColor.RGBPurple,
+   accentColor: MKColor.Amber,
+ });
 
 export default class RootComponent extends Component {
   constructor(props) {
