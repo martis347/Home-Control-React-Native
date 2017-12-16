@@ -4,6 +4,7 @@ import RGBIndicator from './RGBIndicator';
 import CheckboxesGroup from './CheckboxesGroup';
 import PowerButton from './PowerButton';
 import Sliders from './Sliders';
+import ApiService from '../Services/ApiService';
 import {
   StyleSheet,
   Text,
@@ -54,7 +55,7 @@ export default class LightningCard extends Component {
   }
 
   sendLightningData = () => {
-    console.log(Object.assign({}, sliders[this.state.activeCheckbox.id], {turnedOn}));
+    ApiService.updateState(Object.assign({}, turnedOn ? sliders[this.state.activeCheckbox.id] : null, {turnedOn}));
   }
 
   render() {
