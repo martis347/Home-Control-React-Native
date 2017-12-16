@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from 'react-native-material-ui';
-import { View } from 'react-native';
+import { View, StatusBar } from 'react-native';
 import LightningCard from './LightningCard/LightningCard';
 
 export default class RootComponent extends Component {
@@ -12,6 +12,7 @@ export default class RootComponent extends Component {
     return (
       <ThemeProvider uiTheme={{palette: {}}}>
         <View style={{flex: 1, backgroundColor: 'gray'}}>
+          <StatusBar hidden={true} />
           <View style={{flex: 8, flexDirection: 'column'}}>
             <LightningCard></LightningCard>
           </View>
