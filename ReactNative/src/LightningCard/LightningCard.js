@@ -9,7 +9,8 @@ import ApiService from '../Services/ApiService';
 import {
   StyleSheet,
   Text,
-  View
+  View,
+  R
 } from 'react-native';
 
 const sliders = Data.getSliders();
@@ -84,7 +85,10 @@ export default class LightningCard extends Component {
         </View> }
         { !this.state.connected &&
           <View style={styles.cardStyle}>
-            <MKSpinner style={{position: 'absolute', top: '50%', left: '45%'}}></MKSpinner>
+            <View style={{flex: 1, flexDirection: 'row', position: 'absolute', top: '50%', left: '30%'}}>
+              <MKSpinner></MKSpinner>
+              <Text style={{marginLeft: 10, marginTop: 5}}>Connecting to Server...</Text>
+            </View>
           </View> }
       </View>
     );

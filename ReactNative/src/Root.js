@@ -19,6 +19,7 @@ export default class RootComponent extends Component {
     return (
       <ThemeProvider uiTheme={{palette: {}}}>
         <View style={{flex: 1, backgroundColor: 'gray'}}>
+          <StatusBar hidden={true} />
           <View style={{flex: 8, flexDirection: 'column'}}>
             <LightningCard></LightningCard>
           </View>
