@@ -1,6 +1,6 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
-const rws = new ReconnectingWebSocket('ws://192.168.31.248:3001/ws/lightning');
+const rws = new ReconnectingWebSocket('ws://192.168.31.247:3001/ws/lightning');
 const connection = {
   open: false,
   listeners: []

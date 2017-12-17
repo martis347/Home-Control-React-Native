@@ -14,7 +14,7 @@ const lightningMessage = (request, receivers) => request => {
 	} else {
 		const state = getState();
 		receivers.forEach(r => {
-			const stateToSend = JSON.stringify(state);
+			const stateToSend = `${state.red} ${state.green} ${state.blue}`;
 			r.send(stateToSend);
 			console.log(stateToSend);
 		});
