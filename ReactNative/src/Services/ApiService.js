@@ -1,6 +1,6 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
 
-const rws = new ReconnectingWebSocket('ws://192.168.31.247:3001/ws/lightning');
+const rws = new ReconnectingWebSocket('ws://192.168.31.248:3001/ws/lightning');
 const connection = {
   open: false,
   listeners: []
@@ -14,12 +14,19 @@ const updateState = data => {
   }
 };
 
-const addConnectionListener = callback => {
-  connection.listeners.push(callback);
+const addConnectionListener = callbacks => {
+  connection.listeners.push(callbacks);
+};
+
+const removeConnectionListener = callback => {
+  var index = listeners.indexOf(callbacks);
+  if (index > -1) {
+    listeners.splice(index, 1);
+  }
 };
 
 const connectionChanged = () => {
-  connection.listeners.forEach(l => l(connection.open));
+  connection.listeners.forEach(l => l.onConnectionChanged(connection.open));
 }
 
 rws.onopen = () => {
@@ -35,6 +42,13 @@ rws.onclose = e => {
   connection.open = false;
   connectionChanged();
   console.log(e.code, e.reason);
+};
+
+rws.onmessage = m => {
+  connection.listeners.forEach(l => {
+    const message = JSON.parse(m.data);
+    l.onMessage(message)
+  });
 };
 
 export default ApiService = {

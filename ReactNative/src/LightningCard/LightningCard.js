@@ -9,48 +9,48 @@ import ApiService from '../Services/ApiService';
 import {
   StyleSheet,
   Text,
-  View,
-  R
+  View
 } from 'react-native';
-
-const sliders = Data.getSliders();
-const checkboxes = Data.getCheckboxes();
-const turnedOn = true;
 
 export default class LightningCard extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      activeCheckbox: checkboxes[0],
-      rgbValues: this.getRgbValue(),
+      activeCheckbox: Data.getCheckboxes()[0],
+      sliders: Data.getSliders()[Data.getCheckboxes()[0].id],
       turnedOn: true,
       connected: false
     };
-    this.onConnectionChanged = this.onConnectionChanged.bind(this);
+
+    this.apiServiceCallbacks = {
+      onConnectionChanged: this.onConnectionChanged,
+      onMessage: this.onMessage
+    };
   };
 
   componentDidMount() {
-    ApiService.addConnectionListener(this.onConnectionChanged);
+    ApiService.addConnectionListener(this.apiServiceCallbacks);
+  }
+
+  componentWillUnmount() {
+    ApiService.removeConnectionListener(this.apiServiceCallbacks);
   }
 
   updateCheckbox = activeCheckbox => {
-    this.setState({activeCheckbox});
-    sliders = Data.getSliders();
-    checkboxes = Data.getCheckboxes();
-    this.setState({rgbValues: this.getRgbValue()});
+    this.setState({sliders: Data.getSliders()[activeCheckbox.id], activeCheckbox});
   };
 
-  handleUpdatedSlider = (newValue, slider) => {
-    slider.value = newValue;
-    if(this.rgbShown()) {
-      this.setState({rgbValues: this.getRgbValue()});
-    }
-    this.sendLightningData();
+  handleUpdatedSlider = sliders => {
+    this.setState({sliders}, () => {
+      this.sendLightningData();
+    });
   };
 
   getRgbValue = () => {
-    return `rgb(${Math.round(sliders[1][0].value * 2.55)}, ${Math.round(sliders[1][1].value * 2.55)}, ${Math.round(sliders[1][2].value * 2.55)})`;
+    if(this.rgbShown()) {
+      return `rgb(${Math.round(this.state.sliders[0].value * 2.55)}, ${Math.round(this.state.sliders[1].value * 2.55)}, ${Math.round(this.state.sliders[2].value * 2.55)})`;
+    }
   };
 
   rgbShown = () => {
@@ -58,12 +58,20 @@ export default class LightningCard extends Component {
   };
 
   onPowerClick = v => {
-    turnedOn = v;
-    this.setState({turnedOn}, this.sendLightningData);
+    this.setState({turnedOn: v}, this.sendLightningData);
   };
 
   sendLightningData = () => {
-    ApiService.updateState(Object.assign({}, turnedOn ? { sliders: sliders[this.state.activeCheckbox.id] } : null, {turnedOn}));
+    ApiService.updateState(Object.assign({}, this.state.turnedOn ? { sliders: this.state.sliders, activeCheckbox: this.state.activeCheckbox.id } : null, {turnedOn: this.state.turnedOn}));
+  };
+
+  onMessage = message => {
+    if(!message.turnedOn) {
+      this.setState({turnedOn: false});
+    } else {
+      this.setState({turnedOn: true, sliders: message.sliders, activeCheckbox: Data.getCheckboxes()[message.activeCheckbox]});
+    }
+    this.refs.sliders.updateSliders(message.sliders);
   };
 
   onConnectionChanged = newStatus => {
@@ -77,10 +85,10 @@ export default class LightningCard extends Component {
         <View style={styles.cardStyle}>
           <Text style={styles.cardTitleStyle}>Apšvietimas</Text>
           <View style={{flex: 2, flexDirection: 'row', paddingTop: 35}}>
-            { turnedOn && <CheckboxesGroup width={3} checkboxes={checkboxes} updateCheckbox={this.updateCheckbox}></CheckboxesGroup> }
+            { this.state.turnedOn && <CheckboxesGroup width={3} activeCheckbox={this.state.activeCheckbox} updateCheckbox={this.updateCheckbox}></CheckboxesGroup> }
             <PowerButton checked={this.state.turnedOn} onChange={this.onPowerClick}></PowerButton>
-            { turnedOn && <Sliders width={5} sliders={sliders[this.state.activeCheckbox.id]} onValueUpdate={(newValue, slider) => this.handleUpdatedSlider(newValue, slider)}></Sliders> }
-            { turnedOn && this.rgbShown() && <RGBIndicator color={this.state.rgbValues}></RGBIndicator> }
+            { this.state.turnedOn && <Sliders width={5} ref="sliders" activeCheckboxId={this.state.activeCheckbox.id} onValueUpdate={sliders => this.handleUpdatedSlider(sliders)}></Sliders> }
+            { this.state.turnedOn && this.rgbShown() && <RGBIndicator color={this.getRgbValue()}></RGBIndicator> }
           </View>
         </View> }
         { !this.state.connected &&

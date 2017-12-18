@@ -1,22 +1,40 @@
 import { MKSlider } from 'react-native-material-kit';
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
+import Data from '../data';
 
+const sliders = Data.getSliders();
 export default class Sliders extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      sliders: this.props.sliders
+      sliders: sliders[this.props.activeCheckboxId],
+      activeCheckboxId: this.props.activeCheckboxId
     };
   }
 
-  updateSliderValue = (newValue, slider) => {
-    this.props.onValueUpdate(newValue, slider);
+  updateSliders = sliders => {
+    this.setState({sliders});
   }
 
-  componentWillReceiveProps(props) {
-    this.setState({sliders: props.sliders});
+  updateSliderValue = (newValue, slider) => {
+    newValue = Math.round(newValue);
+    let updatedSlider = Object.assign({}, slider, {value: newValue});
+    let slidersGroup = { ...sliders };
+    const updatedSliderIndex = this.state.sliders.findIndex(s => s.id === slider.id);
+    if(updatedSliderIndex !== -1) {
+      this.state.sliders[updatedSliderIndex] = updatedSlider;
+    }
+    this.setState({sliders: this.state.sliders}, () => {
+      this.props.onValueUpdate(this.state.sliders);
+    });
+  }
+
+  componentWillReceiveProps({ activeCheckboxId }) {
+    if(this.state.activeCheckboxId !== activeCheckboxId) {
+      this.setState({ sliders: sliders[activeCheckboxId], activeCheckboxId: activeCheckboxId })
+    }
   }
 
   render() {
@@ -29,7 +47,7 @@ export default class Sliders extends Component {
               <MKSlider
                 min={0}
                 max={100}
-                step={1}
+                step={5}
                 value={slider.value}
                 onChange={newValue => this.updateSliderValue(newValue, slider)}>
               </MKSlider>
