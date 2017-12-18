@@ -3,7 +3,7 @@ const state = {
 	green: 0,
 	blue: 0
 }
-			
+
 export const getState = () => {
 	return state;
 }
@@ -12,23 +12,23 @@ export const updateState = request => {
 	if(requestIsInvalid(request)) {
 		return false;
 	}
-	
+
 	if(!request.turnedOn) {
 		state.red = 0;
 		state.green = 0;
 		state.blue = 0;
 	}
-	else if(request.sliders.every(s => s.id < 10)) {
-		state.red = Math.round(2.55 * request.sliders[0].value);
-		state.green = Math.round(2.55 * request.sliders[0].value);
-		state.blue = Math.round(2.55 * request.sliders[0].value);
+	else if(request.activeCheckbox === 0) {
+		state.red = Math.round(10.24 * request.sliders[0].value);
+		state.green = Math.round(10.24 * request.sliders[0].value);
+		state.blue = Math.round(10.24 * request.sliders[0].value);
 	}
-	else if(request.sliders.every(s => s.id > 10 && s.id < 20)) {
-		state.red = Math.round(2.55 * request.sliders[0].value);
-		state.green = Math.round(2.55 * request.sliders[1].value);
-		state.blue = Math.round(2.55 * request.sliders[2].value);
+	else if(request.activeCheckbox === 1) {
+		state.red = Math.round(10.24 * request.sliders[0].value);
+		state.green = Math.round(10.24 * request.sliders[1].value);
+		state.blue = Math.round(10.24 * request.sliders[2].value);
 	}
-	else if(request.sliders.every(s => s.id > 20 && s.id < 30)) {
+	else if(request.activeCheckbox === 2) {
 		state.red = 50;
 		state.green = 50;
 		state.blue = 50;
@@ -36,16 +36,17 @@ export const updateState = request => {
 	else {
 		return false;
 	}
-	
+
 	return true;
 }
 
 const requestIsInvalid = request => {
-	const result = 
-		request.turnedOn === undefined || 
-		(request.turnedOn === true && !Array.isArray(request.sliders)) || 
-		(Array.isArray(request.sliders) && request.sliders.some(s => isNaN(s.value) || s.value > 100 || s.value < 0));
-		
+	const result =
+		request.turnedOn === undefined ||
+		(request.turnedOn === true && !Array.isArray(request.sliders)) ||
+		(Array.isArray(request.sliders) && request.sliders.some(s => isNaN(s.value) || s.value > 100 || s.value < 0) ||
+		request.turnedOn === true && request.activeCheckbox === undefined);
+
 		return result;
 }
 

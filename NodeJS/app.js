@@ -5,16 +5,33 @@ import expressWs from 'express-ws';
 var app = express();
 const webSockets = expressWs(app);
 const lightningHandler = LightningController();
+let lightningReceivers = [];
+let lightningControllers = [];
 
 app.ws('/ws' + lightningHandler.path, (ws, req) => {
-	const receivers = webSockets.getWss('/ws' + lightningHandler.receiversPath).clients;
+	ws.on('close', () => {
+		const index = lightningReceivers.indexOf(ws);
+		if(index != -1) {
+			lightningControllers.splice(index, 1);
+		}
+		console.log('Listener to %s disconnected', lightningHandler.receiversPath);
+	});
+	console.log('Controller to %s connected', lightningHandler.path);
+	lightningControllers.push(ws);
 
-	console.log('Connection to %s established', lightningHandler.path);
-	ws.on('message', lightningHandler.message(ws, receivers));
+	ws.on('message', function(request) { lightningHandler.message(ws, request, lightningReceivers, lightningControllers) });
 })
 
 app.ws('/ws' + lightningHandler.receiversPath, (ws, req) => {
-	console.log('Connection to %s established', lightningHandler.receiversPath);
+	ws.on('close', () => {
+		const index = lightningReceivers.indexOf(ws);
+		if(index != -1) {
+			lightningReceivers.splice(index, 1);
+		}
+		console.log('Listener to %s disconnected', lightningHandler.receiversPath);
+	});
+	console.log('Listener to %s connected', lightningHandler.receiversPath);
+	lightningReceivers.push(ws);
 })
 
 app.listen(3001);

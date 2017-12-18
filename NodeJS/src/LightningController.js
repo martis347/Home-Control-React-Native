@@ -1,25 +1,29 @@
 import { getState, updateState } from './LightningState';
 
-const lightningMessage = (request, receivers) => request => {
+const lightningMessage =  (sender, request, receivers, controllers) => {
 	let req;
 	if(!(req = tryParseRequest(request))) {
 		request.send(JSON.stringify({error: 'Request Must be valid JSON'}));
 		return;
 	}
-	console.log('Request received!');
 
 	if(!updateState(req)) {
 		console.error('Received request did not match Interface');
 		console.log(req);
 	} else {
 		const state = getState();
-		receivers.forEach(r => {
+		console.log('Received: ');
+		console.log(req);
+		receivers.filter(r => r.readyState === 1).forEach(r => {
 			const stateToSend = `${state.red} ${state.green} ${state.blue}`;
 			r.send(stateToSend);
-			console.log(stateToSend);
 		});
+
+		controllers.filter(c => c.readyState === 1 && c !== sender).forEach(c => {
+			c.send(JSON.stringify(req));
+		})
 	}
-};
+}
 
 const lightningClose = () => {
 	console.log('Connection Closed!');
