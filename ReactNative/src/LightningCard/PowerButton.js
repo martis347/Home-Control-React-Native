@@ -21,6 +21,12 @@ export default class PowerButton extends Component {
     this.state.poweredOn = false;
   }
 
+  componentWillReceiveProps({checked}) {
+    if(this.state.poweredOn !== checked) {
+      this.setState({poweredOn: checked});
+    }
+  }
+
   powerOnButton = MKButton.coloredButton().withText('ĮJUNGTI').withOnPress(this.onPowerOn).build();
   powerOffButton = MKButton.coloredButton().withText('IŠJUNGTI').withOnPress(this.onPowerOff).build();
 

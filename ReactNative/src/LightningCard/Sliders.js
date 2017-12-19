@@ -14,8 +14,8 @@ export default class Sliders extends Component {
     };
   }
 
-  updateSliders = sliders => {
-    this.setState({sliders});
+  updateSliders = (sliders, callback) => {
+    this.setState({sliders}, callback);
   }
 
   updateSliderValue = (newValue, slider) => {

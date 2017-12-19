@@ -58,7 +58,16 @@ export default class LightningCard extends Component {
   };
 
   onPowerClick = v => {
-    this.setState({turnedOn: v}, this.sendLightningData);
+    const defaultSliders = Data.getSliders()[this.state.activeCheckbox.id];
+    this.setState({turnedOn: v}, () => {
+      if(v) {
+        this.refs.sliders.updateSliders(defaultSliders, () => {
+          this.sendLightningData();
+        });
+      } else {
+        this.sendLightningData();
+      }
+    });
   };
 
   sendLightningData = () => {
@@ -69,9 +78,10 @@ export default class LightningCard extends Component {
     if(!message.turnedOn) {
       this.setState({turnedOn: false});
     } else {
-      this.setState({turnedOn: true, sliders: message.sliders, activeCheckbox: Data.getCheckboxes()[message.activeCheckbox]});
+      this.setState({turnedOn: true, sliders: message.sliders, activeCheckbox: Data.getCheckboxes()[message.activeCheckbox]}, () => {
+        this.refs.sliders.updateSliders(message.sliders);
+      });
     }
-    this.refs.sliders.updateSliders(message.sliders);
   };
 
   onConnectionChanged = newStatus => {
