@@ -1,4 +1,4 @@
-import { getState, updateState } from './LightningState';
+import { getState, updateState, getLastRequest } from './LightningState';
 
 const lightningMessage =  (sender, request, receivers, controllers) => {
 	let req;
@@ -25,6 +25,19 @@ const lightningMessage =  (sender, request, receivers, controllers) => {
 	}
 }
 
+const lightningOpen = opener => {
+	if(opener.readyState === 1) {
+		opener.send(JSON.stringify(getLastRequest()));
+	}
+}
+
+const lightningListenerOpen = opener => {
+	if(opener.readyState === 1) {
+		const state = getState();
+		opener.send(JSON.stringify(`${state.red} ${state.green} ${state.blue}`));
+	}
+}
+
 const lightningClose = () => {
 	console.log('Connection Closed!');
 };
@@ -46,5 +59,7 @@ export default () => ({
 	path: '/lightning',
 	receiversPath: '/lightningReceiver',
 	message: lightningMessage,
+	open: lightningOpen,
+	openListener: lightningListenerOpen,
 	close: lightningClose
 });

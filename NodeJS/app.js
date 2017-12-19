@@ -9,6 +9,7 @@ let lightningReceivers = [];
 let lightningControllers = [];
 
 app.ws('/ws' + lightningHandler.path, (ws, req) => {
+	lightningHandler.open(ws);
 	ws.on('close', () => {
 		const index = lightningReceivers.indexOf(ws);
 		if(index != -1) {
@@ -32,6 +33,7 @@ app.ws('/ws' + lightningHandler.receiversPath, (ws, req) => {
 	});
 	console.log('Listener to %s connected', lightningHandler.receiversPath);
 	lightningReceivers.push(ws);
+	lightningHandler.openListener(ws);
 })
 
 app.listen(3001);

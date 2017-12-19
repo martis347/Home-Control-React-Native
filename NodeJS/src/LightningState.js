@@ -2,17 +2,26 @@ const state = {
 	red: 0,
 	green: 0,
 	blue: 0
-}
+};
+
+let lastRequest = {
+	turnedOn: false
+};
 
 export const getState = () => {
 	return state;
-}
+};
+
+export const getLastRequest = () => {
+	return lastRequest;
+};
 
 export const updateState = request => {
 	if(requestIsInvalid(request)) {
 		return false;
 	}
-
+	lastRequest = request;
+	
 	if(!request.turnedOn) {
 		state.red = 0;
 		state.green = 0;
