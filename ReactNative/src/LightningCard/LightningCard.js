@@ -18,7 +18,7 @@ export default class LightningCard extends Component {
 
     this.state = {
       activeCheckbox: Data.getCheckboxes()[0],
-      sliders: Data.getSliders()[Data.getCheckboxes()[0].id],
+      sliders: Data.getSliders()[0],
       turnedOn: true,
       connected: false
     };
@@ -58,8 +58,8 @@ export default class LightningCard extends Component {
   };
 
   onPowerClick = v => {
-    const defaultSliders = Data.getSliders()[this.state.activeCheckbox.id];
-    this.setState({turnedOn: v}, () => {
+    const defaultSliders = Data.getSliders()[0];
+    this.setState({turnedOn: v, activeCheckbox: (v ? Data.getCheckboxes()[0] : null)}, () => {
       if(v) {
         this.refs.sliders.updateSliders(defaultSliders, () => {
           this.sendLightningData();

@@ -25,6 +25,10 @@ export default class CheckboxesGroup extends Component {
     this.setState({ activeCheckbox })
   }
 
+  shouldComponentUpdate(_, {activeCheckbox}) {
+    return this.state.activeCheckbox !== activeCheckbox;
+  }
+
   render() {
     return (
       <View style={{flex: this.props.width, flexDirection: 'column'}}>
