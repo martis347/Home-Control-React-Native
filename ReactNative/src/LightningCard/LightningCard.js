@@ -5,7 +5,7 @@ import CheckboxesGroup from './CheckboxesGroup';
 import { MKSpinner } from 'react-native-material-kit';
 import PowerButton from './PowerButton';
 import Sliders from './Sliders';
-import ApiService from '../Services/ApiService';
+import LightningService from '../Services/LightningService';
 import {
   StyleSheet,
   Text,
@@ -23,18 +23,18 @@ export default class LightningCard extends Component {
       connected: false
     };
 
-    this.apiServiceCallbacks = {
+    this.lightningServiceCallbacks = {
       onConnectionChanged: this.onConnectionChanged,
       onMessage: this.onMessage
     };
   };
 
   componentDidMount() {
-    ApiService.addConnectionListener(this.apiServiceCallbacks);
+    LightningService.addConnectionListener(this.lightningServiceCallbacks);
   }
 
   componentWillUnmount() {
-    ApiService.removeConnectionListener(this.apiServiceCallbacks);
+    LightningService.removeConnectionListener(this.lightningServiceCallbacks);
   }
 
   updateCheckbox = activeCheckbox => {
@@ -71,7 +71,7 @@ export default class LightningCard extends Component {
   };
 
   sendLightningData = () => {
-    ApiService.updateState(Object.assign({}, this.state.turnedOn ? { sliders: this.state.sliders, activeCheckbox: this.state.activeCheckbox.id } : null, {turnedOn: this.state.turnedOn}));
+    LightningService.updateState(Object.assign({}, this.state.turnedOn ? { sliders: this.state.sliders, activeCheckbox: this.state.activeCheckbox.id } : null, {turnedOn: this.state.turnedOn}));
   };
 
   onMessage = message => {

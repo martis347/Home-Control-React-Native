@@ -1,6 +1,7 @@
 import ReconnectingWebSocket from 'reconnecting-websocket';
+import Data from '../data';
 
-const rws = new ReconnectingWebSocket('ws://192.168.31.246:3001/ws/lightning');
+const rws = new ReconnectingWebSocket(Data.websocketPath + 'radio');
 const connection = {
   open: false,
   listeners: []

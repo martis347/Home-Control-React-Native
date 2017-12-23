@@ -1,3 +1,5 @@
+const websocketPath = 'ws://192.168.31.246:3001/ws/';
+
 const getSliders = () => [
   [{ title: 'Ryškumas', value: 50, id: 1 }],
   [{ title: 'Raudona', value: 50, id: 11 }, { title: 'Žalia', value: 50, id: 12	}, { title: 'Mėlyna', value: 50, id: 13 }],
@@ -16,7 +18,17 @@ const getCheckboxes = () => [{
   }
 ];
 
+const getAudios = () => [{
+  title: 'M-1',
+  id: 'm1'
+}, {
+  title: 'Power Hit Radio',
+  id: 'phr'
+}];
+
 export default Data = {
   getSliders,
-  getCheckboxes
+  getCheckboxes,
+  getAudios,
+  websocketPath
 }

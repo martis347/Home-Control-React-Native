@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MKSwitch, MKButton } from 'react-native-material-kit';
+import { MKButton } from 'react-native-material-kit';
 import { Text, View, StyleSheet } from 'react-native';
 
 export default class PowerButton extends Component {

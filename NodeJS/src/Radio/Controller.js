@@ -1,5 +1,5 @@
 import MPlayer from 'mplayer';
-import { tryParseRequest } from '../Utils'; 
+import { tryParseRequest } from '../Utils';
 
 const controllerPath = '/radio';
 const controllers = [];

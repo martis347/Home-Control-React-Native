@@ -3,6 +3,7 @@ import { ThemeProvider } from 'react-native-material-ui';
 import { MKColor, setTheme } from 'react-native-material-kit';
 import { View, StatusBar, AppState } from 'react-native';
 import LightningCard from './LightningCard/LightningCard';
+import AudioCard from './AudioCard/AudioCard';
 
 setTheme({
    primaryColor: MKColor.Cyan,
@@ -47,9 +48,10 @@ export default class RootComponent extends Component {
           <View style={{flex: 8, flexDirection: 'column'}}>
             <LightningCard ref="lightningCard"></LightningCard>
           </View>
-          <View style={{flex: 7}}>
+          <View style={{flex: 5}}>
+            <AudioCard></AudioCard>
           </View>
-          <View style={{flex: 7}}>
+          <View style={{flex: 9}}>
           </View>
         </View>
       </ThemeProvider>
