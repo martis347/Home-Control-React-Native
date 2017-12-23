@@ -1,3 +1,5 @@
+import RainbowProcessor from './RainbowProcessor';
+
 const state = {
 	red: 0,
 	green: 0,
@@ -7,6 +9,8 @@ const state = {
 let lastRequest = {
 	turnedOn: false
 };
+
+const interval = () => {};
 
 export const getState = () => {
 	return state;
@@ -21,7 +25,7 @@ export const updateState = request => {
 		return false;
 	}
 	lastRequest = request;
-	
+
 	if(!request.turnedOn) {
 		state.red = 0;
 		state.green = 0;
@@ -44,6 +48,16 @@ export const updateState = request => {
 	}
 	else {
 		return false;
+	}
+
+	if(request.activeCheckbox === 2) {
+		RainbowProcessor.startRainbow(newState => {
+			state.red = newState[0];
+			state.green = newState[1];
+			state.blue = newState[2];
+		});
+	} else {
+		RainbowProcessor.stopRainbow();
 	}
 
 	return true;
