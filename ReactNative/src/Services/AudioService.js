@@ -30,13 +30,13 @@ const connectionChanged = () => {
   connection.listeners.forEach(l => l.onConnectionChanged(connection.open));
 }
 
-rws.onopen = () => {
+rws.onopen = e => {
   connection.open = true;
-  connectionChanged();
 };
 
 rws.onerror = e => {
   console.log(e.message);
+  connectionChanged();
 };
 
 rws.onclose = e => {
@@ -46,6 +46,9 @@ rws.onclose = e => {
 };
 
 rws.onmessage = m => {
+  connection.open = true;
+  connectionChanged();
+
   connection.listeners.forEach(l => {
     const message = JSON.parse(m.data);
     l.onMessage(message)

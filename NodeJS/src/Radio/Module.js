@@ -1,7 +1,5 @@
 import Controller from './Controller';
-import MPlayer from 'mplayer';
 
-console.log(MPlayer);
 const controller = Controller();
 
 const initialize = expressApp => {

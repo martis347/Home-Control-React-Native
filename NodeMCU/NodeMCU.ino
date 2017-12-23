@@ -23,7 +23,7 @@ int values[3] = {0, 0, 0};
 int oldValues[3] = {0, 0, 0};
 void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
 
-  switch(type) {
+  switch (type) {
     case WStype_DISCONNECTED:
       USE_SERIAL.printf("[WSc] Disconnected!\n");
       break;
@@ -36,7 +36,7 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
   }
 }
 
-void updateValues(uint8_t * payload) 
+void updateValues(uint8_t * payload)
 {
   char* str = (char*)payload;
   values[0] = atoi(strtok(str, " "));
@@ -45,19 +45,19 @@ void updateValues(uint8_t * payload)
 }
 
 void setup() {
-  USE_SERIAL.begin(115200);
+  USE_SERIAL.begin(9600);
 
   USE_SERIAL.setDebugOutput(true);
 
 
-  pinMode(r1, OUTPUT);pinMode(g1, OUTPUT);pinMode(b1, OUTPUT);
-  pinMode(r2, OUTPUT);pinMode(g2, OUTPUT);pinMode(b2, OUTPUT);
-  
+  pinMode(r1, OUTPUT); pinMode(g1, OUTPUT); pinMode(b1, OUTPUT);
+  pinMode(r2, OUTPUT); pinMode(g2, OUTPUT); pinMode(b2, OUTPUT);
+
   USE_SERIAL.println();
   USE_SERIAL.println();
   USE_SERIAL.println();
 
-  for(uint8_t t = 4; t > 0; t--) {
+  for (uint8_t t = 4; t > 0; t--) {
     USE_SERIAL.printf("[SETUP] BOOT WAIT %d...\n", t);
     USE_SERIAL.flush();
     delay(1000);
@@ -66,10 +66,10 @@ void setup() {
   WiFiMulti.addAP("HomeControl", "HomeControl347");
   //WiFiMulti.addAP("2 Guys 1 Router", "admin01ADF");
 
-  while(WiFiMulti.run() != WL_CONNECTED) {
+  while (WiFiMulti.run() != WL_CONNECTED) {
     delay(100);
   }
-  
+
   webSocket.begin("10.42.0.1", 3001, "/ws/lightningReceiver");
   //webSocket.begin("192.168.31.248", 3001, "/ws/lightningReceiver");
 
@@ -81,7 +81,7 @@ void setup() {
 void loop() {
   webSocket.loop();
 
-  if(oldValues[0] != values[0] || oldValues[1] != values[1] || oldValues[2] != values[2]) 
+  if (oldValues[0] != values[0] || oldValues[1] != values[1] || oldValues[2] != values[2])
   {
     oldValues[0] = values[0];
     oldValues[1] = values[1];

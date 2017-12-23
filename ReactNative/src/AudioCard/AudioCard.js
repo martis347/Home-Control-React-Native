@@ -81,7 +81,6 @@ export default class AudioCard extends Component {
                 } else {
                   buttonProps = Object.assign({}, buttonProps, MKButton.coloredButton().toProps());
                 }
-                debugger;
 
                 return (
                   <View key={audio.id} style={{paddingRight: 10}}>
