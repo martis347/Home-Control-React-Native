@@ -1,11 +1,12 @@
 import { getState, updateState, getLastRequest } from './State';
-import { tryParseRequest } from '../Utils'; 
+import { tryParseRequest } from '../Utils';
 
 const controllerPath = '/lightning';
 const listenerPath = '/lightningReceiver';
 
 const listeners = [];
 const controllers = [];
+let interval = null;
 
 const openController = opener => {
 	console.log('Controller to %s connected', controllerPath);
@@ -26,7 +27,7 @@ const openListener = opener => {
 	}
 };
 
-const message =  (sender, request) => {
+const message = (sender, request) => {
 	let req;
 	if(!(req = tryParseRequest(request))) {
 		request.send(JSON.stringify({error: 'Request Must be valid JSON'}));
@@ -37,18 +38,17 @@ const message =  (sender, request) => {
 		console.error('Received request did not match Interface');
 		console.log(req);
 	} else {
-		const state = getState();
-		console.log('Received: ');
-		console.log(req);
-		console.log(listeners.length);
-		listeners.filter(r => r.readyState === 1).forEach(r => {
-			const stateToSend = `${state.red} ${state.green} ${state.blue}`;
-			r.send(stateToSend);
-		});
+		let interval = null;
+		if(req.activeCheckbox === 2 || req.activeCheckbox === 2) {
+			handleInterval();
+		} else {
+			clearInterval(interval);
+			const state = getState();
+			sendState(state, listeners.filter(r => r.readyState === 1));
+		}
 
-		controllers.filter(c => c.readyState === 1 && c !== sender).forEach(c => {
-			c.send(JSON.stringify(req));
-		})
+		const state = JSON.stringify(req);
+		sendState(state, controllers.filter(c => c.readyState === 1 && c !== sender));
 	}
 }
 
@@ -66,6 +66,22 @@ const closeListener = closer => {
 		listeners.splice(index, 1);
 		console.log('Receiver to %s disconnected', controllerPath);
 	}
+};
+
+const handleInterval = () => {
+	interval = setInterval(function () {
+		const state = getState();
+		sendState(state, listeners.filter(r => r.readyState === 1));
+	}, 50);
+};
+
+const sendState = (state, receivers) => {
+	console.log('sendingState:');
+	console.log(state);
+	receivers.forEach(r => {
+		const stateToSend = `${state.red} ${state.green} ${state.blue}`;
+		r.send(stateToSend);
+	})
 };
 
 export default () => ({
