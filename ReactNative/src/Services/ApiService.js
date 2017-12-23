@@ -18,10 +18,10 @@ const addConnectionListener = callbacks => {
   connection.listeners.push(callbacks);
 };
 
-const removeConnectionListener = callback => {
-  var index = listeners.indexOf(callbacks);
+const removeConnectionListener = callbacks => {
+  var index = connection.listeners.indexOf(callbacks);
   if (index > -1) {
-    listeners.splice(index, 1);
+    connection.listeners.splice(index, 1);
   }
 };
 
@@ -53,5 +53,6 @@ rws.onmessage = m => {
 
 export default ApiService = {
   updateState,
-  addConnectionListener
+  addConnectionListener,
+  removeConnectionListener
 };

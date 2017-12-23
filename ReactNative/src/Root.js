@@ -28,6 +28,10 @@ export default class RootComponent extends Component {
   }
 
   handleAppStateChange = (nextAppState) => {
+    if(this.state.appState === 'background' && nextAppState === 'active') {
+      this.refs.lightningCard.onPowerClick(true);
+    }
+
     this.setState({ appState: nextAppState });
   }
 
@@ -41,7 +45,7 @@ export default class RootComponent extends Component {
         <View style={{flex: 1, backgroundColor: 'gray'}}>
           <StatusBar hidden={true} />
           <View style={{flex: 8, flexDirection: 'column'}}>
-            <LightningCard></LightningCard>
+            <LightningCard ref="lightningCard"></LightningCard>
           </View>
           <View style={{flex: 7}}>
           </View>
