@@ -76,8 +76,6 @@ const handleInterval = () => {
 };
 
 const sendState = (state, receivers) => {
-	console.log('sendingState:');
-	console.log(state);
 	receivers.forEach(r => {
 		const stateToSend = `${state.red} ${state.green} ${state.blue}`;
 		r.send(stateToSend);

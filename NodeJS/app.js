@@ -1,5 +1,5 @@
 import LightningModule from './src/Lightning/Module';
-import RadioModule from './src/Lightning/Module';
+import RadioModule from './src/Radio/Module';
 import express from 'express';
 import expressWs from 'express-ws';
 
@@ -18,6 +18,8 @@ const initializeRadio = () => {
     if(!mplayerFailed) {
       RadioModule.initialize(app);
     }
+    
+		app.listen(3001);
   }, 3000);
 
 }
@@ -25,5 +27,4 @@ const initializeRadio = () => {
 LightningModule.initialize(app);
 initializeRadio();
 
-app.listen(3001);
 console.info('Listening on Port %s', 3001);
