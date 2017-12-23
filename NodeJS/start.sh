@@ -1,3 +1,3 @@
 #!/bin/bash
 
-npm start
+forever -c "npm start" ./

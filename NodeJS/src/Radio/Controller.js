@@ -3,7 +3,7 @@ import { tryParseRequest } from '../Utils';
 
 const controllerPath = '/radio';
 const controllers = [];
-const currentStream = null;
+let currentStream = null;
 const streams = {
 	m1: 'http://stream.m-1.fm/m1/aacp64',
 	phr: 'https://power-stream.tv3.lt:8080/PHR.mp3'
