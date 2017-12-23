@@ -4,6 +4,7 @@ import { tryParseRequest } from '../Utils';
 const controllerPath = '/radio';
 const controllers = [];
 let currentStream = null;
+let currentTitle = null;
 const streams = {
 	m1: 'http://stream.m-1.fm/m1/aacp64',
 	phr: 'https://power-stream.tv3.lt:8080/PHR.mp3'
@@ -16,7 +17,7 @@ const openController = opener => {
 	controllers.push(opener);
 
 	if(opener.readyState === 1) {
-		opener.send(JSON.stringify({ playing: true, title: 'test' }));
+		opener.send(JSON.stringify({title: currentTitle, activeAudio: currentStream}));
 	}
 };
 
@@ -39,14 +40,14 @@ const closeController = closer => {
 	const index = controllers.indexOf(closer);
 	if(index != -1) {
 		controllers.splice(index, 1);
-		console.log('Controller to %s disconnected', listenerPath);
+		console.log('Controller to %s disconnected', controllerPath);
 	}
 };
 
 const broadcastStatusChange = status => {
-	console.log(status);
+	currentTitle = status.title;
 	controllers.filter(r => r.readyState === 1).forEach(r => {
-		r.send(JSON.stringify({title: status.title, activeAudio: currentStream}));
+		r.send(JSON.stringify({title: currentTitle, activeAudio: currentStream}));
 	});
 }
 
