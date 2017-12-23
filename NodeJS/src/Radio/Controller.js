@@ -3,6 +3,7 @@ import { tryParseRequest } from '../Utils';
 
 const controllerPath = '/radio';
 const controllers = [];
+const currentStream = null;
 const streams = {
 	m1: 'http://stream.m-1.fm/m1/aacp64',
 	phr: 'https://power-stream.tv3.lt:8080/PHR.mp3'
@@ -27,8 +28,10 @@ const message =  (sender, request) => {
 	}
 	if(req.play === false || !streams[req.play]) {
 		player.stop();
+		currentStream = null;
 	} else {
 		player.openFile(streams[req.play], { volume: 100 });
+		currentStream = req.play;
 	}
 };
 
@@ -43,7 +46,7 @@ const closeController = closer => {
 const broadcastStatusChange = status => {
 	console.log(status);
 	controllers.filter(r => r.readyState === 1).forEach(r => {
-		r.send(JSON.stringify({title: status.title}));
+		r.send(JSON.stringify({title: status.title, activeAudio: currentStream}));
 	});
 }
 
