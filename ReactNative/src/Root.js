@@ -45,13 +45,13 @@ export default class RootComponent extends Component {
       <ThemeProvider uiTheme={{palette: {}}}>
         <View style={{flex: 1, backgroundColor: 'gray'}}>
           <StatusBar hidden={true} />
-          <View style={{flex: 8, flexDirection: 'column'}}>
+          <View style={{flex: 6, flexDirection: 'column'}}>
             <LightningCard ref="lightningCard"></LightningCard>
           </View>
           <View style={{flex: 5}}>
             <AudioCard></AudioCard>
           </View>
-          <View style={{flex: 9}}>
+          <View style={{flex: 6}}>
           </View>
         </View>
       </ThemeProvider>

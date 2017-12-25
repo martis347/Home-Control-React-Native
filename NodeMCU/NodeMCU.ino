@@ -45,7 +45,7 @@ void updateValues(uint8_t * payload)
 }
 
 void setup() {
-  USE_SERIAL.begin(9600);
+  USE_SERIAL.begin(38400);
 
   USE_SERIAL.setDebugOutput(true);
 

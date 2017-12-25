@@ -4,6 +4,7 @@ import { tryParseRequest } from '../Utils';
 const controllerPath = '/radio';
 const controllers = [];
 let currentStream = null;
+let currentVolume = 50;
 let currentTitle = null;
 const streams = {
 	m1: 'http://stream.m-1.fm/m1/aacp64',
@@ -27,12 +28,24 @@ const message =  (sender, request) => {
 		request.send(JSON.stringify({error: 'Request Must be valid JSON'}));
 		return;
 	}
+	if(requestIsInvalid(req)) {
+		console.error('Received request did not match Interface');
+		console.log(req);
+		return;
+	}
+
 	if(req.play === false || !streams[req.play]) {
 		player.stop();
 		currentStream = null;
-	} else {
-		player.openFile(streams[req.play], { volume: 100 });
+	} else if(currentStream === req.play) {
+		player.setOptions({
+			volume: req.volume
+		});
+		currentVolume = req.volume;
+	}	else {
+		player.openFile(streams[req.play], { volume: req.volume });
 		currentStream = req.play;
+		currentVolume = req.volume;
 	}
 };
 
@@ -49,6 +62,14 @@ const broadcastStatusChange = status => {
 	controllers.filter(r => r.readyState === 1).forEach(r => {
 		r.send(JSON.stringify({title: currentTitle, activeAudio: currentStream}));
 	});
+}
+
+const requestIsInvalid = (req) => {
+	if(!streams[req.play] || isNaN(req.volume)) {
+		return true;
+	}
+
+	return false;
 }
 
 export default () => ({

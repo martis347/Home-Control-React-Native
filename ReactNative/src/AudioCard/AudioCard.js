@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Data from '../data';
 import AudioService from '../Services/AudioService';
-import { MKButton, MKSpinner, MKColor } from 'react-native-material-kit';
+import { MKButton, MKSpinner, MKColor, MKSlider } from 'react-native-material-kit';
 import {
   StyleSheet,
   Text,
@@ -17,7 +17,8 @@ export default class AudioCard extends Component {
       title: '',
       connected: false,
       audios: Data.getAudios(),
-      loading: false
+      loading: false,
+      audioVolume: 50
     };
 
     this.audioServiceCallbacks = {
@@ -48,16 +49,30 @@ export default class AudioCard extends Component {
   };
 
   onAudioClick = audioId => {
-    this.setState({loading: true});
-    setTimeout(() => this.setState({loading: false}), 1500);
     let newAudioId = audioId;
     if(audioId === this.state.activeAudio) {
       newAudioId = null;
     }
-    AudioService.updateState({
-      play: newAudioId
-    });
+    this.addTemporaryLoader();
+    this.setState({activeAudio: newAudioId}, this.updateAudioState);
   }
+
+  updateAudioSliderValue = value => {
+    value = Math.round(value);
+    this.setState({audioVolume: value}, this.updateAudioState);
+  };
+
+  addTemporaryLoader = () => {
+    this.setState({loading: true});
+    setTimeout(() => this.setState({loading: false}), 1500);
+  };
+
+  updateAudioState = () => {
+    AudioService.updateState({
+      play: this.state.activeAudio,
+      volume: this.state.audioVolume
+    });
+  };
 
   render() {
     return (
@@ -93,6 +108,18 @@ export default class AudioCard extends Component {
                 );
               })}
             </View>
+          </View>
+          <View style={{flex: 2, width: '70%'}}>
+            <Text style={{paddingLeft:15}}>
+              Garsas
+            </Text>
+            <MKSlider
+              min={0}
+              max={100}
+              step={5}
+              value={this.state.audioVolume}
+              onChange={newValue => this.updateAudioSliderValue(newValue)}>
+            </MKSlider>
           </View>
         </View> }
         { !this.state.connected &&
