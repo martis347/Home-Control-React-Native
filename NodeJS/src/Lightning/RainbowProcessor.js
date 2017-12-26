@@ -2,20 +2,25 @@ let listener = null;
 let interval = null;
 let seed = 0;
 
-const startRainbow = listener => {
+const startRainbow = (listener, brightness, speed) => {
   listener = listener;
-  interval = setInterval(() => {
-    const values = hslToRgb(seed, 0.5, 0.5);
-    seed = seed + 0.01;
-    if(seed > 1) {
-      seed = 0;
-    }
-    listener(values);
-  }, 50);
+  speed = speed < 1 ? 1 : speed;
+  speed = speed / 100;
+
+	clearInterval(interval);
+	interval = setInterval(() => {
+		const values = hslToRgb(seed, 0.5, brightness / 200);
+		seed = seed + (speed * speed / 100);
+		if(seed > 1) {
+			seed = 0;
+		}
+		listener(values);
+	}, 50);
 };
 
 const stopRainbow = () => {
   clearInterval(interval);
+  interval = null;
   listener = null;
 };
 

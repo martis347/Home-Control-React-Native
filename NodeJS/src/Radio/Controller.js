@@ -63,7 +63,8 @@ const broadcastStatusChange = status => {
 }
 
 const requestIsInvalid = (req) => {
-	if(!streams[req.play] || isNaN(req.volume)) {
+	if(req.play === null) 
+	if((!streams[req.play] && req.play !== null) || (req.play !== null && isNaN(req.volume))) {
 		return true;
 	}
 

@@ -42,21 +42,17 @@ export const updateState = request => {
 		state.blue = Math.round(10.24 * request.sliders[2].value);
 	}
 	else if(request.activeCheckbox === 2) {
-		state.red = 50;
-		state.green = 50;
-		state.blue = 50;
-	}
-	else {
-		return false;
-	}
-
-	if(request.activeCheckbox === 2) {
 		RainbowProcessor.startRainbow(newState => {
 			state.red = newState[0];
 			state.green = newState[1];
 			state.blue = newState[2];
-		});
-	} else {
+		}, request.sliders[0].value, request.sliders[1].value);
+	}
+	else {
+		return false;
+	}
+	
+	if(request.activeCheckbox !== 2) {
 		RainbowProcessor.stopRainbow();
 	}
 

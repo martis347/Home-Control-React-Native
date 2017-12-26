@@ -38,11 +38,11 @@ const message = (sender, request) => {
 		console.error('Received request did not match Interface');
 		console.log(req);
 	} else {
-		let interval = null;
-		if(req.activeCheckbox === 2 || req.activeCheckbox === 2) {
-			handleInterval();
-		} else {
+		if(req.activeCheckbox === 2 && interval === null) {
+			interval = handleInterval();
+		} else if(req.activeCheckbox !== 2) {
 			clearInterval(interval);
+			interval = null;
 			const state = getState();
 			sendState(state, listeners.filter(r => r.readyState === 1));
 		}
@@ -69,7 +69,7 @@ const closeListener = closer => {
 };
 
 const handleInterval = () => {
-	interval = setInterval(function () {
+	return setInterval(function () {
 		const state = getState();
 		sendState(state, listeners.filter(r => r.readyState === 1));
 	}, 50);
