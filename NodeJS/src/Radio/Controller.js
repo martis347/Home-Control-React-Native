@@ -45,6 +45,8 @@ const message =  (sender, request) => {
 		currentStream = req.play;
 		currentVolume = req.volume;
 	}
+
+	sendUpdatedStatus(controllers.filter(c => c.readyState === 1 && c !== sender));
 };
 
 const closeController = closer => {
@@ -57,10 +59,14 @@ const closeController = closer => {
 
 const broadcastStatusChange = status => {
 	currentTitle = status.title;
-	controllers.filter(r => r.readyState === 1).forEach(r => {
-		r.send(JSON.stringify({title: currentTitle, activeAudio: currentStream}));
-	});
+	sendUpdatedStatus(controllers.filter(r => r.readyState === 1));
 }
+
+const sendUpdatedStatus = receivers => {
+	receivers.forEach(r => {
+		r.send(JSON.stringify({title: currentTitle, activeAudio: currentStream, audioVolume: currentVolume}));
+	});
+};
 
 const requestIsInvalid = (req) => {
 	if(req.play === null) 

@@ -50,7 +50,7 @@ const message = (sender, request) => {
 		}
 
 		const stateToSend = JSON.stringify(req);
-		sendState(state, controllers.filter(c => c.readyState === 1 && c !== sender));
+		sendState(stateToSend, controllers.filter(c => c.readyState === 1 && c !== sender));
 	}
 }
 
@@ -73,13 +73,15 @@ const closeListener = closer => {
 const handleInterval = () => {
 	return setInterval(function () {
 		const state = getState();
-		sendState(state, listeners.filter(r => r.readyState === 1));
+		const stateToSend = `${state.red} ${state.green} ${state.blue}`;
+
+		sendState(stateToSend, listeners.filter(r => r.readyState === 1));
 	}, 50);
 };
 
 const sendState = (state, receivers) => {
 	receivers.forEach(r => {
-		r.send(stateToSend);
+		r.send(state);
 	})
 };
 
