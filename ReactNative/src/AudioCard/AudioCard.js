@@ -109,7 +109,7 @@ export default class AudioCard extends Component {
               })}
             </View>
           </View>
-          <View style={{flex: 2, width: '70%'}}>
+          { !!this.state.activeAudio && <View style={{flex: 2, width: '70%'}}>
             <Text style={{paddingLeft:15}}>
               Garsas
             </Text>
@@ -120,7 +120,7 @@ export default class AudioCard extends Component {
               value={this.state.audioVolume}
               onChange={newValue => this.updateAudioSliderValue(newValue)}>
             </MKSlider>
-          </View>
+          </View> }
         </View> }
         { !this.state.connected &&
           <View style={styles.cardStyle}>

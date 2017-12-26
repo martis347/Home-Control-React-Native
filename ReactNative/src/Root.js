@@ -48,10 +48,10 @@ export default class RootComponent extends Component {
           <View style={{flex: 6, flexDirection: 'column'}}>
             <LightningCard ref="lightningCard"></LightningCard>
           </View>
-          <View style={{flex: 5}}>
+          <View style={{flex: 6}}>
             <AudioCard></AudioCard>
           </View>
-          <View style={{flex: 6}}>
+          <View style={{flex: 5}}>
           </View>
         </View>
       </ThemeProvider>
