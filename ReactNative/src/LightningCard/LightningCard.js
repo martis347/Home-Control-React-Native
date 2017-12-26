@@ -70,6 +70,12 @@ export default class LightningCard extends Component {
     });
   };
 
+  onWake = () => {
+    if(!this.state.turnedOn) {
+      this.onPowerClick(true);
+    }
+  };
+
   sendLightningData = () => {
     LightningService.updateState(Object.assign({}, this.state.turnedOn ? { sliders: this.state.sliders, activeCheckbox: this.state.activeCheckbox.id } : null, {turnedOn: this.state.turnedOn}));
   };

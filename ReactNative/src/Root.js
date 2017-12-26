@@ -30,7 +30,7 @@ export default class RootComponent extends Component {
 
   handleAppStateChange = (nextAppState) => {
     if(this.state.appState === 'background' && nextAppState === 'active') {
-      this.refs.lightningCard.onPowerClick(true);
+      this.refs.lightningCard.onWake(true);
     }
 
     this.setState({ appState: nextAppState });
