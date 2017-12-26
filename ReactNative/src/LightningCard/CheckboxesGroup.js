@@ -31,7 +31,7 @@ export default class CheckboxesGroup extends Component {
 
   render() {
     return (
-      <View style={{flex: this.props.width, flexDirection: 'column'}}>
+      <View style={{flexDirection: 'column'}}>
         {checkboxes.map((c, index) => {
           return <Checkbox title={c.title} checked={this.state.activeCheckbox.id === c.id} key={index} onClick={this.onClick}></Checkbox>
         })}

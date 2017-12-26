@@ -36,23 +36,15 @@ export default class PowerButton extends Component {
 
   render() {
     return (
-      <View style={[(this.state.poweredOn ? styles.buttonOn : styles.buttonOff), {position: 'absolute'}]}>
-        <View style={{ flex: 1, flexDirection: 'row', marginLeft: 15, marginBottom: 15 }}>
-          { !this.state.poweredOn && React.createElement(this.powerOnButton)}
-          { this.state.poweredOn && React.createElement(this.powerOffButton)}
-        </View>
+      <View style={{paddingLeft: 9, paddingTop: 10, flexDirection: 'row'}}>
+        { !this.state.poweredOn && React.createElement(this.powerOnButton)}
+        { this.state.poweredOn && React.createElement(this.powerOffButton)}
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  buttonOff: {
-    top: '50%',
-    left: '40%'
-  },
   buttonOn: {
-    bottom: -5,
-    left: -3
   }
 });

@@ -9,10 +9,8 @@ export default class RGBIndicator extends Component {
 
   render() {
     return (
-      <View style={{position: 'absolute', top: -9, right: 14, transform: [{scale: 1.5}]}}>
-        <View style={{alignItems: 'center'}}>
-           <Icon name="color-lens" style={{color: this.props.color}}/>
-        </View>
+      <View style={{transform: [{scale: 1.5}], padding: 10}}>
+         <Icon name="color-lens" style={{color: this.props.color}}/>
       </View>
     );
   }

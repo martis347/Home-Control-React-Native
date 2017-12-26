@@ -15,7 +15,7 @@ export default class Checkbox extends Component {
 
   render() {
     return (
-      <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: 7, marginRight: 7}}>
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
         <MKCheckbox disabled={this.props.checked} checked={this.props.checked} onPress={this.handleClick}/>
         <Text style={{color: '#666666', fontSize: 12, fontWeight: '300'}} onPress={(e) => this.props.onClick(this.props.title)}>{this.props.title}</Text>
       </View>

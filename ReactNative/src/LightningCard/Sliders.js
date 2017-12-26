@@ -45,10 +45,10 @@ export default class Sliders extends Component {
 
   render() {
     return (
-      <View style={{flex: this.props.width}}>
+      <View style={{flexDirection: 'column'}}>
         {this.state.sliders.map((slider, index) => {
           return (
-            <View key={index}>
+            <View key={index} style={{flexDirection: 'column'}}>
               <Text>{slider.title}</Text>
               <MKSlider
                 min={0}

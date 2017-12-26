@@ -90,15 +90,31 @@ export default class LightningCard extends Component {
 
   render() {
     return (
-      <View style={{flex: 1}}>
+      <View style={{flexDirection: 'column'}}>
         { this.state.connected &&
         <View style={styles.cardStyle}>
-          <Text style={styles.cardTitleStyle}>Apšvietimas</Text>
-          <View style={{flex: 2, flexDirection: 'row', paddingTop: 35}}>
-            { this.state.turnedOn && <CheckboxesGroup width={3} activeCheckbox={this.state.activeCheckbox} updateCheckbox={this.updateCheckbox}></CheckboxesGroup> }
-            <PowerButton checked={this.state.turnedOn} onChange={this.onPowerClick}></PowerButton>
-            { this.state.turnedOn && <Sliders width={5} ref="sliders" activeCheckboxId={this.state.activeCheckbox.id} onValueUpdate={sliders => this.handleUpdatedSlider(sliders)}></Sliders> }
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text style={styles.cardTitleStyle}>Apšvietimas</Text>
             { this.state.turnedOn && this.rgbShown() && <RGBIndicator color={this.getRgbValue()}></RGBIndicator> }
+          </View>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <View style={{flexDirection: 'column', flex: 1}}>
+              { this.state.turnedOn &&
+              <CheckboxesGroup
+                activeCheckbox={this.state.activeCheckbox}
+                updateCheckbox={this.updateCheckbox}/>
+              }
+              <PowerButton checked={this.state.turnedOn} onChange={this.onPowerClick}/>
+            </View>
+            <View style={{flex: 2}}>
+              { this.state.turnedOn &&
+              <Sliders
+                style={{width: 500}}
+                ref="sliders"
+                activeCheckboxId={this.state.activeCheckbox.id}
+                onValueUpdate={sliders => this.handleUpdatedSlider(sliders)}/>
+              }
+            </View>
           </View>
         </View> }
         { !this.state.connected &&
@@ -123,20 +139,15 @@ const styles = StyleSheet.create({
     shadowOffset: {},
     shadowOpacity: 0.8,
     shadowRadius: 2,
-    paddingTop: 20,
     margin: 10,
-    flex: 1
+    paddingBottom: 15,
   },
   cardTitleStyle: {
     backgroundColor: "transparent",
     color: "#000000",
     fontSize: 24,
     fontWeight:"bold",
-    left: 26,
-    padding: 16,
-    position: "absolute",
-    top: 120,
-    top: 0,
-    left: 0
+    padding: 10,
+    position: "relative",
   }
 });

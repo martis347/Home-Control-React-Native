@@ -75,18 +75,22 @@ export default class AudioCard extends Component {
   };
 
   render() {
+    console.log(MKSlider.slider);
+    debugger;
     return (
-      <View style={{flex: 1}}>
-        { this.state.connected &&
-        <View style={styles.cardStyle}>
-          <Text style={styles.cardTitleStyle}>Audio</Text>
-          <Text style={[styles.cardContentStyle, {padding:0}]}>
-            { this.state.title ?  'Dabar Grojama: ' + this.state.title : '' }
-          </Text>
-          {this.state.loading && <MKSpinner style={{position: 'absolute', top: 10, right: 10}}></MKSpinner>}
-          <View style={{flex: 2, flexDirection: 'row', paddingTop: 20}}>
-            <View style={{ flex: 1, flexDirection: 'row', marginLeft: 15 }}>
-              {this.state.audios.map(audio => {
+        <View style={[styles.cardStyle, {flexDirection: 'column'}]}>
+          { !!this.state.connected &&
+          <View>
+            <View>
+              <Text style={styles.cardTitleStyle}>Audio</Text>
+              { !!this.state.title && <Text style={styles.cardContentStyle}>
+                {'Dabar Grojama: ' + this.state.title}
+              </Text> }
+              {this.state.loading && <MKSpinner style={{position: 'absolute', top: 10, right: 10}}></MKSpinner>}
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flexDirection: 'row', marginLeft: 10 }}>
+                {this.state.audios.map(audio => {
                 let buttonProps = {
                   onPress: () => this.onAudioClick(audio.id),
                 };
@@ -99,37 +103,38 @@ export default class AudioCard extends Component {
 
                 return (
                   <View key={audio.id} style={{paddingRight: 10}}>
-                    <MKButton {...buttonProps}>
-                      <Text style={{ color: !buttonActive ? 'white' : 'black', fontWeight: 'bold' }}>
-                        {audio.title}
-                      </Text>
-                    </MKButton>
+                  <MKButton {...buttonProps}>
+                    <Text style={{ color: !buttonActive ? 'white' : 'black', fontWeight: 'bold' }}>
+                    {audio.title}
+                    </Text>
+                  </MKButton>
                   </View>
                 );
-              })}
+                })}
+              </View>
             </View>
-          </View>
-          { !!this.state.activeAudio && <View style={{flex: 2, width: '70%'}}>
-            <Text style={{paddingLeft:15}}>
-              Garsas
-            </Text>
-            <MKSlider
-              min={0}
-              max={100}
-              step={5}
-              value={this.state.audioVolume}
-              onChange={newValue => this.updateAudioSliderValue(newValue)}>
-            </MKSlider>
-          </View> }
-        </View> }
-        { !this.state.connected &&
-          <View style={styles.cardStyle}>
-            <View style={{flex: 1, flexDirection: 'row', position: 'absolute', top: '50%', left: '30%'}}>
+            { !!this.state.activeAudio &&
+            <View style={{width: '50%', paddingTop: 10}}>
+              <Text style={{paddingLeft:10}}>
+                Garsas
+              </Text>
+              <MKSlider
+                min={33}
+                max={99}
+                step={3}
+                value={this.state.audioVolume}
+                onChange={newValue => this.updateAudioSliderValue(newValue)}>
+              </MKSlider>
+            </View> }
+          </View>}
+          { !this.state.connected &&
+          <View style={{height: 50}}>
+            <View style={{flexDirection: 'row', position: 'absolute', top: '40%', left: '30%'}}>
               <MKSpinner></MKSpinner>
               <Text style={{marginLeft: 10, marginTop: 5}}>Connecting to Server...</Text>
             </View>
           </View> }
-      </View>
+        </View>
     );
   }
 }
@@ -144,25 +149,20 @@ const styles = StyleSheet.create({
     shadowOffset: {},
     shadowOpacity: 0.8,
     shadowRadius: 2,
-    paddingTop: 20,
     margin: 10,
-    flex: 1
+    paddingBottom: 15
   },
   cardTitleStyle: {
     backgroundColor: "transparent",
     color: "#000000",
     fontSize: 24,
     fontWeight:"bold",
-    left: 26,
-    padding: 16,
-    position: "absolute",
-    top: 120,
-    top: 0,
-    left: 0
+    padding: 10,
+    position: "relative",
   },
   cardContentStyle: {
     color: "rgba(0, 0, 0, 0.54)",
-    paddingLeft : 16,
-    paddingTop: 30
+    paddingLeft : 10,
+    paddingBottom: 15
   }
 });

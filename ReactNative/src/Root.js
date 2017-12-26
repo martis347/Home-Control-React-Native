@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from 'react-native-material-ui';
 import { MKColor, setTheme } from 'react-native-material-kit';
-import { View, StatusBar, AppState } from 'react-native';
+import { View, StatusBar, AppState, ScrollView } from 'react-native';
 import LightningCard from './LightningCard/LightningCard';
 import AudioCard from './AudioCard/AudioCard';
 
@@ -43,17 +43,11 @@ export default class RootComponent extends Component {
   render() {
     return (
       <ThemeProvider uiTheme={{palette: {}}}>
-        <View style={{flex: 1, backgroundColor: 'gray'}}>
+        <ScrollView style={{flex: 1, backgroundColor: 'gray'}}>
           <StatusBar hidden={true} />
-          <View style={{flex: 6, flexDirection: 'column'}}>
-            <LightningCard ref="lightningCard"></LightningCard>
-          </View>
-          <View style={{flex: 6}}>
-            <AudioCard></AudioCard>
-          </View>
-          <View style={{flex: 5}}>
-          </View>
-        </View>
+          <LightningCard ref="lightningCard"></LightningCard>
+          <AudioCard></AudioCard>
+        </ScrollView>
       </ThemeProvider>
     );
   }
