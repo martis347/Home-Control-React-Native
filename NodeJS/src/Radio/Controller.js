@@ -38,9 +38,7 @@ const message =  (sender, request) => {
 		player.stop();
 		currentStream = null;
 	} else if(currentStream === req.play) {
-		player.setOptions({
-			volume: req.volume
-		});
+		player.volume(req.volume);
 		currentVolume = req.volume;
 	}	else {
 		player.openFile(streams[req.play], { volume: req.volume });
