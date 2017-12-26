@@ -90,9 +90,9 @@ export default class LightningCard extends Component {
 
   render() {
     return (
-      <View style={{flexDirection: 'column'}}>
-        { this.state.connected &&
-        <View style={styles.cardStyle}>
+      <View style={[{flexDirection: 'column'}, styles.cardStyle]}>
+        { !!this.state.connected &&
+        <View>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={styles.cardTitleStyle}>Apšvietimas</Text>
             { this.state.turnedOn && this.rgbShown() && <RGBIndicator color={this.getRgbValue()}></RGBIndicator> }
@@ -118,12 +118,12 @@ export default class LightningCard extends Component {
           </View>
         </View> }
         { !this.state.connected &&
-          <View style={styles.cardStyle}>
-            <View style={{flex: 1, flexDirection: 'row', position: 'absolute', top: '50%', left: '30%'}}>
-              <MKSpinner></MKSpinner>
-              <Text style={{marginLeft: 10, marginTop: 5}}>Connecting to Server...</Text>
-            </View>
-          </View> }
+        <View style={{height: 50}}>
+          <View style={{flexDirection: 'row', position: 'absolute', top: '40%', left: '30%'}}>
+            <MKSpinner></MKSpinner>
+            <Text style={{marginLeft: 10, marginTop: 5}}>Connecting to Server...</Text>
+          </View>
+        </View> }
       </View>
     );
   }

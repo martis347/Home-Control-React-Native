@@ -75,8 +75,6 @@ export default class AudioCard extends Component {
   };
 
   render() {
-    console.log(MKSlider.slider);
-    debugger;
     return (
         <View style={[styles.cardStyle, {flexDirection: 'column'}]}>
           { !!this.state.connected &&

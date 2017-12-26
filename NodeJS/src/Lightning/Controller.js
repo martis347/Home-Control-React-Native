@@ -44,10 +44,12 @@ const message = (sender, request) => {
 			clearInterval(interval);
 			interval = null;
 			const state = getState();
-			sendState(state, listeners.filter(r => r.readyState === 1));
+			const stateToSend = `${state.red} ${state.green} ${state.blue}`;
+
+			sendState(stateToSend, listeners.filter(r => r.readyState === 1));
 		}
 
-		const state = JSON.stringify(req);
+		const stateToSend = JSON.stringify(req);
 		sendState(state, controllers.filter(c => c.readyState === 1 && c !== sender));
 	}
 }
@@ -77,7 +79,6 @@ const handleInterval = () => {
 
 const sendState = (state, receivers) => {
 	receivers.forEach(r => {
-		const stateToSend = `${state.red} ${state.green} ${state.blue}`;
 		r.send(stateToSend);
 	})
 };
