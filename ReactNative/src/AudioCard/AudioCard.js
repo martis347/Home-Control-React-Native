@@ -43,9 +43,7 @@ export default class AudioCard extends Component {
   };
 
   onMessage = message => {
-    this.setState(message, () => {
-      console.log(this.state);
-    });
+    this.setState(message);
   };
 
   onAudioClick = audioId => {
