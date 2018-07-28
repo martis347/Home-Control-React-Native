@@ -32,14 +32,14 @@ export const updateState = request => {
 		state.blue = 0;
 	}
 	else if(request.activeCheckbox === 0) {
-		state.red = Math.round(10.24 * request.sliders[0].value);
-		state.green = Math.round(10.24 * request.sliders[0].value);
-		state.blue = Math.round(10.24 * request.sliders[0].value);
+		state.red = Math.round(2.55 * request.sliders[0].value);
+		state.green = Math.round(2.55 * request.sliders[0].value);
+		state.blue = Math.round(2.55 * request.sliders[0].value);
 	}
 	else if(request.activeCheckbox === 1) {
-		state.red = Math.round(10.24 * request.sliders[0].value);
-		state.green = Math.round(10.24 * request.sliders[1].value);
-		state.blue = Math.round(10.24 * request.sliders[2].value);
+		state.red = Math.round(2.55 * request.sliders[0].value);
+		state.green = Math.round(2.55 * request.sliders[1].value);
+		state.blue = Math.round(2.55 * request.sliders[2].value);
 	}
 	else if(request.activeCheckbox === 2) {
 		RainbowProcessor.startRainbow(newState => {
