@@ -7,8 +7,11 @@ const connection = {
   listeners: []
 };
 
+const isConnected = () => rws.readyState === rws.OPEN;
+
 const updateState = data => {
-  if(connection.open) {
+  console.log(data.sliders.map(s => s.value));
+  if(isConnected()) {
     rws.send(JSON.stringify(data));
   } else {
     console.error('Connection Closed, unable to send request.');
@@ -26,22 +29,11 @@ const removeConnectionListener = callbacks => {
   }
 };
 
-const connectionChanged = () => {
-  connection.listeners.forEach(l => l.onConnectionChanged(connection.open));
-}
-
-rws.onopen = () => {
-  connection.open = true;
-  connectionChanged();
-};
-
 rws.onerror = e => {
   console.log(e.message);
 };
 
 rws.onclose = e => {
-  connection.open = false;
-  connectionChanged();
   console.log(e.code, e.reason);
 };
 
@@ -55,5 +47,6 @@ rws.onmessage = m => {
 export default ApiService = {
   updateState,
   addConnectionListener,
-  removeConnectionListener
+  removeConnectionListener,
+  isConnected
 };

@@ -15,14 +15,12 @@ export default class AudioCard extends Component {
     this.state = {
       activeAudio: null,
       title: '',
-      connected: false,
       audios: Data.getAudios(),
       loading: false,
       audioVolume: 50
     };
 
     this.audioServiceCallbacks = {
-      onConnectionChanged: this.onConnectionChanged,
       onMessage: this.onMessage
     };
   };
@@ -33,13 +31,6 @@ export default class AudioCard extends Component {
 
   componentWillUnmount() {
     AudioService.removeConnectionListener(this.audioServiceCallbacks);
-  };
-
-  onConnectionChanged = newStatus => {
-    if(!newStatus) {
-      this.setState({ activeAudio: null, title: null });
-    }
-    this.setState({ connected: newStatus });
   };
 
   onMessage = message => {
@@ -75,7 +66,7 @@ export default class AudioCard extends Component {
   render() {
     return (
         <View style={[styles.cardStyle, {flexDirection: 'column'}]}>
-          { !!this.state.connected &&
+          { AudioService.isConnected() &&
           <View>
             <View>
               <Text style={styles.cardTitleStyle}>Audio</Text>
@@ -123,7 +114,7 @@ export default class AudioCard extends Component {
               </MKSlider>
             </View> }
           </View>}
-          { !this.state.connected &&
+          { !AudioService.isConnected() &&
           <View style={{height: 50}}>
             <View style={{flexDirection: 'row', position: 'absolute', top: '40%', left: '30%'}}>
               <MKSpinner></MKSpinner>

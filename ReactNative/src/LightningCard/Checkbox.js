@@ -8,7 +8,7 @@ export default class Checkbox extends Component {
   }
 
   handleClick = e => {
-    if(!this.props.checked) {
+    if(!this.props.checked || this.props.uncheckable) {
       this.props.onClick(this.props.title);
     }
   }
@@ -16,7 +16,7 @@ export default class Checkbox extends Component {
   render() {
     return (
       <View style={{flexDirection: 'row', alignItems: 'center'}}>
-        <MKCheckbox disabled={this.props.checked} checked={this.props.checked} onPress={this.handleClick}/>
+        <MKCheckbox disabled={this.props.checked && !this.props.uncheckable} checked={this.props.checked} onPress={this.handleClick}/>
         <Text style={{color: '#666666', fontSize: 12, fontWeight: '300'}} onPress={(e) => this.props.onClick(this.props.title)}>{this.props.title}</Text>
       </View>
     );

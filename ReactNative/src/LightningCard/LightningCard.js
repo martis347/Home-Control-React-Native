@@ -2,32 +2,43 @@ import React, { Component } from 'react';
 import Data from '../data';
 import RGBIndicator from './RGBIndicator';
 import CheckboxesGroup from './CheckboxesGroup';
+import Checkbox from './Checkbox';
 import { MKSpinner } from 'react-native-material-kit';
 import PowerButton from './PowerButton';
 import Sliders from './Sliders';
 import LightningService from '../Services/LightningService';
+import shallowCompare from 'react-addons-shallow-compare';
 import {
   StyleSheet,
   Text,
-  View
+  View,
+  AsyncStorage,
+  Alert
 } from 'react-native';
 
 export default class LightningCard extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       activeCheckbox: Data.getCheckboxes()[0],
       sliders: Data.getSliders()[0],
       turnedOn: true,
-      connected: false
+      autoLightning: 'false'
     };
 
     this.lightningServiceCallbacks = {
-      onConnectionChanged: this.onConnectionChanged,
       onMessage: this.onMessage
     };
   };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return shallowCompare(this, nextProps, nextState);
+  }
+
+  async componentWillMount() {
+    const autoLightning = await AsyncStorage.getItem('autoLightning');
+    this.setState({ autoLightning });
+  }
 
   componentDidMount() {
     LightningService.addConnectionListener(this.lightningServiceCallbacks);
@@ -70,8 +81,10 @@ export default class LightningCard extends Component {
     });
   };
 
-  onWake = () => {
-    if(!this.state.turnedOn) {
+  onWake = async () => {
+    const autoLightning = await AsyncStorage.getItem('autoLightning');
+    if(!this.state.turnedOn && autoLightning === 'true') {
+      console.warn('Waking');
       this.onPowerClick(true);
     }
   };
@@ -90,15 +103,18 @@ export default class LightningCard extends Component {
     }
   };
 
-  onConnectionChanged = newStatus => {
-    this.setState({ connected: newStatus });
+  onToggleAutoLightning = async () => {
+    const newValue = this.state.autoLightning === 'true' ? 'false' : 'true';
+    this.setState({ autoLightning: newValue });
+    await AsyncStorage.setItem('autoLightning', newValue);
   };
 
   render() {
     return (
       <View style={[{flexDirection: 'column'}, styles.cardStyle]}>
-        { !!this.state.connected &&
+        { LightningService.isConnected() &&
         <View>
+          <Checkbox title={'Automatiškai įjungti apšvietimą'} checked={this.state.autoLightning === 'true'} onClick={this.onToggleAutoLightning} uncheckable={true}></Checkbox>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text style={styles.cardTitleStyle}>Apšvietimas</Text>
             { this.state.turnedOn && this.rgbShown() && <RGBIndicator color={this.getRgbValue()}></RGBIndicator> }
@@ -123,7 +139,7 @@ export default class LightningCard extends Component {
             </View>
           </View>
         </View> }
-        { !this.state.connected &&
+        { !LightningService.isConnected() &&
         <View style={{height: 50}}>
           <View style={{flexDirection: 'row', position: 'absolute', top: '40%', left: '30%'}}>
             <MKSpinner></MKSpinner>

@@ -18,7 +18,7 @@ export default class Sliders extends Component {
   }
 
   updateSliderValue = (newValue, slider) => {
-    newValue = Math.round(newValue);
+    newValue = Math.round(Math.pow(newValue, 1.5372));
     let updatedSlider = Object.assign({}, slider, {value: newValue});
     let slidersGroup = { ...Data.getSliders() };
     const updatedSliderIndex = this.state.sliders.findIndex(s => s.id === slider.id);
@@ -52,8 +52,8 @@ export default class Sliders extends Component {
               <Text>{slider.title}</Text>
               <MKSlider
                 min={0}
-                max={100}
-                step={5}
+                max={20}
+                step={1}
                 value={slider.value}
                 onChange={newValue => this.updateSliderValue(newValue, slider)}>
               </MKSlider>

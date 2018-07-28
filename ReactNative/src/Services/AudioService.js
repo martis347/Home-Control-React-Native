@@ -3,12 +3,13 @@ import Data from '../data';
 
 const rws = new ReconnectingWebSocket(Data.websocketPath + 'radio');
 const connection = {
-  open: false,
   listeners: []
 };
 
+const isConnected = () => rws.readyState === rws.OPEN;
+
 const updateState = data => {
-  if(connection.open) {
+  if(isConnected()) {
     rws.send(JSON.stringify(data));
   } else {
     console.error('Connection Closed, unable to send request.');
@@ -26,29 +27,15 @@ const removeConnectionListener = callbacks => {
   }
 };
 
-const connectionChanged = () => {
-  connection.listeners.forEach(l => l.onConnectionChanged(connection.open));
-}
-
-rws.onopen = e => {
-  connection.open = true;
-};
-
 rws.onerror = e => {
   console.log(e.message);
-  connectionChanged();
 };
 
 rws.onclose = e => {
-  connection.open = false;
-  connectionChanged();
   console.log(e.code, e.reason);
 };
 
 rws.onmessage = m => {
-  connection.open = true;
-  connectionChanged();
-
   connection.listeners.forEach(l => {
     const message = JSON.parse(m.data);
     l.onMessage(message)
@@ -58,5 +45,6 @@ rws.onmessage = m => {
 export default ApiService = {
   updateState,
   addConnectionListener,
-  removeConnectionListener
+  removeConnectionListener,
+  isConnected
 };
