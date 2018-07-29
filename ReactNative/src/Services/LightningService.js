@@ -10,7 +10,6 @@ const connection = {
 const isConnected = () => rws.readyState === rws.OPEN;
 
 const updateState = data => {
-  console.log(data.sliders.map(s => s.value));
   if(isConnected()) {
     rws.send(JSON.stringify(data));
   } else {

@@ -46,7 +46,7 @@ const hslToRgb = (h, s, l) => {
         b = hue2rgb(p, q, h - 1/3);
     }
 
-    return [Math.round(r * 1024), Math.round(g * 1024), Math.round(b * 1024)];
+    return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
 };
 
 export default {
