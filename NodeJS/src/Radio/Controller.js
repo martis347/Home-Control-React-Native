@@ -1,87 +1,102 @@
 import MPlayer from 'mplayer';
-import { tryParseRequest } from '../Utils';
+import axios from 'axios';
 
-const controllerPath = '/radio';
-const controllers = [];
-let currentStream = null;
-let currentVolume = 50;
-let currentTitle = null;
-const streams = {
-	m1: 'http://stream.m-1.fm/m1/aacp64',
-	phr: 'https://power-stream.tv3.lt:8080/PHR.mp3'
-};
-const player = new MPlayer();
-player.on('status', status => broadcastStatusChange(status));
+class RadioController {
+	constructor() {
+		this.streams = {
+			m1: 'http://stream.m-1.fm/m1/aacp64',
+			phr: 'https://power-stream.tv3.lt:8080/PHR.mp3',
+			powerhitradio: 'https://power-stream.tv3.lt:8080/PHR.mp3',
+			rockfm: 'http://5.20.223.18/crf128.mp3',
+			relaxfm: 'http://5.20.223.18/relaxfm128.mp3',
+		};
 
-const openController = opener => {
-	console.log('Controller to %s connected', controllerPath);
-	controllers.push(opener);
-
-	if(opener.readyState === 1) {
-		opener.send(JSON.stringify({title: currentTitle, activeAudio: currentStream}));
-	}
-};
-
-const message =  (sender, request) => {
-	let req;
-	if(!(req = tryParseRequest(request))) {
-		request.send(JSON.stringify({error: 'Request Must be valid JSON'}));
-		return;
-	}
-	if(requestIsInvalid(req)) {
-		console.error('Received request did not match Interface');
-		console.log(req);
-		return;
+		this.controllerUrl = 'http://10.42.0.60';
+		
+		this.status = {
+			title: '',
+			stream: '',
+			volume: 0,
+			on: false,
+		}
 	}
 
-	if(req.play === false || !streams[req.play]) {
-		player.stop();
-		currentStream = null;
-	} else if(currentStream === req.play) {
-		player.volume(req.volume);
-		currentVolume = req.volume;
-	}	else {
-		player.openFile(streams[req.play], { volume: req.volume });
-		currentStream = req.play;
-		currentVolume = req.volume;
+	async turnOnRadio(radioName) {
+		console.log(`turnOnRadio ${radioName}`);
+		const radioToPlay = radioName.replace(' ', '').toLowerCase();
+
+		const stream = this.streams[radioToPlay];
+		if (!stream) {
+			return;
+		}
+		if (this.player) {
+			await this.turnOffSpeakers(true);
+			this.player.stop();
+		}
+		this.player = new MPlayer();
+		this.player.on('status', (status) => {
+			this.status.title = status.title;
+		});
+		this.player.openFile(stream, { volume: 5 });
+
+		while(!this.player.status.position) {
+			await new Promise((resolve) => {
+				setTimeout(() => {
+					resolve();
+				}, 100);
+			});
+		}
+		this.player.volume(this.status.volume || 40);
+		await this.turnOnSpeakers();
+
+		this.status.stream = radioToPlay;
+		this.status.on = true;
+		this.status.volume = this.status.volume || 40;
 	}
 
-	sendUpdatedStatus(controllers.filter(c => c.readyState === 1 && c !== sender));
-};
-
-const closeController = closer => {
-	const index = controllers.indexOf(closer);
-	if(index != -1) {
-		controllers.splice(index, 1);
-		console.log('Controller to %s disconnected', controllerPath);
+	async turnOnSpeakers() {
+		console.log(`turnOnSpeakers`);
+		try {
+			await axios.get(`${this.controllerUrl}/on`, { timeout: 500 });
+		} catch (error) {
+			console.log(`${this.controllerUrl}/on Did not respond.`);
+		}
 	}
-};
 
-const broadcastStatusChange = status => {
-	currentTitle = status.title;
-	sendUpdatedStatus(controllers.filter(r => r.readyState === 1));
+	setSpeakersVolume(volume) {
+		console.log(`setSpeakersVolume`);
+		if (!this.player) {
+			return;
+		}
+
+		this.player.volume(Number(volume));
+		this.status.volume = Number(volume);
+	}
+
+	async turnOffSpeakers(keepVolume = false) {
+		console.log(`turnOffSpeakers`);
+		if (!this.player) {
+			return;
+		}
+		try {
+			await axios.get(`${this.controllerUrl}/off`, { timeout: 500 });
+		} catch (error) {
+			console.log(`${this.controllerUrl}/off Did not respond.`);
+		}
+
+		this.player.stop();
+		this.status = {
+			title: '',
+			stream: '',
+			volume: keepVolume ? this.status.volume : 0,
+			on: false,
+		}
+	}
+
+	getSpeakersStatus() {
+		console.log(`getSpeakersStatus`);
+		return this.status;
+	}
 }
 
-const sendUpdatedStatus = receivers => {
-	receivers.forEach(r => {
-		r.send(JSON.stringify({title: currentTitle, activeAudio: currentStream, audioVolume: currentVolume}));
-	});
-};
-
-const requestIsInvalid = (req) => {
-	if(req.play === null) 
-	if((!streams[req.play] && req.play !== null) || (req.play !== null && isNaN(req.volume))) {
-		return true;
-	}
-
-	return false;
-}
-
-export default () => ({
-	controllerPath,
-	actions: {
-		onOpenController: openController,
-		onMessage: message,
-		onCloseController: closeController
-	}
-});
+export default new RadioController();

@@ -1,98 +1,66 @@
-import { getState, updateState, getLastRequest } from './State';
-import { tryParseRequest } from '../Utils';
+import axios from 'axios';
 
-const controllerPath = '/lightning';
-const listenerPath = '/lightningReceiver';
+class LightningController {
+	constructor() {
+		this.controllerUrl = 'http://10.42.0.99';
 
-const listeners = [];
-const controllers = [];
-let interval = null;
+		this.status = {
+			mode: '',
+			on: false,
+		};
 
-const openController = opener => {
-	console.log('Controller to %s connected', controllerPath);
-	controllers.push(opener);
-
-	if(opener.readyState === 1) {
-		opener.send(JSON.stringify(getLastRequest()));
-	}
-};
-
-const openListener = opener => {
-	console.log('Receiver to %s connected', listenerPath);
-	listeners.push(opener);
-
-	if(opener.readyState === 1) {
-		const state = getState();
-		opener.send(JSON.stringify(`${state.red} ${state.green} ${state.blue}`));
-	}
-};
-
-const message = (sender, request) => {
-	let req;
-	if(!(req = tryParseRequest(request))) {
-		request.send(JSON.stringify({error: 'Request Must be valid JSON'}));
-		return;
+		this.mappings = {
+			bright: [255, 240, 220],
+			medium: [120, 90, 100],
+			low: [35, 25, 30],
+			red: [100, 0, 0],
+			green: [0, 100, 0],
+			blue: [0, 1, 100],
+			cyan: [0, 30, 60],
+			purple: [60, 0, 30],
+		};
 	}
 
-	if(!updateState(req)) {
-		console.error('Received request did not match Interface');
-		console.log(req);
-	} else {
-		if(req.activeCheckbox === 2 && interval === null) {
-			interval = handleInterval();
-		} else if(req.activeCheckbox !== 2) {
-			clearInterval(interval);
-			interval = null;
-			const state = getState();
-			const stateToSend = `${state.red} ${state.green} ${state.blue}`;
+	turnLightOn(mode) {
+		const modeToUse = mode.toLowerCase();
+		const colors = this.mappings[modeToUse];
 
-			sendState(stateToSend, listeners.filter(r => r.readyState === 1));
+		if (!colors) {
+			return;
+		}
+		console.log(`${this.controllerUrl}/?r=${colors[0]}&g=${colors[1]}&b=${colors[2]}`);
+		try {
+			axios.get(`${this.controllerUrl}/?r=${colors[0]}&g=${colors[1]}&b=${colors[2]} Did not respond.`, { timeout: 500 });
+			this.status = {
+				mode: '',
+				on: false,
+			};
+		} catch (error) {
+			console.log(`${this.controllerUrl}/?r=${colors[0]}&g=${colors[1]}&b=${colors[2]} Did not respond.`);
 		}
 
-		const stateToSend = JSON.stringify(req);
-		sendState(stateToSend, controllers.filter(c => c.readyState === 1 && c !== sender));
+		this.status = {
+			mode: modeToUse,
+			on: true,
+		};
+	}
+
+	turnLightOff(mode) {
+		console.log(`${this.controllerUrl}/?r=0&g=0&b=0`);
+		try {
+			axios.get(`${this.controllerUrl}/?r=0&g=0&b=0`, { timeout: 500 });
+			this.status = {
+				mode: '',
+				on: false,
+			};
+		} catch (error) {
+			console.log(`${this.controllerUrl}/?r=0&g=0&b=0`);
+		}
+	}
+
+	getLightningStatus() {
+		return this.status;
 	}
 }
 
-const closeController = closer => {
-	const index = controllers.indexOf(closer);
-	if(index != -1) {
-		controllers.splice(index, 1);
-		console.log('Controller to %s disconnected', listenerPath);
-	}
-};
-
-const closeListener = closer => {
-	const index = listeners.indexOf(closer);
-	if(index != -1) {
-		listeners.splice(index, 1);
-		console.log('Receiver to %s disconnected', controllerPath);
-	}
-};
-
-const handleInterval = () => {
-	return setInterval(function () {
-		const state = getState();
-		const stateToSend = `${state.red} ${state.green} ${state.blue}`;
-
-		sendState(stateToSend, listeners.filter(r => r.readyState === 1));
-	}, 50);
-};
-
-const sendState = (state, receivers) => {
-	receivers.forEach(r => {
-		r.send(state);
-	})
-};
-
-export default () => ({
-	controllerPath,
-	listenerPath,
-	actions: {
-		onOpenController: openController,
-		onOpenListener: openListener,
-		onMessage: message,
-		onCloseController: closeController,
-		onCloseListener: closeListener
-	}
-});
+export default new LightningController();

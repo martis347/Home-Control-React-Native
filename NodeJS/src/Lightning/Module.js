@@ -1,17 +1,14 @@
-import Controller from './Controller';
+import controller from './Controller';
 
-const controller = Controller();
-
-const initialize = expressApp => {
-	expressApp.ws('/ws' + controller.controllerPath, ws => {
-		controller.actions.onOpenController(ws);
-		ws.on('close', () => controller.actions.onCloseController(ws));
-		ws.on('message', request => controller.actions.onMessage(ws, request));
+const initialize = app => {
+	app.get('/lightning/status', (req, res) => res.send(controller.getLightningStatus()));
+	app.get('/lightning/off', (req, res) => {
+		res.sendStatus(200);
+		controller.turnLightOff();
 	});
-	
-	expressApp.ws('/ws' + controller.listenerPath, ws => {
-		controller.actions.onOpenListener(ws);
-		ws.on('close', () => controller.actions.onCloseListener(ws));
+	app.get('/lightning/on/:mode', (req, res) => {
+		res.sendStatus(200);
+		controller.turnLightOn(req.params.mode);
 	});
 }
 

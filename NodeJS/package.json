@@ -10,11 +10,12 @@
   "author": "Martynas Kanapinskas",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
     "express": "^4.16.2",
-    "express-ws": "^3.0.0",
-    "http": "0.0.0",
+    "forever": "^0.15.3",
     "mplayer": "^2.1.0",
-    "ws": "^3.3.2"
+    "node-mplayer": "0.0.6",
+    "stream-player": "^0.3.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
