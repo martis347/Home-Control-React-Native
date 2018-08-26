@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="frame">
     <div class="clock">{{ time }}</div>
     <div class="date">Monday | Liepos 30, 2018</div>
   </div>
@@ -27,13 +27,16 @@ export default {
 </script>
 
 <style scoped>
-.clock {
-  font-size: 8em;
+.frame {
+  margin: 0;
 }
-
+.clock {
+  font-size: 15vw;
+  margin-top: -4vh;
+}
 .date {
-  font-size: 1.8em;
-  margin-top: -40px;
+  font-size: 3.3vw;
+  margin-top: -7vh;
   text-align: center;
 }
 </style>

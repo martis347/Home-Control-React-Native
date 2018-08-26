@@ -1,11 +1,9 @@
 <template>
-  <section class="container1" :key="iteration">
-    <Weather :currentData="current" :dailyData="daily" class="box weather"/>
-    <div></div>
-    <Clock class="box clock"/>
-    <Chart :data="hourly" class="box chart"/>
-    <div></div>
-  </section>
+  <v-app dark class="main" :key="iteration">
+    <Weather :currentData="current" :dailyData="daily" class="weather"/>
+    <Clock class="clock"/>
+    <Chart :data="hourly" class="chart"/>
+  </v-app>
 </template>
 
 <script>
@@ -27,7 +25,7 @@ export default {
   },
   methods: {
     async loadWeatherData() {
-      const { data } = await axios.get('/api/weather');
+      const { data } = await axios.get('https://home-control2.azurewebsites.net/api/weather');
 
       this.hourly = data.hourly;
       this.daily = data.daily;
@@ -49,43 +47,19 @@ export default {
 </script>
 
 <style scoped>
-* {
-  color: #000;
-  letter-spacing: 0.5px;
-  font-family: "Source Sans Pro", Arial, sans-serif;
-}
-.container1 {
+.main {
   background-color: black;
-  display: grid;
-  grid-template-columns: 1fr 2fr 1fr 1fr;
-  grid-template-rows: 2fr 3fr;
-  grid-gap: 10px;
-  height: 100%;
-  height: -moz-available;          /* WebKit-based browsers will ignore this. */
-  height: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
-  height: stretch;
-}
-
-.box {
-  color: #fff;
-  border-radius: 5px;
-  padding: 20px;
-  font-size: 150%;
+  position: relative;
 }
 
 .clock {
-  grid-column-start: 3;
-  grid-column-end: 5;
-}
-
-.weather {
-  grid-row-start: 1;
-  grid-row-end: 4;
+  top: 0;
+  right: 0;
+  position: absolute;
 }
 
 .chart {
-  grid-column-start: 2;
-  grid-column-end: 4;
+  margin: auto;
+  width: 50%;
 }
-
 </style>

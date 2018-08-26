@@ -155,7 +155,7 @@ export default {
       this.lightningStatus = response;
     },
     async makeCall(data) {
-      const response = await axios.post(`/api/${data}`);
+      const response = await axios.post(`https://home-control2.azurewebsites.net/api/${data}`);
       return response.data;
     },
     showSnack(message) {

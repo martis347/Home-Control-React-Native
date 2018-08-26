@@ -3,7 +3,7 @@
     <div>
       <div>
         <span class="temperature-text">{{ currentData.apparentTemperature}}°</span>
-        <canvas class="current-weather-icon" id="icon1" width="140" height="140"></canvas>
+        <canvas class="current-weather-icon" id="icon1" width="60" height="60"></canvas>
       </div>
       <div class="weather-text">
         {{ currentData.summary }}
@@ -12,10 +12,10 @@
         Kaunas, Lithuania
       </div>
     </div>
-    <div style="margin-top: 30px;">
+    <div style="margin-top: 4vh;">
       <ul style="padding-left: 0;">
         <li v-for="(day, i) in dailyData" :key="i" class="days-list-item">
-          <canvas :id="day.day" width="50" height="50"></canvas>
+          <canvas :id="day.day" width="30" height="30"></canvas>
           <span>{{ day.day }} {{ day.lowTemp }}° - {{ day.highTemp }}°</span>
         </li>
       </ul>
@@ -42,22 +42,27 @@ export default {
 </script>
 <style scoped>
 .temperature-text {
-  font-size: 8em;
+  font-size: 8vw;
+  margin-top: 10vh;
 }
 
 .weather-text {
-  margin-top: -30px;
-  font-size: 3em;
+  font-size: 4vw;
+  margin-top: -8vh;
 }
 
 .city-text {
   font-size: 1.5em;
 }
 
+.current-weather-icon {
+  margin-bottom: -2vh;
+}
+
 .days-list-item {
   list-style-type: none;
-  font-size: 1.3em;
-  margin-bottom: 8px;
+  font-size: 2.5vw;
+  margin-bottom: 6px;
 }
 
 .days-list-item > canvas {

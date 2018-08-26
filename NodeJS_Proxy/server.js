@@ -1,6 +1,7 @@
 const axios = require('axios');
 const express = require('express');
 const cors = require('cors');
+const moment = require('moment');
 
 const app = express();
 app.use(cors());
@@ -29,13 +30,13 @@ app.get('/api/weather', async (req, resp) => {
 	const daysOfWeek = ['Sekmadienis', 'Pirmadienis', 'Antradienis', 'Trečiadienis', 'Ketvirtadienis', 'Penktadienis', 'Šeštadienis']
 	const { data } = await axios.get('https://api.darksky.net/forecast/3e3a24a1e579b33cf401b4a69f4ad990/54.927689,23.949363?units=si');
 	const hourlyWeather = data.hourly.data.slice(0, 16).map(d => ({
-		hour: (new Date(d.time * 1000)).getHours(),
+		hour: moment.utc(d.time * 1000).add(3, 'hours').get('hours'),
 		temperature: d.apparentTemperature,
 		rainProbability: d.precipProbability * 100,
 	}));
 
 	const dailyWeather = data.daily.data.slice(0, 7).map(d => ({
-		day: daysOfWeek[(new Date(d.time * 1000)).getDay()],
+		day: daysOfWeek[moment.utc(d.time * 1000).add(3, 'hours').get('day')],
 		icon: d.icon,
 		lowTemp: Math.round(d.temperatureLow),
 		highTemp: Math.round(d.temperatureHigh),

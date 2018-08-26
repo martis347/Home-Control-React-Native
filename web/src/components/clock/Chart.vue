@@ -23,9 +23,11 @@ export default {
   computed: {
     myStyles() {
       return {
-        bottom: '20px',
+        bottom: '0',
+        right: '2vw',
+        width: '63vw',
+        height: '65vh',
         position: 'absolute',
-        width: '60vw',
       };
     },
   },
