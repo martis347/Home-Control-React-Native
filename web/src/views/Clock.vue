@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     async loadWeatherData() {
-      const { data } = await axios.get('http://localhost:3005/api/weather');
+      const { data } = await axios.get('/api/weather');
 
       this.hourly = data.hourly;
       this.daily = data.daily;

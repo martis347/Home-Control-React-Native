@@ -54,4 +54,4 @@ app.get('/api/weather', async (req, resp) => {
 	});
 });
 
-app.listen(3005);
+app.listen(process.env.port || 3005);
