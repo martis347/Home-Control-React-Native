@@ -33,7 +33,7 @@
         </span>
       <v-layout>
         <v-flex xs5>
-            <v-btn :icon="true" @click="turnOffRadio()">
+            <v-btn :icon="true" :color="radioStatus.stream === '' ? 'secondary' : ''" @click="turnOffRadio()">
               <v-icon color="primary">stop</v-icon>
             </v-btn>
             <v-btn :icon="true" @click="updateVolume(-5)">
@@ -104,7 +104,7 @@ export default {
     radioStatus: {
       title: '',
       stream: '',
-      volume: '',
+      volume: 0,
       on: false,
     },
     lightningStatus: {
@@ -117,6 +117,7 @@ export default {
   methods: {
     async turnRadio(station) {
       this.showSnack(`Turning radio to ${station}.`);
+      this.radioStatus.stream = station;
       await this.makeCall(`radio/on/${station}`);
       setTimeout(() => {
         this.refresh();
@@ -124,17 +125,16 @@ export default {
     },
     async turnOffRadio() {
       this.showSnack('Turning radio off.');
+      this.radioStatus.stream = '';
       await this.makeCall('radio/off');
       setTimeout(() => {
         this.refresh();
       }, 3000);
     },
     async updateVolume(amount) {
-      this.showSnack(`Volume set to ${this.radioStatus.volume}.`);
-      await this.updateRadioStatus();
       this.radioStatus.volume += amount;
+      this.showSnack(`Volume set to ${this.radioStatus.volume}.`);
       await this.makeCall(`radio/volume/${this.radioStatus.volume}`);
-      this.refresh();
     },
     async setBrightness(mode) {
       this.showSnack(`Setting lightning to ${mode}.`);
@@ -155,7 +155,7 @@ export default {
       this.lightningStatus = response;
     },
     async makeCall(data) {
-      const response = await axios.post(`/api/${data}`);
+      const response = await axios.post(`http://localhost:3005/api/${data}`);
       return response.data;
     },
     showSnack(message) {
@@ -168,6 +168,7 @@ export default {
     },
   },
   mounted() {
+    this.refresh();
   },
 };
 </script>
