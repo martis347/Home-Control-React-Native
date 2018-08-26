@@ -5,9 +5,7 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 
-app.use(express.static('static'));
-
-app.post('api/:a?/:b?/:c?/:d?/:e?', (req, resp) => {
+app.post('/api/:a?/:b?/:c?/:d?/:e?', (req, resp) => {
 	let request = '';
 	request += req.params.a ? '/' + req.params.a : '';
 	request += req.params.b ? '/' + req.params.b : '';
@@ -27,4 +25,33 @@ app.post('api/:a?/:b?/:c?/:d?/:e?', (req, resp) => {
 		});
 });
 
-app.listen(process.env.port || 3005);
+app.get('/api/weather', async (req, resp) => {
+	const daysOfWeek = ['Sekmadienis', 'Pirmadienis', 'Antradienis', 'Trečiadienis', 'Ketvirtadienis', 'Penktadienis', 'Šeštadienis']
+	const { data } = await axios.get('https://api.darksky.net/forecast/3e3a24a1e579b33cf401b4a69f4ad990/54.927689,23.949363?units=si');
+	const hourlyWeather = data.hourly.data.slice(0, 16).map(d => ({
+		hour: (new Date(d.time * 1000)).getHours(),
+		temperature: d.apparentTemperature,
+		rainProbability: d.precipProbability * 100,
+	}));
+
+	const dailyWeather = data.daily.data.slice(0, 7).map(d => ({
+		day: daysOfWeek[(new Date(d.time * 1000)).getDay()],
+		icon: d.icon,
+		lowTemp: Math.round(d.temperatureLow),
+		highTemp: Math.round(d.temperatureHigh),
+	}));
+
+	const currentWeather = {
+		icon: data.currently.icon,
+		summary: data.currently.summary,
+		apparentTemperature: Math.round(data.currently.apparentTemperature),
+	};
+
+	return resp.json({
+		hourly: hourlyWeather,
+		daily: dailyWeather,
+		current: currentWeather,
+	});
+});
+
+app.listen(3005);
