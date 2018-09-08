@@ -3,10 +3,10 @@
     <v-subheader>Youtube</v-subheader>
     <span class="grey--text">
       <v-layout>
-        <v-flex xs4>
+        <v-flex xs10 md4>
           <v-text-field v-model="searchQuery" class="ml-3" @keyup.enter.native="search" label="Youtube Search"/>
         </v-flex>
-        <v-flex class="mt-2">
+        <v-flex xs2 class="mt-2">
           <v-btn color="primary" outline :loading="loading" @click="search">Search</v-btn>
         </v-flex>
       </v-layout>
@@ -56,9 +56,7 @@ export default {
       this.loading = false;
     },
     play(id) {
-      axios.post('https://home-control2.azurewebsites.net/api', {
-        request: `browser/start/https://www.youtube.com/watch?v=${id}`,
-      });
+      axios.post(`https://home-control2.azurewebsites.net/api/browser/start/${id}`);
     },
   },
 };
