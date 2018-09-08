@@ -7,7 +7,9 @@ class BrowserController {
 
 	async startYoutube(videoId) {
 		await this.killYoutube();
-		this.chromeInstance = await ChromeLauncher.launch({ startingUrl: `https://www.youtube.com/watch?v=${videoId}`, chromeFlags: [] });
+		setTimeout(async () => {
+			this.chromeInstance = await ChromeLauncher.launch({ startingUrl: `https://www.youtube.com/watch?v=${videoId}` });
+		}, 1000);
 	}
 
 	async killYoutube() {
