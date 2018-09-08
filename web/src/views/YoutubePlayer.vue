@@ -18,7 +18,9 @@ export default {
   mounted() {
     this.showPlayer = Object.prototype.hasOwnProperty.call(this.$route.query, 'show');
     this.player = YouTubePlayer('video-player');
-    this.playVideo(this.$route.params.videoId);
+    if (this.$route.params.videoId) {
+      this.playVideo(this.$route.params.videoId);
+    }
 
     this.player.on('stateChange', async (event) => {
       if (event.data === 0) {
@@ -28,6 +30,9 @@ export default {
         this.playVideo(nextVideoId);
       }
     });
+
+    window.playVideo = this.playVideo;
+    window.stopPlaying = this.stop;
   },
   methods: {
     getRandomInt(min, max) {
@@ -35,6 +40,7 @@ export default {
       return result;
     },
     playVideo(id) {
+      console.log(id);
       this.player.loadVideoById(id);
       this.playedVideoId = id;
       this.last5VideoIds.push(id);
@@ -42,6 +48,10 @@ export default {
       if (this.last5VideoIds.length === 5) {
         this.last5VideoIds = this.last5VideoIds.slice(1);
       }
+    },
+    stop() {
+      this.player.stopVideo();
+      this.playedVideoId = null;
     },
   },
 };

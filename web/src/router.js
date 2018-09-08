@@ -25,7 +25,7 @@ export default new Router({
       component: Control,
     },
     {
-      path: '/player/:videoId',
+      path: '/player/:videoId?',
       name: 'Player',
       component: YoutubePlayer,
     },
