@@ -56,7 +56,7 @@ export default {
       this.loading = false;
     },
     play(id) {
-      axios.post(`https://home-control2.azurewebsites.net/api/browser/start/${id}`);
+      axios.post(`https://home-control2.azurewebsites.net/api/youtube/start/${id}`);
     },
   },
 };
