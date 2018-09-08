@@ -16,8 +16,7 @@
     "forever": "^0.15.3",
     "greenlock-express": "^2.3.2",
     "mplayer": "^2.1.0",
-    "node-mplayer": "0.0.6",
-    "stream-player": "^0.3.0"
+    "node-mplayer": "0.0.6"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
