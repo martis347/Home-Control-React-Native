@@ -1,12 +1,17 @@
 <template>
   <v-card class="mt-3">
-    <v-subheader>Youtube</v-subheader>
+    <v-layout>
+      <v-subheader>Youtube</v-subheader>
+      <v-btn style="margin-left: -10px" icon @click="stop">
+        <v-icon color="red">stop</v-icon>
+      </v-btn>
+    </v-layout>
     <span class="grey--text">
       <v-layout>
-        <v-flex xs10 md4>
+        <v-flex xs8 md6>
           <v-text-field v-model="searchQuery" class="ml-3" @keyup.enter.native="search" label="Youtube Search"/>
         </v-flex>
-        <v-flex xs2 class="mt-2">
+        <v-flex xs4 class="mt-2">
           <v-btn color="primary" outline :loading="loading" @click="search">Search</v-btn>
         </v-flex>
       </v-layout>
@@ -20,7 +25,12 @@
           @click="play(result.id)"
         >
           <v-list-tile-avatar>
-            <img :src="result.thumbnail">
+            <v-progress-circular
+              v-if="loadingId === result.id"
+              indeterminate
+              color="primary"
+            ></v-progress-circular>
+            <img v-else :src="result.thumbnail">
           </v-list-tile-avatar>
 
           <v-list-tile-content>
@@ -42,6 +52,7 @@ export default {
     searchQuery: '',
     loading: false,
     searchResults: [],
+    loadingId: null,
   }),
   methods: {
     async search() {
@@ -56,7 +67,17 @@ export default {
       this.loading = false;
     },
     play(id) {
+      if (this.loadingId) {
+        return;
+      }
       axios.post(`https://home-control2.azurewebsites.net/api/youtube/start/${id}`);
+      this.loadingId = id;
+      setTimeout(() => {
+        this.loadingId = null;
+      }, 5000);
+    },
+    stop() {
+      axios.post('https://home-control2.azurewebsites.net/api/youtube/stop');
     },
   },
 };
