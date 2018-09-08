@@ -1,25 +1,27 @@
 const ChromeLauncher = require('./chrome-launcher');
+const puppeteer = require('puppeteer-core');
 
 class BrowserController {
 	constructor() {
-		this.chromeInstance = null;
+		puppeteer.launch({ headless: false, executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe' })
+			.then(chrome => chrome.newPage()
+				.then(page => {
+					this.currentPage = page;
+					this.currentPage.goto('localhost:8080/player');
+				})
+			);
 	}
 
 	async startYoutube(videoId) {
-		await this.killYoutube();
-		setTimeout(async () => {
-			this.chromeInstance = await ChromeLauncher.launch({ startingUrl: `https://www.youtube.com/watch?v=${videoId}` });
-		}, 1000);
+		await this.currentPage.evaluate((id) => {
+			window.playVideo(id);
+		}, videoId);
 	}
 
-	async killYoutube() {
-		try {
-			if (this.chromeInstance) {
-				return await this.chromeInstance.kill();
-			}
-		} catch (error) {
-			
-		}
+	async stopYoutube() {
+		await this.currentPage.evaluate(() => {
+			window.stopPlaying();
+		});
 	}
 }
 

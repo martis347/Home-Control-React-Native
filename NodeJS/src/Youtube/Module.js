@@ -7,7 +7,7 @@ const initialize = app => {
 	});
 	app.get('/youtube/stop', (req, res) => {
 		res.sendStatus(200);
-		controller.killYoutube();
+		controller.stopYoutube();
 	});
 }
 
