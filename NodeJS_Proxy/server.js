@@ -2,17 +2,23 @@ const axios = require('axios');
 const express = require('express');
 const cors = require('cors');
 const moment = require('moment');
+const bodyParser = require('body-parser');
 
 const app = express();
 app.use(cors());
+app.use(bodyParser.json());
 
 app.post('/api/:a?/:b?/:c?/:d?/:e?', (req, resp) => {
 	let request = '';
-	request += req.params.a ? '/' + req.params.a : '';
-	request += req.params.b ? '/' + req.params.b : '';
-	request += req.params.c ? '/' + req.params.c : '';
-	request += req.params.d ? '/' + req.params.d : '';
-	request += req.params.e ? '/' + req.params.e : '';
+	if (req.body.request) {
+		request = '/' + req.body.request;
+	} else {
+		request += req.params.a ? '/' + req.params.a : '';
+		request += req.params.b ? '/' + req.params.b : '';
+		request += req.params.c ? '/' + req.params.c : '';
+		request += req.params.d ? '/' + req.params.d : '';
+		request += req.params.e ? '/' + req.params.e : '';
+	}	
 	console.log(request);
 	
 	return axios.get('http://178.16.37.145:3001' + request)

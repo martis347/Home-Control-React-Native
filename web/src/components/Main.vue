@@ -31,35 +31,35 @@
         <span class="grey--text ml-3" v-show="radioStatus.title">
           <b>Now Playing:</b> {{ radioStatus.title }}
         </span>
-      <v-layout>
-        <v-flex xs5>
-            <v-btn :icon="true" :color="radioStatus.stream === '' ? 'secondary' : ''" @click="turnOffRadio()">
-              <v-icon color="primary">stop</v-icon>
-            </v-btn>
-            <v-btn :icon="true" @click="updateVolume(-5)">
-              <v-icon color="primary">volume_down</v-icon>
-            </v-btn>
-            <v-btn :icon="true" @click="updateVolume(5)">
-              <v-icon color="primary">volume_up</v-icon>
-            </v-btn>
-          </v-flex>
-          <v-flex xs7 class="mb-3 text-xs-center" :style="{ marginTop: '-8px' }">
-            <v-btn color="secondary" small :flat="radioStatus.stream !== 'm1'" @click="turnRadio('m1')">
-              M-1
-            </v-btn>
-            <v-btn color="secondary" small  :flat="radioStatus.stream !== 'phr'" @click="turnRadio('phr')">
-              PHR
-            </v-btn>
-            <v-btn color="secondary" small  :flat="radioStatus.stream !== 'relaxfm'" @click="turnRadio('relaxfm')">
-              Relax FM
-            </v-btn>
-            <v-btn color="secondary" small  :flat="radioStatus.stream !== 'rockfm'" @click="turnRadio('rockfm')">
-              Rock FM
-            </v-btn>
-          </v-flex>
-      </v-layout>
+        <v-layout>
+          <v-flex xs5>
+              <v-btn :icon="true" :color="radioStatus.stream === '' ? 'secondary' : ''" @click="turnOffRadio()">
+                <v-icon color="primary">stop</v-icon>
+              </v-btn>
+              <v-btn :icon="true" @click="updateVolume(-5)">
+                <v-icon color="primary">volume_down</v-icon>
+              </v-btn>
+              <v-btn :icon="true" @click="updateVolume(5)">
+                <v-icon color="primary">volume_up</v-icon>
+              </v-btn>
+            </v-flex>
+            <v-flex xs7 class="mb-3 text-xs-center" :style="{ marginTop: '-8px' }">
+              <v-btn color="secondary" small :flat="radioStatus.stream !== 'm1'" @click="turnRadio('m1')">
+                M-1
+              </v-btn>
+              <v-btn color="secondary" small  :flat="radioStatus.stream !== 'phr'" @click="turnRadio('phr')">
+                PHR
+              </v-btn>
+              <v-btn color="secondary" small  :flat="radioStatus.stream !== 'relaxfm'" @click="turnRadio('relaxfm')">
+                Relax FM
+              </v-btn>
+              <v-btn color="secondary" small  :flat="radioStatus.stream !== 'rockfm'" @click="turnRadio('rockfm')">
+                Rock FM
+              </v-btn>
+            </v-flex>
+        </v-layout>
       </v-card>
-      <v-card class="mt-3">
+      <v-card class="mt-3" v-show="false">
         <v-subheader>Lightning</v-subheader>
         <v-flex>
           <v-btn :color="!lightningStatus.on ? 'secondary' : ''" :icon="true" @click="setBrightnessOff()">
@@ -92,14 +92,19 @@
           </v-btn>
         </v-flex>
       </v-card>
+      <youtube-search/>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
 import axios from 'axios';
+import YoutubeSearch from './YoutubeSearch.vue';
 
 export default {
+  components: {
+    YoutubeSearch,
+  },
   data: () => ({
     radioStatus: {
       title: '',

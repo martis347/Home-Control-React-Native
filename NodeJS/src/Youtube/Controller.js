@@ -5,13 +5,12 @@ class BrowserController {
 		this.chromeInstance = null;
 	}
 
-	async startBrowser(url) {
+	async startYoutube(videoId) {
 		await this.killBrowser();
-		console.log(ChromeLauncher);
-		this.chromeInstance = await ChromeLauncher.launch({ startingUrl: url });
+		this.chromeInstance = await ChromeLauncher.launch({ startingUrl: `https://www.youtube.com/watch?v=${videoId}` });
 	}
 
-	async killBrowser() {
+	async killYoutube() {
 		if (this.chromeInstance) {
 			return await this.chromeInstance.kill();
 		}
