@@ -8,7 +8,16 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+const getDestinationUrl = (request) => {
+	if (request.startsWith('/transmit')) {
+		return 'http://178.16.37.145:3002';
+	} else {
+		return 'http://178.16.37.145:3001';
+	}
+};
+
 app.post('/api/:a?/:b?/:c?/:d?/:e?', (req, resp) => {
+	
 	let request = '';
 	if (req.body.request) {
 		request = '/' + req.body.request;
@@ -18,10 +27,11 @@ app.post('/api/:a?/:b?/:c?/:d?/:e?', (req, resp) => {
 		request += req.params.c ? '/' + req.params.c : '';
 		request += req.params.d ? '/' + req.params.d : '';
 		request += req.params.e ? '/' + req.params.e : '';
-	}	
+	}
 	console.log(request);
 	
-	return axios.get('http://178.16.37.145:3001' + request)
+	
+	return axios.get(getDestinationUrl(request) + request)
 		.then(r => {
 			return resp.send(r.data);
 		})

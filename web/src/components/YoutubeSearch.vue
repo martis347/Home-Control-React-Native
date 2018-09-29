@@ -1,18 +1,20 @@
 <template>
-  <v-card class="mt-3">
-    <v-layout>
+  <v-card class="mt-3" max-height="70vh" style="overflow-y: auto;">
+    <v-layout hidden-md-and-down>
       <v-subheader>Youtube</v-subheader>
-      <v-btn style="margin-left: -10px" icon @click="stop">
-        <v-icon color="red">stop</v-icon>
-      </v-btn>
     </v-layout>
     <span class="grey--text">
       <v-layout>
         <v-flex xs8 md6>
           <v-text-field v-model="searchQuery" class="ml-3" @keyup.enter.native="search" label="Youtube Search"/>
         </v-flex>
-        <v-flex xs4 class="mt-2">
-          <v-btn color="primary" outline :loading="loading" @click="search">Search</v-btn>
+        <v-flex>
+          <v-btn color="primary" fab small :loading="loading" @click="search">
+            <v-icon>search</v-icon>
+          </v-btn>
+          <v-btn color="red" fab small @click="stop">
+            <v-icon>stop</v-icon>
+          </v-btn>
         </v-flex>
       </v-layout>
     </span>
@@ -70,14 +72,26 @@ export default {
       if (this.loadingId) {
         return;
       }
-      axios.post(`https://home-control2.azurewebsites.net/api/youtube/start/${id}`);
+
+      if (window.settings.useLocalServer) {
+        axios.get(`http://192.168.31.246:3001/youtube/start/${id}`);
+      } else {
+        axios.post(`https://home-control2.azurewebsites.net/api/youtube/start/${id}`);
+      }
+
       this.loadingId = id;
       setTimeout(() => {
         this.loadingId = null;
       }, 5000);
     },
     stop() {
-      axios.post('https://home-control2.azurewebsites.net/api/youtube/stop');
+      if (window.settings.useLocalServer) {
+        axios.get('http://192.168.31.246:3001/youtube/stop');
+      } else {
+        axios.post('https://home-control2.azurewebsites.net/api/youtube/stop');
+      }
+      this.searchResults = [];
+      this.searchQuery = '';
     },
   },
 };

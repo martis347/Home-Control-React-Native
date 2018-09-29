@@ -1,5 +1,4 @@
 <template>
-  <!-- eslint-disable max-len -->
   <v-layout>
     <v-snackbar
       v-model="snackbar"
@@ -15,83 +14,36 @@
         Close
       </v-btn>
     </v-snackbar>
-    <v-flex xs12 md8 lg6 offset-md2 offset-lg3>
+    <v-flex xs3>
       <v-card class="mt-3">
-        <v-card-title primary-title>
-            <div>
-              <h3 class="headline">Hey There!</h3>
-              <div>I hope you're having a good day 😃</div>
-            </div>
-        </v-card-title>
-      </v-card>
-      <v-card class="mt-3">
-        <v-subheader>
-          Radio <span v-show="radioStatus.volume">&nbsp;({{radioStatus.volume}})</span>
-        </v-subheader>
-        <span class="grey--text ml-3" v-show="radioStatus.title">
-          <b>Now Playing:</b> {{ radioStatus.title }}
-        </span>
-        <v-layout>
-          <v-flex xs5>
-              <v-btn :icon="true" :color="radioStatus.stream === '' ? 'secondary' : ''" @click="turnOffRadio()">
-                <v-icon color="primary">stop</v-icon>
-              </v-btn>
-              <v-btn :icon="true" @click="updateVolume(-5)">
-                <v-icon color="primary">volume_down</v-icon>
-              </v-btn>
-              <v-btn :icon="true" @click="updateVolume(5)">
-                <v-icon color="primary">volume_up</v-icon>
-              </v-btn>
-            </v-flex>
-            <v-flex xs7 class="mb-3 text-xs-center" :style="{ marginTop: '-8px' }">
-              <v-btn color="secondary" small :flat="radioStatus.stream !== 'm1'" @click="turnRadio('m1')">
-                M-1
-              </v-btn>
-              <v-btn color="secondary" small  :flat="radioStatus.stream !== 'phr'" @click="turnRadio('phr')">
-                PHR
-              </v-btn>
-              <v-btn color="secondary" small  :flat="radioStatus.stream !== 'relaxfm'" @click="turnRadio('relaxfm')">
-                Relax FM
-              </v-btn>
-              <v-btn color="secondary" small  :flat="radioStatus.stream !== 'rockfm'" @click="turnRadio('rockfm')">
-                Rock FM
-              </v-btn>
-            </v-flex>
+        <v-layout column>
+          <v-layout hidden-md-and-down>
+            <v-subheader>Radio</v-subheader>
+          </v-layout>
+          <span class="grey--text text-truncate" style="text-align: center;" v-show="radioStatus.title">
+            {{ radioStatus.title }}
+          </span>
+          <v-btn color="red" small flat @click="turnOffRadio">
+            <span>STOP</span>
+          </v-btn>
+          <v-divider/>
+          <v-flex class="text-xs-center">
+            <v-btn color="secondary" :outline="radioStatus.stream !== 'm1'" small :flat="radioStatus.stream !== 'm1'" @click="turnRadio('m1')">
+              M-1
+            </v-btn>
+            <v-btn color="secondary" :outline="radioStatus.stream !== 'phr'" small :flat="radioStatus.stream !== 'phr'" @click="turnRadio('phr')">
+              PHR
+            </v-btn>
+            <v-btn color="secondary" :outline="radioStatus.stream !== 'relaxfm'" small :flat="radioStatus.stream !== 'relaxfm'" @click="turnRadio('relaxfm')">
+              Relax FM
+            </v-btn>
+            <v-btn color="secondary" :outline="radioStatus.stream !== 'rockfm'" small :flat="radioStatus.stream !== 'rockfm'" @click="turnRadio('rockfm')">
+              Rock FM
+            </v-btn>
+          </v-flex>
         </v-layout>
       </v-card>
-      <v-card class="mt-3" v-show="false">
-        <v-subheader>Lightning</v-subheader>
-        <v-flex>
-          <v-btn :color="!lightningStatus.on ? 'secondary' : ''" :icon="true" @click="setBrightnessOff()">
-            <v-icon color="primary">flash_off</v-icon>
-          </v-btn>
-          <v-btn :color="lightningStatus.mode === 'low' ? 'secondary' : ''" :icon="true" @click="setBrightness('low')">
-            <v-icon color="primary">brightness_low</v-icon>
-          </v-btn>
-          <v-btn :color="lightningStatus.mode === 'medium' ? 'secondary' : ''" :icon="true" @click="setBrightness('medium')">
-            <v-icon color="primary">brightness_medium</v-icon>
-          </v-btn>
-          <v-btn :color="lightningStatus.mode === 'bright' ? 'secondary' : ''" class="mr-4" :icon="true" @click="setBrightness('bright')">
-            <v-icon color="primary">brightness_high</v-icon>
-          </v-btn>
-          <br v-if="$vuetify.breakpoint.xsOnly">
-          <v-btn :color="lightningStatus.mode === 'red' ? 'secondary' : ''" :icon="true" @click="setBrightness('red')">
-            <v-icon color="red">bubble_chart</v-icon>
-          </v-btn>
-          <v-btn :color="lightningStatus.mode === 'green' ? 'secondary' : ''" :icon="true" @click="setBrightness('green')">
-            <v-icon color="green">bubble_chart</v-icon>
-          </v-btn>
-          <v-btn :color="lightningStatus.mode === 'blue' ? 'secondary' : ''" :icon="true" @click="setBrightness('blue')">
-            <v-icon color="blue">bubble_chart</v-icon>
-          </v-btn>
-          <v-btn :color="lightningStatus.mode === 'cyan' ? 'secondary' : ''" :icon="true" @click="setBrightness('cyan')">
-            <v-icon color="cyan">bubble_chart</v-icon>
-          </v-btn>
-          <v-btn :color="lightningStatus.mode === 'purple' ? 'secondary' : ''" :icon="true" @click="setBrightness('purple')">
-            <v-icon color="purple">bubble_chart</v-icon>
-          </v-btn>
-        </v-flex>
-      </v-card>
+      <audio-controls/>
       <youtube-search/>
     </v-flex>
   </v-layout>
@@ -100,10 +52,12 @@
 <script>
 import axios from 'axios';
 import YoutubeSearch from './YoutubeSearch.vue';
+import AudioControls from './AudioControls.vue';
 
 export default {
   components: {
     YoutubeSearch,
+    AudioControls,
   },
   data: () => ({
     radioStatus: {
@@ -111,6 +65,7 @@ export default {
       stream: '',
       volume: 0,
       on: false,
+      fab: false,
     },
     lightningStatus: {
       mode: '',
@@ -160,6 +115,11 @@ export default {
       this.lightningStatus = response;
     },
     async makeCall(data) {
+      if (window.settings.useLocalServer) {
+        const response = await axios.get(`http://192.168.31.246:3001/${data}`);
+        return response.data;
+      }
+
       const response = await axios.post(`https://home-control2.azurewebsites.net/api/${data}`);
       return response.data;
     },
@@ -173,7 +133,9 @@ export default {
     },
   },
   mounted() {
-    this.refresh();
+    if (!window.settings.useLocalServer) {
+      this.refresh();
+    }
   },
 };
 </script>
