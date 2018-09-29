@@ -1,96 +1,77 @@
 <template>
-  <v-app :dark="settings.isDark">
+  <v-app :dark="dark" :key="iteration">
     <v-content>
-      <Main ref="main"></Main>
-      <v-dialog max-width="600">
-        <v-btn
-          color="primary"
-          slot="activator"
-          dark
-          fab
-          fixed
-          bottom
-          right
-        >
-          <v-icon>settings</v-icon>
-        </v-btn>
-        <v-card>
-          <v-card-title
-            primary-title
-          >
-            Settings
-          </v-card-title>
-          <v-list>
-            <v-list-tile @click.stop="switchDark">
-              <v-list-tile-action>
-                <v-checkbox v-model="settings.isDark" @click.stop="switchDark"></v-checkbox>
-              </v-list-tile-action>
-
-              <v-list-tile-content>
-                <v-list-tile-title>Dark</v-list-tile-title>
-                <v-list-tile-sub-title>Use Dark theme</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile @click.stop="switchServer">
-              <v-list-tile-action>
-                <v-checkbox v-model="settings.useLocalServer" @click.stop="switchServer"></v-checkbox>
-              </v-list-tile-action>
-
-              <v-list-tile-content>
-                <v-list-tile-title>Local Server</v-list-tile-title>
-                <v-list-tile-sub-title>Use Local server instead of remote</v-list-tile-sub-title>
-              </v-list-tile-content>
-            </v-list-tile>
-          </v-list>
-        </v-card>
-      </v-dialog>
+      <v-layout>
+        <v-flex md3 class="ml-3">
+          <speakers-controls class="mt-3"/>
+          <radio-controls class="mt-3"/>
+          <youtube-search class="mt-3"/>
+        </v-flex>
+        <v-flex md9 v-if="loaded">
+          <v-layout>
+            <v-flex md4 class="ml-3">
+              <week-weather-list :current="current" :dailyData="daily" class="mt-3" style="height: 280px;"/>
+            </v-flex>
+            <v-flex md8 class="mx-3">
+              <clock-with-date class="mt-3" style="height: 280px;"/>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+      </v-layout>
+      <settings-dialog/>
     </v-content>
   </v-app>
 </template>
 
 <script>
-import Main from '../components/Main.vue';
+import axios from 'axios';
+import YoutubeSearch from '../components/YoutubeSearch.vue';
+import SpeakersControls from '../components/SpeakersControls.vue';
+import RadioControls from '../components/RadioControls.vue';
+import SettingsDialog from '../components/SettingsDialog.vue';
+import WeekWeatherList from '../components/WeekWeatherList.vue';
+import ClockWithDate from '../components/ClockWithDate.vue';
 
 export default {
   name: 'App',
   components: {
-    Main,
+    YoutubeSearch,
+    SpeakersControls,
+    RadioControls,
+    SettingsDialog,
+    WeekWeatherList,
+    ClockWithDate,
   },
   data: () => ({
-    settings: {
-      isDark: true,
-      useLocalServer: false,
-    },
+    hourly: [],
+    daily: [],
+    current: null,
+    iteration: 0,
+    loaded: false,
   }),
-  beforeMount() {
-    const isDark = localStorage.getItem('isDark');
-    if (isDark === undefined) {
-      this.settings.isDark = true;
-    } else {
-      this.settings.isDark = isDark === 'true';
-    }
-
-    const useLocalServer = localStorage.getItem('useLocalServer');
-    if (useLocalServer === undefined) {
-      this.settings.useLocalServer = true;
-    } else {
-      this.settings.useLocalServer = useLocalServer === 'true';
-    }
-
-    window.settings = this.settings;
-    window.urlToUse = this.settings.useLocalServer ? 'http://192.168.31.246:3001' : 'https://home-control2.azurewebsites.net/api';
+  mounted() {
+    this.loadWeatherData();
+    setInterval(this.loadWeatherData, 15 * 60 * 1000);
   },
   methods: {
-    switchDark() {
-      this.settings.isDark = !this.settings.isDark;
-      localStorage.setItem('isDark', this.settings.isDark);
+    async loadWeatherData() {
+      const { data } = await axios.get('https://home-control2.azurewebsites.net/api/weather');
+
+      this.hourly = data.hourly;
+      this.daily = data.daily;
+      this.current = data.current;
+      this.iteration += 1;
+      this.loaded = true;
     },
-    switchServer() {
-      this.settings.useLocalServer = !this.settings.useLocalServer;
-      localStorage.setItem('useLocalServer', this.settings.useLocalServer);
-    },
-    refresh() {
-      this.$refs.main.refresh();
+  },
+  computed: {
+    dark() {
+      const { settings } = window;
+      if (settings) {
+        return settings.isDark;
+      }
+
+      return true;
     },
   },
 };

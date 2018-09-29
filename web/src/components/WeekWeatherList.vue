@@ -1,0 +1,42 @@
+<template>
+  <v-card style="overflow-y: auto;">
+    <v-card-text>
+      <span class="display-3">{{ current.apparentTemperature }}°</span>
+      <canvas id="current-weather" width="62" height="62"></canvas>
+      <div>{{ current.summary }}</div>
+    </v-card-text>
+    <v-list>
+      <template v-for="day in dailyData" >
+        <v-list-tile :key="day.id" @click="() => {}">
+        <v-list-tile-content>
+          <v-list-tile-title>
+            {{ day.day }}
+          </v-list-tile-title>
+          <v-list-tile-sub-title>{{ day.lowTemp }}° - {{ day.highTemp }}°</v-list-tile-sub-title>
+        </v-list-tile-content>
+        <v-list-tile-action>
+          <canvas :id="day.id" width="40" height="40"></canvas>
+        </v-list-tile-action>
+      </v-list-tile>
+      <v-divider :key="`divider-${day.id}`"/>
+      </template>
+    </v-list>
+  </v-card>
+</template>
+
+<script>
+import Skycons from '../../skycons';
+
+export default {
+  mounted() {
+    const skycons = new Skycons({ color: 'white' });
+    this.dailyData.forEach(day => skycons.add(`${day.id}`, day.icon));
+    skycons.add('current-weather', this.current.icon);
+    skycons.play();
+  },
+  props: {
+    dailyData: Array,
+    current: Object,
+  },
+};
+</script>
