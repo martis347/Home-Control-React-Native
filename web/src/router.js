@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Clock from './views/Clock.vue';
-import Control from './views/Control.vue';
+import Main from './views/Main.vue';
 import YoutubePlayer from './views/YoutubePlayer.vue';
 
 Vue.use(Router);
@@ -12,17 +11,12 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/control',
+      redirect: '/main',
     },
     {
-      path: '/clock',
-      name: 'Clock',
-      component: Clock,
-    },
-    {
-      path: '/control',
-      name: 'Control',
-      component: Control,
+      path: '/main',
+      name: 'Main',
+      component: Main,
     },
     {
       path: '/player/:videoId?',

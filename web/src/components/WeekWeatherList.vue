@@ -1,9 +1,9 @@
 <template>
   <v-card style="overflow-y: auto;">
-    <v-card-text>
+    <v-card-text class="pr-0">
       <span class="display-3">{{ current.apparentTemperature }}°</span>
       <canvas id="current-weather" width="62" height="62"></canvas>
-      <div>{{ current.summary }}</div>
+      <span style="font-size: 23px;" class="text-truncate">{{ current.summary }}</span>
     </v-card-text>
     <v-list>
       <template v-for="day in dailyData" >

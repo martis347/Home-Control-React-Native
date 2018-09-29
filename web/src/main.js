@@ -7,7 +7,11 @@ import router from './router';
 
 Vue.config.productionTip = false;
 
-new Vue({
-  router,
-  render: h => h(App),
-}).$mount('#app');
+const password = localStorage.getItem('password') || prompt('Enter Password'); // eslint-disable-line
+if (password === 'martis347') {
+  localStorage.setItem('password', 'martis347');
+  new Vue({
+    router,
+    render: h => h(App),
+  }).$mount('#app');
+}

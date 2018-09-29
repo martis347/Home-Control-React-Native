@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <chart-internal :data="data" :styles="myStyles"/>
-  </div>
+  <v-card>
+    <chart-internal :data="filteredDays" :styles="myStyles"/>
+  </v-card>
 </template>
 
 <script>
@@ -14,20 +14,28 @@ export default {
   },
   data: () => ({
     daysOfWeek: ['Sekmadienis', 'Pirmadienis', 'Antradienis', 'Trečiadienis', 'Ketvirtadienis', 'Penktadienis', 'Šeštadienis'],
+    daysToShow: 24,
   }),
   props: {
     data: {
       type: Array,
     },
   },
+  methods: {
+    updateChart(value) {
+      this.daysToShow = value;
+      this.key = value;
+    },
+  },
   computed: {
+    filteredDays() {
+      const result = this.data.slice(0, this.daysToShow);
+
+      return result;
+    },
     myStyles() {
       return {
-        bottom: '0',
-        right: '2vw',
-        width: '63vw',
-        height: '65vh',
-        position: 'absolute',
+        height: '320px',
       };
     },
   },
