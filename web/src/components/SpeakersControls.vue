@@ -10,14 +10,14 @@
       <v-btn color="primary" small flat fab outline @click="sendRequest(149389439)">
         <v-icon>volume_mute</v-icon>
       </v-btn>
-      <span class="mx-3"/>
+      <span class="mx-3" v-if="$vuetify.breakpoint.lgAndUp"/>
       <v-btn color="primary" small flat fab outline @click="sendRequest(149393519, 3)">
         <v-icon>volume_up</v-icon>
       </v-btn>
       <v-btn color="primary" small flat fab outline @click="sendRequest(149369039, 3)">
         <v-icon>volume_down</v-icon>
       </v-btn>
-      <span v-if="$vuetify.breakpoint.lgAndUp" class="mx-3"/>
+      <span v-if="!smallView" class="mx-3"/>
       <v-btn color="primary" small flat fab outline @click="sendRequest(149385359)">
         <v-icon>bluetooth</v-icon>
       </v-btn>
@@ -48,6 +48,11 @@ export default {
           });
         }
       }
+    },
+  },
+  computed: {
+    smallView() {
+      return this.$vuetify.breakpoint.smAndDown;
     },
   },
 };

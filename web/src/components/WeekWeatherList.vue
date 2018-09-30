@@ -2,7 +2,7 @@
   <v-card style="overflow-y: auto;">
     <v-card-text class="pr-0">
       <span class="display-3">{{ current.apparentTemperature }}°</span>
-      <canvas id="current-weather" width="62" height="62"></canvas>
+      <canvas id="current-weather" width="40" height="40"></canvas>
       <span style="font-size: 23px;" class="text-truncate">{{ current.summary }}</span>
     </v-card-text>
     <v-list>

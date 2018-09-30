@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card style="overflow-x: auto">
     <chart-internal :data="filteredDays" :styles="myStyles"/>
   </v-card>
 </template>
@@ -14,7 +14,7 @@ export default {
   },
   data: () => ({
     daysOfWeek: ['Sekmadienis', 'Pirmadienis', 'Antradienis', 'Trečiadienis', 'Ketvirtadienis', 'Penktadienis', 'Šeštadienis'],
-    daysToShow: 24,
+    daysToShow: 48,
   }),
   props: {
     data: {
@@ -35,8 +35,12 @@ export default {
     },
     myStyles() {
       return {
-        height: '320px',
+        height: '305px',
+        width: '1750px',
       };
+    },
+    smallView() {
+      return this.$vuetify.breakpoint.smAndDown;
     },
   },
 };

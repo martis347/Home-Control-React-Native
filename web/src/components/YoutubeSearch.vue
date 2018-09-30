@@ -1,5 +1,5 @@
 <template>
-  <v-card max-height="65vh" style="overflow-y: auto;">
+  <v-card max-height="370px" style="overflow-y: auto;">
     <v-layout hidden-md-and-down>
       <v-subheader>Youtube</v-subheader>
     </v-layout>

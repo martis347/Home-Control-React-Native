@@ -14,16 +14,16 @@
           </v-btn>
         </v-flex>
         <v-flex class="text-xs-center">
-          <v-btn color="primary" :outline="radioStatus.stream !== 'm1'" small :flat="radioStatus.stream !== 'm1'" @click="turnRadio('m1')">
+          <v-btn :style="{ 'min-width': smallView ? '20px' : '' }" color="primary" :outline="radioStatus.stream !== 'm1'" small :flat="radioStatus.stream !== 'm1'" @click="turnRadio('m1')">
             M-1
           </v-btn>
-          <v-btn color="primary" :outline="radioStatus.stream !== 'phr'" small :flat="radioStatus.stream !== 'phr'" @click="turnRadio('phr')">
+          <v-btn :style="{ 'min-width': smallView ? '20px' : '' }" color="primary" :outline="radioStatus.stream !== 'phr'" small :flat="radioStatus.stream !== 'phr'" @click="turnRadio('phr')">
             PHR
           </v-btn>
-          <v-btn color="primary" :outline="radioStatus.stream !== 'relaxfm'" small :flat="radioStatus.stream !== 'relaxfm'" @click="turnRadio('relaxfm')">
+          <v-btn :style="{ 'min-width': smallView ? '20px' : '' }" color="primary" :outline="radioStatus.stream !== 'relaxfm'" small :flat="radioStatus.stream !== 'relaxfm'" @click="turnRadio('relaxfm')">
             Relax FM
           </v-btn>
-          <v-btn color="primary" :outline="radioStatus.stream !== 'rockfm'" small :flat="radioStatus.stream !== 'rockfm'" @click="turnRadio('rockfm')">
+          <v-btn :style="{ 'min-width': smallView ? '20px' : '' }" color="primary" :outline="radioStatus.stream !== 'rockfm'" small :flat="radioStatus.stream !== 'rockfm'" @click="turnRadio('rockfm')">
             Rock FM
           </v-btn>
         </v-flex>
@@ -96,6 +96,11 @@ export default {
     refresh() {
       this.updateRadioStatus();
       this.updateLightningStatus();
+    },
+  },
+  computed: {
+    smallView() {
+      return this.$vuetify.breakpoint.smAndDown;
     },
   },
   mounted() {
