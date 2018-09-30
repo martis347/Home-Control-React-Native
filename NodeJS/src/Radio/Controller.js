@@ -46,12 +46,12 @@ class RadioController {
 				}, 100);
 			});
 		}
-		this.player.volume(this.status.volume || 40);
+		this.player.volume(this.status.volume || 100);
 		await this.turnOnSpeakers();
 
 		this.status.stream = radioToPlay;
 		this.status.on = true;
-		this.status.volume = this.status.volume || 40;
+		this.status.volume = this.status.volume || 100;
 	}
 
 	async turnOnSpeakers() {

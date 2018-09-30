@@ -3,11 +3,11 @@ const puppeteer = require('puppeteer-core');
 
 class BrowserController {
 	constructor() {
-		puppeteer.launch({ headless: false, executablePath: 'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe' })
+		puppeteer.launch({ headless: false, executablePath: '/usr/bin/chromium-browser' })
 			.then(chrome => chrome.newPage()
 				.then(page => {
 					this.currentPage = page;
-					this.currentPage.goto('localhost:8080/player');
+					this.currentPage.goto('https://home-control2.azurewebsites.net/player');
 				})
 			);
 	}
