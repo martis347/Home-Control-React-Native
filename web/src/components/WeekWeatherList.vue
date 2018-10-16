@@ -32,7 +32,6 @@ export default {
     const skycons = new Skycons({ color: 'white' });
     this.dailyData.forEach(day => skycons.add(`${day.id}`, day.icon));
     skycons.add('current-weather', this.current.icon);
-    skycons.play();
   },
   props: {
     dailyData: Array,

@@ -12,6 +12,10 @@ export default {
     data: {
       type: Array,
     },
+    disableAnimations: {
+      type: Boolean,
+      default: false,
+    },
   },
   mounted() {
     this.renderChart(
@@ -57,6 +61,7 @@ export default {
         tooltips: {
           enabled: false,
         },
+        animation: this.disableAnimations ? false : undefined,
         responsive: true,
         maintainAspectRatio: false,
         scales: {

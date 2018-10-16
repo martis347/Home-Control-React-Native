@@ -1,6 +1,6 @@
 <template>
   <v-card style="overflow-x: auto">
-    <chart-internal :data="filteredDays" :styles="myStyles"/>
+    <chart-internal :data="filteredDays" :disable-animations="disableAnimations" :styles="myStyles"/>
   </v-card>
 </template>
 
@@ -20,6 +20,10 @@ export default {
     data: {
       type: Array,
     },
+    disableAnimations: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     updateChart(value) {
@@ -35,7 +39,7 @@ export default {
     },
     myStyles() {
       return {
-        height: '305px',
+        height: '330px',
         width: '1750px',
       };
     },

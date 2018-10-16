@@ -9,10 +9,10 @@
           <v-text-field v-model="searchQuery" class="ml-3" @keyup.enter.native="search" label="Youtube Search"/>
         </v-flex>
         <v-flex>
-          <v-btn color="primary" fab small :loading="loading" @click="search">
+          <v-btn :ripple="!disableAnimations" color="primary" fab small :loading="loading" @click="search">
             <v-icon>search</v-icon>
           </v-btn>
-          <v-btn color="red" fab small @click="stop">
+          <v-btn :ripple="!disableAnimations" color="red" fab small @click="stop">
             <v-icon>stop</v-icon>
           </v-btn>
         </v-flex>
@@ -22,6 +22,7 @@
     <v-list two-line>
       <template v-for="result in searchResults">
         <v-list-tile
+          :ripple="!disableAnimations"
           :key="result.id"
           avatar
           @click="play(result.id)"
@@ -56,6 +57,13 @@ export default {
     searchResults: [],
     loadingId: null,
   }),
+  props: {
+    useLocalServer: Boolean,
+    disableAnimations: {
+      type: Boolean,
+      default: false,
+    },
+  },
   methods: {
     async search() {
       this.loading = true;
@@ -73,7 +81,7 @@ export default {
         return;
       }
 
-      if (window.settings.useLocalServer) {
+      if (this.useLocalServer) {
         axios.get(`http://192.168.31.246:3001/youtube/start/${id}`);
       } else {
         axios.post(`https://home-control2.azurewebsites.net/api/youtube/start/${id}`);
@@ -85,7 +93,7 @@ export default {
       }, 5000);
     },
     stop() {
-      if (window.settings.useLocalServer) {
+      if (this.useLocalServer) {
         axios.get('http://192.168.31.246:3001/youtube/stop');
       } else {
         axios.post('https://home-control2.azurewebsites.net/api/youtube/stop');

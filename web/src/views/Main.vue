@@ -4,13 +4,13 @@
       <v-layout :column="smallView" :class="smallView ? 'mt-3' : 'asd'">
         <v-flex xs3 column :class="`${smallView ? `mx-${padding}` : `ml-${padding}`}`">
           <v-flex>
-            <speakers-controls :class="`mb-3`"/>
+            <speakers-controls :disable-animations="settings.disableAnimations" :useLocalServer="settings.useLocalServer" :class="`mb-3`"/>
           </v-flex>
           <v-flex>
-            <radio-controls :class="`mb-3`"/>
+            <radio-controls :disable-animations="settings.disableAnimations" :useLocalServer="settings.useLocalServer" :class="`mb-3`"/>
           </v-flex>
           <v-flex>
-            <youtube-search :class="smallView && `mb-3`"/>
+            <youtube-search :disable-animations="settings.disableAnimations" :useLocalServer="settings.useLocalServer" :class="smallView && `mb-3`"/>
           </v-flex>
         </v-flex>
         <v-flex xs9>
@@ -19,7 +19,7 @@
               <week-weather-list :current="current" :dailyData="daily" style="height: 300px;"/>
             </v-flex>
             <v-flex md8 v-if="!smallView">
-              <clock-with-date :class="isSmallView ? `mx-${padding}` : `ml-${padding}`" style="height: 300px;"/>
+              <clock-with-date :class="`ml-${padding}`" style="height: 300px;"/>
             </v-flex>
           </v-layout>
           <v-layout :class="`mt-3`">
@@ -29,7 +29,7 @@
           </v-layout>
         </v-flex>
       </v-layout>
-      <settings-dialog/>
+      <settings-dialog @settings="(v) => settings = v"/>
     </v-content>
   </v-app>
 </template>
@@ -61,6 +61,7 @@ export default {
     current: null,
     iteration: 0,
     loaded: false,
+    settings: {},
   }),
   mounted() {
     this.loadWeatherData();
@@ -79,12 +80,7 @@ export default {
   },
   computed: {
     dark() {
-      const { settings } = window;
-      if (settings) {
-        return settings.isDark;
-      }
-
-      return true;
+      return this.settings.isDark;
     },
     smallView() {
       return this.$vuetify.breakpoint.smAndDown;

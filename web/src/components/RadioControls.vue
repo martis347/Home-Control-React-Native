@@ -9,21 +9,21 @@
       </span>
       <v-layout>
         <v-flex class="text-xs-center">
-          <v-btn color="red" fab small flat outline @click="turnOffRadio">
+          <v-btn :ripple="!disableAnimations" color="red" fab small flat outline @click="turnOffRadio">
             <v-icon>power_settings_new</v-icon>
           </v-btn>
         </v-flex>
         <v-flex class="text-xs-center">
-          <v-btn :style="{ 'min-width': smallView ? '20px' : '' }" color="primary" :outline="radioStatus.stream !== 'm1'" small :flat="radioStatus.stream !== 'm1'" @click="turnRadio('m1')">
+          <v-btn :ripple="!disableAnimations" :style="{ 'min-width': '70px' }" color="primary" :outline="radioStatus.stream !== 'm1'" small :flat="radioStatus.stream !== 'm1'" @click="turnRadio('m1')">
             M-1
           </v-btn>
-          <v-btn :style="{ 'min-width': smallView ? '20px' : '' }" color="primary" :outline="radioStatus.stream !== 'phr'" small :flat="radioStatus.stream !== 'phr'" @click="turnRadio('phr')">
+          <v-btn :ripple="!disableAnimations" :style="{ 'min-width': '70px' }" color="primary" :outline="radioStatus.stream !== 'phr'" small :flat="radioStatus.stream !== 'phr'" @click="turnRadio('phr')">
             PHR
           </v-btn>
-          <v-btn :style="{ 'min-width': smallView ? '20px' : '' }" color="primary" :outline="radioStatus.stream !== 'relaxfm'" small :flat="radioStatus.stream !== 'relaxfm'" @click="turnRadio('relaxfm')">
+          <v-btn :ripple="!disableAnimations" :style="{ 'min-width': '70px' }" color="primary" :outline="radioStatus.stream !== 'relaxfm'" small :flat="radioStatus.stream !== 'relaxfm'" @click="turnRadio('relaxfm')">
             Relax FM
           </v-btn>
-          <v-btn :style="{ 'min-width': smallView ? '20px' : '' }" color="primary" :outline="radioStatus.stream !== 'rockfm'" small :flat="radioStatus.stream !== 'rockfm'" @click="turnRadio('rockfm')">
+          <v-btn :ripple="!disableAnimations" :style="{ 'min-width': '70px' }" color="primary" :outline="radioStatus.stream !== 'rockfm'" small :flat="radioStatus.stream !== 'rockfm'" @click="turnRadio('rockfm')">
             Rock FM
           </v-btn>
         </v-flex>
@@ -49,6 +49,13 @@ export default {
       on: false,
     },
   }),
+  props: {
+    useLocalServer: Boolean,
+    disableAnimations: {
+      type: Boolean,
+      default: false,
+    },
+  },
   methods: {
     async turnRadio(station) {
       this.radioStatus.stream = station;
@@ -85,7 +92,7 @@ export default {
       this.lightningStatus = response;
     },
     async makeCall(data) {
-      if (window.settings.useLocalServer) {
+      if (this.useLocalServer) {
         const response = await axios.get(`http://192.168.31.246:3001/${data}`);
         return response.data;
       }
@@ -104,7 +111,7 @@ export default {
     },
   },
   mounted() {
-    if (!window.settings.useLocalServer) {
+    if (!this.useLocalServer) {
       this.refresh();
     }
   },
