@@ -27,10 +27,19 @@ export default {
   },
   methods: {
     turnLightOn() {
-      axios.get('http://10.42.0.64/on');
+      this.makeCall('lightning/on');
     },
     turnLightOff() {
-      axios.get('http://10.42.0.64/off');
+      this.makeCall('lightning/off');
+    },
+    async makeCall(data) {
+      if (this.useLocalServer) {
+        const response = await axios.get(`http://192.168.31.246:3001/${data}`);
+        return response.data;
+      }
+
+      const response = await axios.post(`https://home-control2.azurewebsites.net/api/${data}`);
+      return response.data;
     },
   },
 };
