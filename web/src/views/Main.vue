@@ -12,6 +12,9 @@
           <v-flex>
             <youtube-search :disable-animations="settings.disableAnimations" :useLocalServer="settings.useLocalServer" :class="smallView && `mb-3`"/>
           </v-flex>
+          <v-flex>
+            <lightning-card :disable-animations="settings.disableAnimations" :useLocalServer="settings.useLocalServer" :class="`my-3`"/>
+          </v-flex>
         </v-flex>
         <v-flex xs9>
           <v-layout :column="smallView" :class="`mx-${padding}`">
@@ -43,6 +46,7 @@ import SettingsDialog from '../components/SettingsDialog.vue';
 import WeekWeatherList from '../components/WeekWeatherList.vue';
 import ClockWithDate from '../components/ClockWithDate.vue';
 import WeatherChart from '../components/WeatherChart.vue';
+import LightningCard from '../components/LightningCard.vue';
 
 export default {
   name: 'App',
@@ -54,6 +58,7 @@ export default {
     WeekWeatherList,
     ClockWithDate,
     WeatherChart,
+    LightningCard,
   },
   data: () => ({
     hourly: [],
