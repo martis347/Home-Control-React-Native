@@ -5,7 +5,7 @@ class LightningController {
 		this.controllerUrl = 'http://10.42.0.64';
 	}
 
-	turnLightOn(mode) {
+	turnLightOn() {
 		try {
 			axios.get(`${this.controllerUrl}/on`);
 		} catch (error) {
@@ -13,7 +13,7 @@ class LightningController {
 		}
 	}
 
-	turnLightOn(mode) {
+	turnLightOff() {
 		try {
 			axios.get(`${this.controllerUrl}/off`);
 		} catch (error) {
