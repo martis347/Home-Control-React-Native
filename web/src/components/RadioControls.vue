@@ -87,10 +87,6 @@ export default {
       const response = await this.makeCall('radio/status');
       this.radioStatus = response;
     },
-    async updateLightningStatus() {
-      const response = await this.makeCall('lightning/status');
-      this.lightningStatus = response;
-    },
     async makeCall(data) {
       if (this.useLocalServer) {
         const response = await axios.get(`http://192.168.31.246:3001/${data}`);
@@ -102,7 +98,6 @@ export default {
     },
     refresh() {
       this.updateRadioStatus();
-      this.updateLightningStatus();
     },
   },
   computed: {
