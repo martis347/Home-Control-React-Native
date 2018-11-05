@@ -7,8 +7,14 @@ import router from './router';
 
 Vue.config.productionTip = false;
 
-const password = localStorage.getItem('password') || prompt('Enter Password'); // eslint-disable-line
-if (password === 'martis347' || window.location.pathname.startsWith('/player')) {
+let password;
+if (window.location.pathname.startsWith('/player')) {
+  password = 'martis347';
+} else {
+  password = localStorage.getItem('password') || prompt('Enter Password'); // eslint-disable-line
+}
+
+if (password === 'martis347') {
   localStorage.setItem('password', 'martis347');
   new Vue({
     router,
