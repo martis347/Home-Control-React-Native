@@ -1,7 +1,8 @@
 <template>
   <v-app :dark="dark" :key="iteration">
-    <v-content>
-      <v-layout :column="smallView" :class="smallView ? 'mt-3' : 'asd'">
+    <v-progress-circular v-if="!loaded" :size="200" color="primary" style="position: absolute; top: calc(50% - 100px); left: calc(50% - 100px);" indeterminate/>
+    <v-content v-else>
+      <v-layout v-if="settings" :column="smallView" :class="smallView ? 'mt-3' : 'asd'">
         <v-flex xs3 column :class="`${smallView ? `mx-${padding}` : `ml-${padding}`}`">
           <v-flex>
             <speakers-controls :disable-animations="settings.disableAnimations" :useLocalServer="settings.useLocalServer" :class="`mb-3`"/>
@@ -18,7 +19,7 @@
         </v-flex>
         <v-flex xs9>
           <v-layout :column="smallView" :class="`mx-${padding}`">
-            <v-flex md4 v-if="loaded">
+            <v-flex md4>
               <week-weather-list :current="current" :dailyData="daily" style="height: 300px;"/>
             </v-flex>
             <v-flex md8 v-if="!smallView">
@@ -66,7 +67,7 @@ export default {
     current: null,
     iteration: 0,
     loaded: false,
-    settings: {},
+    settings: null,
   }),
   mounted() {
     this.loadWeatherData();
@@ -75,7 +76,6 @@ export default {
   methods: {
     async loadWeatherData() {
       const { data } = await axios.get('https://home-control2.azurewebsites.net/api/weather');
-
       this.hourly = data.hourly;
       this.daily = data.daily;
       this.current = data.current;
@@ -85,7 +85,7 @@ export default {
   },
   computed: {
     dark() {
-      return this.settings.isDark;
+      return this.settings ? this.settings.isDark : true;
     },
     smallView() {
       return this.$vuetify.breakpoint.smAndDown;

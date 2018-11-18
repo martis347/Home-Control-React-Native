@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "chrome-launcher": "^0.10.2",
+    "cors": "^2.8.5",
     "express": "^4.16.2",
     "forever": "^0.15.3",
     "greenlock-express": "^2.3.2",
