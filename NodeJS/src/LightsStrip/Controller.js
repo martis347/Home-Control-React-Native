@@ -25,3 +25,5 @@ class LightsStripController {
         return this.status;
     }
 }
+
+export default new LightsStripController();

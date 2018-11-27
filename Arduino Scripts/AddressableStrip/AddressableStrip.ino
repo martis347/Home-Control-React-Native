@@ -38,6 +38,7 @@ void setup() {
     ESP.restart();
   }
 
+  ArduinoOTA.setHostname("NodeMCU_AddressableStrip");
   ArduinoOTA.onStart([]() {
     Serial.println("Start");
   });

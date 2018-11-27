@@ -46,10 +46,7 @@ export default {
   methods: {
     async sendRequest(code, repeatTimes = 1) {
       while (repeatTimes-- > 0) { // eslint-disable-line
-        axios.post('https://home-control2.azurewebsites.net/api', {
-          controller: 'radio/transmit',
-          data: { code },
-        });
+        axios.post(`https://home-control2.azurewebsites.net/api/radio/transmit/${code}`);
       }
     },
   },

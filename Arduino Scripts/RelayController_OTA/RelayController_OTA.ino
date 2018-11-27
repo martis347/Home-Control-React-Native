@@ -10,13 +10,13 @@ const char* password = "admin01ADF";
 
 ESP8266WebServer server(80);   //instantiate server at port 80 (http port)
 int pin = 5;
-bool turnedOn = false;
+bool turnedOn = true;
 
 void setup() {
   Serial.begin(115200);
   pinMode(pin, OUTPUT);
-  digitalWrite(pin, LOW);
-  turnedOn = false;
+  digitalWrite(pin, HIGH);
+  turnedOn = true;
   Serial.println("Booting");
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
@@ -25,7 +25,7 @@ void setup() {
     delay(5000);
     ESP.restart();
   }
-
+  ArduinoOTA.setHostname("NodeMCU_LightsRelay"); // 192.168.31.243 - Wall & 192.168.31.244 - Ceiling
   ArduinoOTA.onStart([]() {
     Serial.println("Start");
   });
