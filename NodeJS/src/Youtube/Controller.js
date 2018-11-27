@@ -1,15 +1,25 @@
-const ChromeLauncher = require('./chrome-launcher');
 const puppeteer = require('puppeteer-core');
 
 class BrowserController {
 	constructor() {
-		puppeteer.launch({ headless: false, executablePath: '/usr/bin/chromium-browser' })
+		const browser = puppeteer.launch({ headless: false, executablePath: '/usr/bin/chromium-browser' })
 			.then(chrome => chrome.newPage()
 				.then(page => {
 					this.currentPage = page;
 					this.currentPage.goto('https://home-control2.azurewebsites.net/player');
 				})
 			);
+
+		var self = this;
+		browser.on('disconnected', () => {
+			self.browser = puppeteer.launch({ headless: false, executablePath: '/usr/bin/chromium-browser' })
+			.then(chrome => chrome.newPage()
+				.then(page => {
+					this.currentPage = page;
+					this.currentPage.goto('https://home-control2.azurewebsites.net/player');
+				})
+			);
+		});
 	}
 
 	async startYoutube(videoId) {
