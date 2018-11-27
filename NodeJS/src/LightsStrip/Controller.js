@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 class LightsStripController {
 	constructor() {
         this.controllerUrl = 'http://192.168.31.242';
@@ -16,6 +18,7 @@ class LightsStripController {
 			axios.post(`${this.controllerUrl}/update`, data);
 		} catch (error) {
 			const response = `Lights strip controller ${this.controllerUrl}} Did not respond. ${JSON.stringify(data)}`;
+			console.error(error);
 			console.error(response);
 			return response;
 		}

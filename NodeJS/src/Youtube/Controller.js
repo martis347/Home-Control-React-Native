@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer-core');
 
 class BrowserController {
 	constructor() {
-		this.startBrowser();
+		this.startBrowser(this);
 	}
 
 	async startYoutube(videoId) {
@@ -17,10 +17,9 @@ class BrowserController {
 		});
 	}
 
-	async startBrowser() {
-		const self = this;
+	async startBrowser(self) {
 		const chrome = await puppeteer.launch({ headless: false, executablePath: '/usr/bin/chromium-browser' });
-		chrome.on('disconnected', self.startBrowser);
+		chrome.on('disconnected', () => self.startBrowser(self));
 		const page = await chrome.newPage();
 		this.currentPage = page;
 		this.currentPage.goto('https://home-control2.azurewebsites.net/player');

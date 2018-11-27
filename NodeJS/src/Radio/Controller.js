@@ -60,6 +60,7 @@ class RadioController {
 		try {
 			await axios.get(`${this.controllerUrl}/on`, { timeout: 500 });
 		} catch (error) {
+			console.error(error);
 			console.log(`${this.controllerUrl}/on Did not respond.`);
 		}
 	}
@@ -82,6 +83,7 @@ class RadioController {
 		try {
 			await axios.get(`${this.controllerUrl}/off`, { timeout: 500 });
 		} catch (error) {
+			console.error(error);
 			console.log(`${this.controllerUrl}/off Did not respond.`);
 		}
 
