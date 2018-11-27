@@ -50,7 +50,6 @@ export default {
     },
   }),
   props: {
-    useLocalServer: Boolean,
     disableAnimations: {
       type: Boolean,
       default: false,
@@ -88,11 +87,6 @@ export default {
       this.radioStatus = response;
     },
     async makeCall(data) {
-      if (this.useLocalServer) {
-        const response = await axios.get(`http://192.168.31.246:3001/${data}`);
-        return response.data;
-      }
-
       const response = await axios.post(`https://home-control2.azurewebsites.net/api/${data}`);
       return response.data;
     },
@@ -106,9 +100,7 @@ export default {
     },
   },
   mounted() {
-    if (!this.useLocalServer) {
-      this.refresh();
-    }
+    this.refresh();
   },
 };
 </script>

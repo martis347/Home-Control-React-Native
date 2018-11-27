@@ -38,7 +38,6 @@ export default {
   data: () => ({
   }),
   props: {
-    useLocalServer: Boolean,
     disableAnimations: {
       type: Boolean,
       default: false,
@@ -47,13 +46,10 @@ export default {
   methods: {
     async sendRequest(code, repeatTimes = 1) {
       while (repeatTimes-- > 0) { // eslint-disable-line
-        if (this.useLocalServer) {
-          axios.get(`http://192.168.31.79/transmit?code=${code}`);
-        } else {
-          axios.post('https://home-control2.azurewebsites.net/api', {
-            request: `transmit?code=${code}`,
-          });
-        }
+        axios.post('https://home-control2.azurewebsites.net/api', {
+          controller: 'radio/transmit',
+          data: { code },
+        });
       }
     },
   },

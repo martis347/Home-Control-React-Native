@@ -12,6 +12,7 @@ class RadioController {
 		};
 
 		this.controllerUrl = 'http://10.42.0.60';
+		this.speakersControllerUrl = 'http://192.168.31.241';
 		
 		this.status = {
 			title: '',
@@ -96,6 +97,11 @@ class RadioController {
 	getSpeakersStatus() {
 		console.log(`getSpeakersStatus`);
 		return this.status;
+	}
+
+	transmitIR(code) {
+		console.log(`transmitIR`);
+		axios.get(`${this.speakersControllerUrl}/transmit?code=${code}`);
 	}
 }
 

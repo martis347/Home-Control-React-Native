@@ -22,4 +22,11 @@
 ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+html .hide-overflow {
+    overflow: hidden;
+}
+.v-icon {
+    user-select: none;
+  }
 </style>

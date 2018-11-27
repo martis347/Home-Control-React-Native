@@ -5,16 +5,16 @@
       <v-layout v-if="settings" :column="smallView" :class="smallView ? 'mt-3' : 'asd'">
         <v-flex xs3 column :class="`${smallView ? `mx-${padding}` : `ml-${padding}`}`">
           <v-flex>
-            <speakers-controls :disable-animations="settings.disableAnimations" :useLocalServer="settings.useLocalServer" :class="`mb-3`"/>
+            <speakers-controls :disable-animations="settings.disableAnimations" :class="`mb-3`"/>
           </v-flex>
           <v-flex>
-            <radio-controls :disable-animations="settings.disableAnimations" :useLocalServer="settings.useLocalServer" :class="`mb-3`"/>
+            <radio-controls :disable-animations="settings.disableAnimations" :class="`mb-3`"/>
           </v-flex>
           <v-flex>
-            <youtube-search :disable-animations="settings.disableAnimations" :useLocalServer="settings.useLocalServer" :class="smallView && `mb-3`"/>
+            <youtube-search :disable-animations="settings.disableAnimations" :class="smallView && `mb-3`"/>
           </v-flex>
           <v-flex>
-            <lightning-card :disable-animations="settings.disableAnimations" :useLocalServer="settings.useLocalServer" :class="`my-3`"/>
+            <lightning-card :disable-animations="settings.disableAnimations" :class="`my-3`"/>
           </v-flex>
         </v-flex>
         <v-flex xs9>
@@ -33,7 +33,34 @@
           </v-layout>
         </v-flex>
       </v-layout>
-      <settings-dialog @settings="(v) => settings = v"/>
+      <settings-dialog v-model="showSettingsDialog" @settings="(v) => settings = v"/>
+      <lights-dialog v-model="showLightsDialog"/>
+      <v-speed-dial
+        :value="true"
+        color="primary"
+        fixed
+        bottom
+        right
+      >
+        <v-btn
+          slot="activator"
+          color="primary"
+          @click.stop="showSettingsDialog = !showSettingsDialog"
+          dark
+          fab
+        >
+          <v-icon>settings</v-icon>
+        </v-btn>
+        <v-btn
+          fab
+          color="secondary"
+          @click.stop="showLightsDialog = !showLightsDialog"
+          dark
+          small
+        >
+          <v-icon>wb_incandescent</v-icon>
+        </v-btn>
+      </v-speed-dial>
     </v-content>
   </v-app>
 </template>
@@ -48,6 +75,7 @@ import WeekWeatherList from '../components/WeekWeatherList.vue';
 import ClockWithDate from '../components/ClockWithDate.vue';
 import WeatherChart from '../components/WeatherChart.vue';
 import LightningCard from '../components/LightningCard.vue';
+import LightsDialog from '../components/LightsDialog/LightsDialog.vue';
 
 export default {
   name: 'App',
@@ -60,6 +88,7 @@ export default {
     ClockWithDate,
     WeatherChart,
     LightningCard,
+    LightsDialog,
   },
   data: () => ({
     hourly: [],
@@ -67,6 +96,8 @@ export default {
     current: null,
     iteration: 0,
     loaded: false,
+    showSettingsDialog: false,
+    showLightsDialog: false,
     settings: null,
   }),
   mounted() {

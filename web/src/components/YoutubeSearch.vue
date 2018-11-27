@@ -58,7 +58,6 @@ export default {
     loadingId: null,
   }),
   props: {
-    useLocalServer: Boolean,
     disableAnimations: {
       type: Boolean,
       default: false,
@@ -81,11 +80,7 @@ export default {
         return;
       }
 
-      if (this.useLocalServer) {
-        axios.get(`http://192.168.31.246:3001/youtube/start/${id}`);
-      } else {
-        axios.post(`https://home-control2.azurewebsites.net/api/youtube/start/${id}`);
-      }
+      axios.post(`https://home-control2.azurewebsites.net/api/youtube/start/${id}`);
 
       this.loadingId = id;
       setTimeout(() => {
@@ -93,11 +88,7 @@ export default {
       }, 5000);
     },
     stop() {
-      if (this.useLocalServer) {
-        axios.get('http://192.168.31.246:3001/youtube/stop');
-      } else {
-        axios.post('https://home-control2.azurewebsites.net/api/youtube/stop');
-      }
+      axios.post('https://home-control2.azurewebsites.net/api/youtube/stop');
       this.searchResults = [];
       this.searchQuery = '';
     },

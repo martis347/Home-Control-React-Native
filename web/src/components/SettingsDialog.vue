@@ -1,16 +1,5 @@
 <template>
-  <v-dialog max-width="600">
-    <v-btn
-      color="primary"
-      slot="activator"
-      dark
-      fab
-      fixed
-      bottom
-      right
-    >
-      <v-icon>settings</v-icon>
-    </v-btn>
+  <v-dialog v-model="show" max-width="600">
     <v-card>
       <v-card-title
         primary-title
@@ -28,22 +17,10 @@
             <v-list-tile-sub-title>Use Dark theme</v-list-tile-sub-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile @click.stop="switchServer">
-          <v-list-tile-action>
-            <v-checkbox :ripple="!settings.disableAnimations" v-model="settings.useLocalServer" @click.stop="switchServer"></v-checkbox>
-          </v-list-tile-action>
-
-          <v-list-tile-content>
-            <v-list-tile-title>Local Server</v-list-tile-title>
-            <v-list-tile-sub-title>Use Local server instead of remote</v-list-tile-sub-title>
-          </v-list-tile-content>
-        </v-list-tile>
-
         <v-list-tile @click.stop="switchAnimations">
           <v-list-tile-action>
             <v-checkbox :ripple="!settings.disableAnimations" v-model="settings.disableAnimations" @click.stop="switchAnimations"></v-checkbox>
           </v-list-tile-action>
-
           <v-list-tile-content>
             <v-list-tile-title>Disable animations</v-list-tile-title>
             <v-list-tile-sub-title>Disable animations to boost performance</v-list-tile-sub-title>
@@ -56,12 +33,14 @@
 
 <script>
 export default {
+  props: {
+    value: Boolean,
+  },
   data: () => ({
+    show: false,
     settings: {
       isDark: true,
-      useLocalServer: false,
       disableAnimations: false,
-      urlToUse: 'https://home-control2.azurewebsites.net/api',
     },
   }),
   beforeMount() {
@@ -72,13 +51,6 @@ export default {
       this.settings.isDark = isDark === 'true';
     }
 
-    const useLocalServer = localStorage.getItem('useLocalServer');
-    if (useLocalServer === undefined) {
-      this.settings.useLocalServer = true;
-    } else {
-      this.settings.useLocalServer = useLocalServer === 'true';
-    }
-
     const disableAnimations = localStorage.getItem('disableAnimations');
     if (disableAnimations === undefined) {
       this.settings.disableAnimations = false;
@@ -86,18 +58,25 @@ export default {
       this.settings.disableAnimations = disableAnimations === 'true';
     }
 
-    this.settings.urlToUse = this.settings.useLocalServer ? 'http://192.168.31.246:3001' : 'https://home-control2.azurewebsites.net/api';
     this.$emit('settings', this.settings);
+  },
+  watch: {
+    show(newV) {
+      this.$emit('input', newV);
+    },
+    value(newV) {
+      this.show = newV;
+      if (newV) {
+        document.body.parentElement.className = 'hide-overflow';
+      } else {
+        document.body.parentElement.className = '';
+      }
+    },
   },
   methods: {
     switchDark() {
       this.settings.isDark = !this.settings.isDark;
       localStorage.setItem('isDark', this.settings.isDark);
-      this.$emit('settings', this.settings);
-    },
-    switchServer() {
-      this.settings.useLocalServer = !this.settings.useLocalServer;
-      localStorage.setItem('useLocalServer', this.settings.useLocalServer);
       this.$emit('settings', this.settings);
     },
     switchAnimations() {

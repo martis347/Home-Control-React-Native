@@ -8,42 +8,41 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const getDestinationUrl = (request) => {
-	if (request.startsWith('/transmit')) {
-		return 'http://178.16.37.145:3002';
-	} else {
-		return 'http://178.16.37.145:3001';
-	}
-};
+const controllerUrl = 'http://178.16.37.145:3001';
 
 app.post('/api/:a?/:b?/:c?/:d?/:e?', (req, resp) => {
-	
-	let request = '';
-	if (req.body.request) {
-		request = '/' + req.body.request;
+	let requestPromise;
+	if (req.body.controller) {
+		controller = req.body.controller;
+		data = req.body.data;
+		requestPromise = axios.post(`${controllerUrl}/${req.body.controller}`, req.body.data);
+		console.log(`Controller: ${req.body.controller}`);
+		console.log(`Data: ${JSON.stringify(req.body.data)}`);
 	} else {
+		let request = '';
 		request += req.params.a ? '/' + req.params.a : '';
 		request += req.params.b ? '/' + req.params.b : '';
 		request += req.params.c ? '/' + req.params.c : '';
 		request += req.params.d ? '/' + req.params.d : '';
 		request += req.params.e ? '/' + req.params.e : '';
+		requestPromise = axios.get(controllerUrl + request);
+		console.log(request);
 	}
-	console.log(request);
-	
-	
-	return axios.get(getDestinationUrl(request) + request)
+
+	return requestPromise
 		.then(r => {
 			return resp.send(r.data);
 		})
 		.catch(r => {
-			return resp.status(r.response.status).send({
+			console.log('Failed', r.response.data);
+			return resp.status(400).send({
 				data: r.response.data
 			});
 		});
 });
 
 app.get('/api/weather', async (req, resp) => {
-	const daysOfWeek = ['Sekmadienis', 'Pirmadienis', 'Antradienis', 'Trečiadienis', 'Ketvirtadienis', 'Penktadienis', 'Šeštadienis']
+	const daysOfWeek = ['Sekmadienis', 'Pirmadienis', 'Antradienis', 'Trečiadienis', 'Ketvirtadienis', 'Penktadienis', 'Šeštadienis'];
 	const { data } = await axios.get('https://api.darksky.net/forecast/3e3a24a1e579b33cf401b4a69f4ad990/54.927689,23.949363?units=si');
 	const hourlyWeather = data.hourly.data.map(d => ({
 		id: d.time,
