@@ -19,8 +19,8 @@ const initialize = app => {
 	});
 	app.get('/radio/transmit/:code', (req, res) => {
 		res.sendStatus(200);
-		res.send(controller.transmitIR(req.body.data.code));
-	});
+		res.send(controller.transmitIR(req.params.code));
+	});	
 	app.get('/radio/status', (req, res) => res.send(controller.getSpeakersStatus()));
 }
 
