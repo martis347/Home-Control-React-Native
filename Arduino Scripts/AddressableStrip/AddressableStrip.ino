@@ -77,19 +77,13 @@ void loop() {
   webSocket.loop();
 
   if (mode == "Palette") {
-    Serial.print("Mode is Palette ");
-    Serial.println(mode);
     startIndex = startIndex + 1;
     handlePalette(startIndex);
   }
   else if (mode == "Canvas") {
-    Serial.print("Mode is Canvas");
-    Serial.println(mode);
     // Do nothing, websockets will handle that
   }
   else {
-    Serial.print("Mode is else ");
-    Serial.println(mode);
     for (int i = 0; i < NUM_LEDS; i++) {
       leds[i] = CHSV(0, 0, 0);
     }
@@ -164,7 +158,7 @@ void handlePalette(uint8_t colorIndex) {
     
   for( int i = 0; i < NUM_LEDS; i++) {
       leds[i] = ColorFromPalette( currentPalette, colorIndex, brightness, currentBlending);
-      colorIndex += 3;
+      colorIndex++;
   }
 }
 
@@ -194,5 +188,5 @@ void SetupBluePalette()
 
 void SetupRainbowPalette()
 {
-    currentPalette = RainbowStripeColors_p;
+    currentPalette = RainbowColors_p;
 }

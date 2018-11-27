@@ -6,7 +6,8 @@
           v-if="selects.mode !== 'Off'"
           v-model="selects.brightness"
           label="Brightness"
-          step="10"
+          step="20"
+          max="255"
           thumb-label="always"
         ></v-slider>
         <v-layout wrap class="mt-0 pt-0">
@@ -30,7 +31,7 @@
             <v-select label="Palette Size" v-model="selects.customPaletteSize" :items="paletteSizes"/>
           </v-flex>
           <v-flex xs12 v-if="selects.mode === 'Palette' && selects.palette === 'Custom'">
-            <custom-palette v-model="selects.customPaletteColors" :count="selects.customPaletteSize"/>
+            <custom-palette v-model="selects.customPaletteColors" :count="+selects.customPaletteSize"/>
           </v-flex>
         </v-layout>
       </v-container>
@@ -63,14 +64,14 @@ export default {
     width: 1000,
     selects: {
       mode: 'Off',
-      brightness: '100',
+      brightness: '255',
       palette: 'Rainbow',
       speed: '30',
       customPaletteSize: '8',
-      customPaletteColors: [],
+      customPaletteColors: ['#000000', '#000000', '#000000', '#000000', '#000000', '#000000', '#000000', '#000000'],
     },
     options: ['Off', 'Palette', 'Canvas'],
-    speeds: [{ value: '100', label: 'x3' }, { value: '60', label: 'x2' }, { value: '30', label: 'x1' }, { value: '10', label: 'x0.5' }, { value: '10', label: 'x0.3' }, { value: '4', label: 'x0.1' }],
+    speeds: [{ value: '100', label: 'x3' }, { value: '60', label: 'x2' }, { value: '30', label: 'x1' }, { value: '15', label: 'x0.5' }, { value: '10', label: 'x0.3' }, { value: '4', label: 'x0.1' }],
     palettes: ['Rainbow', 'Red', 'Green', 'Blue', 'Custom'],
     paletteSizes: ['4', '8', '16'],
   }),
@@ -89,6 +90,15 @@ export default {
     selects: {
       handler: 'sendValues',
       deep: true,
+    },
+    'selects.customPaletteSize': function (newV, oldV) { // eslint-disable-line
+      if (+newV > oldV) {
+        while (this.selects.customPaletteColors.length !== +newV) {
+          this.selects.customPaletteColors.push('#000000');
+        }
+      } else {
+        this.selects.customPaletteColors = this.selects.customPaletteColors.filter((_, index) => index < +newV);
+      }
     },
   },
   methods: {

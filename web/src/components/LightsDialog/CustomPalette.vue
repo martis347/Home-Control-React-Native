@@ -28,10 +28,18 @@ export default {
   data: () => ({
     selectedColor: null,
   }),
+  watch: {
+    count(newV) {
+      if (this.selectedColor + 1 > +newV) {
+        this.selectedColor = null;
+      }
+    },
+  },
   methods: {
     colorUpdated(newColor) {
-      const newValue = [...this.value];
+      let newValue = [...this.value];
       newValue[this.selectedColor] = newColor.hex;
+      newValue = newValue.map(v => v || '#000000');
       this.$emit('input', newValue);
     },
     onColorClick(index) {
@@ -42,8 +50,9 @@ export default {
       }
     },
     resetColor() {
-      const newValue = [...this.value];
+      let newValue = [...this.value];
       newValue[this.selectedColor] = '#000000';
+      newValue = newValue.map(v => v || '#000000');
       this.$emit('input', newValue);
       this.selectedColor = null;
     },
