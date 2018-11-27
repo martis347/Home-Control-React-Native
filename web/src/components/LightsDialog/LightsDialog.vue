@@ -63,16 +63,16 @@ export default {
     width: 1000,
     selects: {
       mode: 'Off',
-      brightness: 100,
+      brightness: '100',
       palette: 'Rainbow',
-      speed: 30,
-      customPaletteSize: 8,
+      speed: '30',
+      customPaletteSize: '8',
       customPaletteColors: [],
     },
     options: ['Off', 'Palette', 'Canvas'],
-    speeds: [{ value: 100, label: 'x3' }, { value: 60, label: 'x2' }, { value: 30, label: 'x1' }, { value: 15, label: 'x0.5' }, { value: 7, label: 'x0.1' }],
+    speeds: [{ value: '100', label: 'x3' }, { value: '60', label: 'x2' }, { value: '30', label: 'x1' }, { value: '10', label: 'x0.5' }, { value: '10', label: 'x0.3' }, { value: '4', label: 'x0.1' }],
     palettes: ['Rainbow', 'Red', 'Green', 'Blue', 'Custom'],
-    paletteSizes: [4, 8, 16],
+    paletteSizes: ['4', '8', '16'],
   }),
   watch: {
     show(newV) {
