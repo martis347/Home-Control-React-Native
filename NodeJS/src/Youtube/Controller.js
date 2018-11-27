@@ -2,24 +2,7 @@ const puppeteer = require('puppeteer-core');
 
 class BrowserController {
 	constructor() {
-		const browser = puppeteer.launch({ headless: false, executablePath: '/usr/bin/chromium-browser' })
-			.then(chrome => chrome.newPage()
-				.then(page => {
-					this.currentPage = page;
-					this.currentPage.goto('https://home-control2.azurewebsites.net/player');
-				})
-			);
-
-		var self = this;
-		browser.on('disconnected', () => {
-			self.browser = puppeteer.launch({ headless: false, executablePath: '/usr/bin/chromium-browser' })
-			.then(chrome => chrome.newPage()
-				.then(page => {
-					this.currentPage = page;
-					this.currentPage.goto('https://home-control2.azurewebsites.net/player');
-				})
-			);
-		});
+		this.startBrowser();
 	}
 
 	async startYoutube(videoId) {
@@ -32,6 +15,15 @@ class BrowserController {
 		await this.currentPage.evaluate(() => {
 			window.stopPlaying();
 		});
+	}
+
+	async startBrowser() {
+		const self = this;
+		const chrome = await puppeteer.launch({ headless: false, executablePath: '/usr/bin/chromium-browser' });
+		chrome.on('disconnected', self.startBrowser);
+		const page = await chrome.newPage();
+		this.currentPage = page;
+		this.currentPage.goto('https://home-control2.azurewebsites.net/player');
 	}
 }
 
