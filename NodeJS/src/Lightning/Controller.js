@@ -29,9 +29,9 @@ class LightningController {
 	async getStatus(controller) {
 		try {
 			if (controller === 'wall') {
-				return await axios.get(`${this.wallControllerUrl}/status`);
+				return (await axios.get(`${this.wallControllerUrl}/status`)).data;
 			} else if (controller === 'ceiling') {
-				return await axios.get(`${this.ceilingControllerUrl}/status`);
+				return (await axios.get(`${this.ceilingControllerUrl}/status`)).data;
 			}
 		} catch (error) {
 			return null;
