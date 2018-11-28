@@ -110,15 +110,20 @@ export default {
   },
   methods: {
     sendValues() {
+      const data = {
+        ...this.selects,
+      };
+      data.customPaletteColors = data.customPaletteColors.map(c => parseInt(c.replace('#', ''), 16));
       axios.post('https://home-control2.azurewebsites.net/api', {
         controller: 'lightsStrip/update',
-        data: this.selects,
+        data,
       });
     },
     async getStatus() {
       try {
         this.loading = true;
         const { data } = await axios.post('https://home-control2.azurewebsites.net/api/lightsStrip/status');
+        data.customPaletteColors = data.customPaletteColors.map(c => `#${(`000000${(+c).toString(16)}`).substr(-6)}`);
         this.selects = data;
         this.loading = false;
       } catch (error) {

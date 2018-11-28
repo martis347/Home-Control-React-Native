@@ -9,13 +9,12 @@
     >
       lens
     </v-icon>
-    <slider-picker v-if="selectedColor !== null" @input="colorUpdated" :value="getColor"></slider-picker>
-    <v-icon @click="resetColor" v-if="selectedColor !== null" color="red">clear</v-icon>
+    <picker v-if="selectedColor !== null" @input="colorUpdated" :value="getColor"></picker>
   </div>
 </template>
 
 <script>
-import { Slider } from 'vue-color';
+import { Compact } from 'vue-color';
 
 export default {
   props: {
@@ -23,7 +22,7 @@ export default {
     count: Number,
   },
   components: {
-    SliderPicker: Slider,
+    Picker: Compact,
   },
   data: () => ({
     selectedColor: null,
@@ -48,13 +47,6 @@ export default {
       } else {
         this.selectedColor = index;
       }
-    },
-    resetColor() {
-      let newValue = [...this.value];
-      newValue[this.selectedColor] = '#000000';
-      newValue = newValue.map(v => v || '#000000');
-      this.$emit('input', newValue);
-      this.selectedColor = null;
     },
     getColor(index = this.selectedColor) {
       const result = this.value[index];

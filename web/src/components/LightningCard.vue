@@ -48,21 +48,20 @@ export default {
   methods: {
     async switchCeiling() {
       this.loadingCeiling = true;
-      await this.makeCall(`lightning/ceiling/${!this.ceilingOn}`);
-      this.ceilingOn = !this.ceilingOn;
+      await this.makeCall(`lightning/ceiling/${!this.ceiling}`);
+      this.ceiling = !this.ceiling;
       this.loadingCeiling = false;
     },
     async switchWall() {
       this.loadingWall = true;
-      this.makeCall(`lightning/wall/${!this.wallOn}`);
-      this.wallOn = !this.wallOn;
+      this.makeCall(`lightning/wall/${!this.wall}`);
+      this.wall = !this.wall;
       this.loadingWall = false;
     },
     async getStatus(controller) {
       this.loading.push(controller);
       try {
         const result = await this.makeCall(`lightning/status/${controller}`);
-        debugger;
         this[controller] = result;
         this.loading = this.loading.filter(v => v !== controller);
       } catch (error) {

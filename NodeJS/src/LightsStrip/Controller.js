@@ -9,7 +9,7 @@ class LightsStripController {
             palette: 'Rainbow',
             speed: '30',
             customPaletteSize: '8',
-            customPaletteColors: ['#000000', '#000000', '#000000', '#000000', '#000000', '#000000', '#000000', '#000000'],
+            customPaletteColors: ['0', '0', '0', '0', '0', '0', '0', '0'],
           };
     }
 

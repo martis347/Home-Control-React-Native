@@ -27,6 +27,8 @@ uint8_t brightness = 0;
 String mode = "";
 String palette = "";
 int speed = 30;
+int customPaletteSize = 4;
+int customPaletteColors[16];
 void setup() {
   Serial.begin(115200);
   Serial.println("Booting");
@@ -126,6 +128,11 @@ void handleUpdate() {
   mode = status["mode"].as<String>();
   palette = status["palette"].as<String>();
   speed = status["speed"].as<int>();
+  customPaletteSize = status["customPaletteSize"].as<int>();
+  JsonArray& colors = status["customPaletteColors"];
+  for (int i = 0; i < customPaletteSize; i++) {
+    customPaletteColors[i] = colors.get<int>(i);
+  }
   if (!status.success()) {
     Serial.println("Failed to parse request!");
     server.send(400);
@@ -144,7 +151,20 @@ void handleUpdate() {
   } else if (palette == "Rainbow") {
     Serial.println("Mode is Rainbow");
     SetupRainbowPalette();
+  } else if (palette == "Custom") {
+    switch (customPaletteSize) {
+      case 4:
+        currentPalette = CRGBPalette16(customPaletteColors[0], customPaletteColors[1], customPaletteColors[2], customPaletteColors[3]);
+        break;
+      case 8:
+        currentPalette = CRGBPalette16(customPaletteColors[0], customPaletteColors[0], customPaletteColors[1], customPaletteColors[1], customPaletteColors[2], customPaletteColors[2], customPaletteColors[3], customPaletteColors[3], customPaletteColors[4], customPaletteColors[4], customPaletteColors[5], customPaletteColors[5], customPaletteColors[6], customPaletteColors[6], customPaletteColors[7], customPaletteColors[7]);
+        break;
+      case 16:
+        currentPalette = CRGBPalette16(customPaletteColors[0], customPaletteColors[1], customPaletteColors[2], customPaletteColors[3], customPaletteColors[4], customPaletteColors[5], customPaletteColors[6], customPaletteColors[7], customPaletteColors[8], customPaletteColors[9], customPaletteColors[10], customPaletteColors[11], customPaletteColors[12], customPaletteColors[13], customPaletteColors[14], customPaletteColors[15]);
+        break;
+    }
   }
+
 
   FastLED.setBrightness(status.get<int>("brightness"));
   brightness = status.get<int>("brightness");
@@ -152,10 +172,6 @@ void handleUpdate() {
 }
 
 void handlePalette(uint8_t colorIndex) {
-  if (palette == "Custom") {
-    
-  }
-    
   for( int i = 0; i < NUM_LEDS; i++) {
       leds[i] = ColorFromPalette( currentPalette, colorIndex, brightness, currentBlending);
       colorIndex++;
