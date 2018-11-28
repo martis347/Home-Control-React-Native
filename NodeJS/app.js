@@ -1,6 +1,4 @@
 import LightningModule from './src/Lightning/Module';
-import RadioModule from './src/Radio/Module';
-import YoutubeModule from './src/Youtube/Module';
 import LightsStripModule from './src/LightsStrip/Module';
 import express from 'express';
 import cors from 'cors';
@@ -11,8 +9,6 @@ var app = express();
 app.use(cors())
 app.use(bodyParser.json());
 LightningModule.initialize(app);
-RadioModule.initialize(app);
-YoutubeModule.initialize(app);
 LightsStripModule.initialize(app);
 
 app.listen(3001, () => console.log('Listening on Port 3001'));

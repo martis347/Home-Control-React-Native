@@ -31,6 +31,7 @@ app.post('/api/:a?/:b?/:c?/:d?/:e?', (req, resp) => {
 
 	return requestPromise
 		.then(r => {
+			console.log('Response: ', r);
 			return resp.send(r.data);
 		})
 		.catch(r => {

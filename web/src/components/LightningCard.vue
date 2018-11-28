@@ -62,7 +62,8 @@ export default {
       this.loading.push(controller);
       try {
         const result = await this.makeCall(`lightning/status/${controller}`);
-        this[controller] = result.ceilingOn;
+        debugger;
+        this[controller] = result;
         this.loading = this.loading.filter(v => v !== controller);
       } catch (error) {
         setTimeout(() => this.getStatus(controller), 1000);

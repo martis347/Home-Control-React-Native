@@ -34,6 +34,8 @@ class LightningController {
 				return (await axios.get(`${this.ceilingControllerUrl}/status`)).data;
 			}
 		} catch (error) {
+			console.error('An error has occured while getting lightning status');
+			console.error(error);
 			return null;
 		}
 	}
