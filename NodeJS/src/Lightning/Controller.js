@@ -26,13 +26,16 @@ class LightningController {
 		}
 	}
 
-	async getStatuses() {
-		const wallResult = await axios.get(`${this.wallControllerUrl}/status`);
-		const ceilingResult = await axios.get(`${this.ceilingControllerUrl}/status`);
-		return {
-			ceilingOn: ceilingResult.data.turnedOn,
-			wallOn: wallResult.data.turnedOn,
-		};
+	async getStatus(controller) {
+		try {
+			if (controller === 'wall') {
+				return await axios.get(`${this.wallControllerUrl}/status`);
+			} else if (controller === 'ceiling') {
+				return await axios.get(`${this.ceilingControllerUrl}/status`);
+			}
+		} catch (error) {
+			return null;
+		}
 	}
 }
 

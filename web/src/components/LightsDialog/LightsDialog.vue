@@ -1,43 +1,48 @@
 <template>
   <v-dialog v-model="show" :width="width">
     <v-card class="card">
-      <v-container fluid grid-list-xl>
-        <v-slider
-          v-if="selects.mode !== 'Off'"
-          v-model="selects.brightness"
-          label="Brightness"
-          step="20"
-          max="255"
-          thumb-label="always"
-        ></v-slider>
-        <v-layout wrap class="mt-0 pt-0">
-          <v-flex xs4 md2>
-            <v-radio-group class="mt-0 " v-model="selects.mode">
-              <v-radio
-                v-for="option in options"
-                :key="option"
-                :label="option"
-                :value="option"
-              ></v-radio>
-            </v-radio-group>
-          </v-flex>
-          <v-flex xs5 md3 v-if="selects.mode === 'Palette'">
-            <v-select label="Palette" v-model="selects.palette" :items="palettes"/>
-          </v-flex>
-          <v-flex xs3 md2 v-if="selects.mode === 'Palette'">
-            <v-select label="Speed" v-model="selects.speed" :items="speeds" item-text="label" item-value="value"/>
-          </v-flex>
-          <v-flex xs3 md2 v-if="selects.mode === 'Palette' && selects.palette === 'Custom'">
-            <v-select label="Palette Size" v-model="selects.customPaletteSize" :items="paletteSizes"/>
-          </v-flex>
-          <v-flex xs12 v-if="selects.mode === 'Palette' && selects.palette === 'Custom'">
-            <custom-palette v-model="selects.customPaletteColors" :count="+selects.customPaletteSize"/>
-          </v-flex>
-        </v-layout>
-      </v-container>
-      <div class="px-4 pb-4" v-if="selects.mode === 'Canvas'" >
-        <my-canvas :width="width - 48"/>
-      </div>
+      <v-layout v-if="loading">
+        <v-progress-circular style="margin: auto;" class="my-5" :size="80" color="primary" indeterminate/>
+      </v-layout>
+      <template v-else>
+        <v-container fluid grid-list-xl>
+          <v-slider
+            v-if="selects.mode !== 'Off'"
+            v-model="selects.brightness"
+            label="Brightness"
+            step="20"
+            max="255"
+            thumb-label="always"
+          ></v-slider>
+          <v-layout wrap class="mt-0 pt-0">
+            <v-flex xs4 md2>
+              <v-radio-group class="mt-0 " v-model="selects.mode">
+                <v-radio
+                  v-for="option in options"
+                  :key="option"
+                  :label="option"
+                  :value="option"
+                ></v-radio>
+              </v-radio-group>
+            </v-flex>
+            <v-flex xs5 md3 v-if="selects.mode === 'Palette'">
+              <v-select label="Palette" v-model="selects.palette" :items="palettes"/>
+            </v-flex>
+            <v-flex xs3 md2 v-if="selects.mode === 'Palette'">
+              <v-select label="Speed" v-model="selects.speed" :items="speeds" item-text="label" item-value="value"/>
+            </v-flex>
+            <v-flex xs3 md2 v-if="selects.mode === 'Palette' && selects.palette === 'Custom'">
+              <v-select label="Palette Size" v-model="selects.customPaletteSize" :items="paletteSizes"/>
+            </v-flex>
+            <v-flex xs12 v-if="selects.mode === 'Palette' && selects.palette === 'Custom'">
+              <custom-palette v-model="selects.customPaletteColors" :count="+selects.customPaletteSize"/>
+            </v-flex>
+          </v-layout>
+        </v-container>
+        <div class="px-4 pb-4" v-if="selects.mode === 'Canvas'" >
+          <my-canvas :width="width - 48"/>
+        </div>
+      </template>
     </v-card>
   </v-dialog>
 </template>
@@ -61,6 +66,7 @@ export default {
   },
   data: () => ({
     show: false,
+    loading: false,
     width: 1000,
     selects: {
       mode: 'Off',
@@ -81,7 +87,8 @@ export default {
     },
     value(newV) {
       this.show = newV;
-      if (newV) {
+      this.getStatus();
+      if (this.show) {
         document.body.parentElement.className = 'hide-overflow';
       } else {
         document.body.parentElement.className = '';
@@ -107,6 +114,17 @@ export default {
         controller: 'lightsStrip/update',
         data: this.selects,
       });
+    },
+    async getStatus() {
+      try {
+        this.loading = true;
+        const { data } = await axios.post('https://home-control2.azurewebsites.net/api/lightsStrip/status');
+        this.selects = data;
+        this.loading = false;
+      } catch (error) {
+        console.error(error);
+        setTimeout(() => this.getStatus(), 500);
+      }
     },
   },
 };

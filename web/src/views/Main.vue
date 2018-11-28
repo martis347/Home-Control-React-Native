@@ -1,7 +1,6 @@
 <template>
   <v-app :dark="dark" :key="iteration">
-    <v-progress-circular v-if="!loaded" :size="200" color="primary" style="position: absolute; top: calc(50% - 100px); left: calc(50% - 100px);" indeterminate/>
-    <v-content v-else>
+    <v-content>
       <v-layout v-if="settings" :column="smallView" :class="smallView ? 'mt-3' : 'asd'">
         <v-flex xs3 column :class="`${smallView ? `mx-${padding}` : `ml-${padding}`}`">
           <v-flex>
@@ -20,7 +19,7 @@
         <v-flex xs9>
           <v-layout :column="smallView" :class="`mx-${padding}`">
             <v-flex md4>
-              <week-weather-list :current="current" :dailyData="daily" style="height: 300px;"/>
+              <week-weather-list :disable-animations="settings.disableAnimations" :loading="!loaded" :current="current" :dailyData="daily" style="height: 300px;"/>
             </v-flex>
             <v-flex md8 v-if="!smallView">
               <clock-with-date :class="`ml-${padding}`" style="height: 300px;"/>
@@ -28,7 +27,7 @@
           </v-layout>
           <v-layout :class="`mt-3`">
             <v-flex xs12>
-              <weather-chart :class="`mx-${padding}`" :data="hourly"/>
+              <weather-chart :loading="!loaded" :class="`mx-${padding}`" :data="hourly"/>
             </v-flex>
           </v-layout>
         </v-flex>

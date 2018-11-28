@@ -7,7 +7,7 @@
         </v-layout>
         <v-layout>
           <v-flex>
-            <v-btn small :outline="!ceilingOn" :loading="loadingCeiling" color="primary" :ripple="!disableAnimations" @click="switchCeiling">
+            <v-btn small :outline="!ceiling" :loading="loading.includes('ceiling')" color="primary" :ripple="!disableAnimations" @click="switchCeiling">
               <v-icon>flash_on</v-icon>
             </v-btn>
           </v-flex>
@@ -19,7 +19,7 @@
         </v-layout>
         <v-layout>
           <v-flex>
-            <v-btn small :outline="!wallOn" :loading="loadingWall" color="primary" :ripple="!disableAnimations" @click="switchWall">
+            <v-btn small :outline="!wall" :loading="loading.includes('wall')" color="primary" :ripple="!disableAnimations" @click="switchWall">
               <v-icon>flash_on</v-icon>
             </v-btn>
           </v-flex>
@@ -37,13 +37,13 @@ export default {
     disableAnimations: Boolean,
   },
   data: () => ({
-    ceilingOn: false,
-    wallOn: false,
-    loadingCeiling: false,
-    loadingWall: false,
+    ceiling: false,
+    wall: false,
+    loading: [],
   }),
   beforeMount() {
-    this.getStatuses();
+    this.getStatus('wall');
+    this.getStatus('ceiling');
   },
   methods: {
     async switchCeiling() {
@@ -58,14 +58,15 @@ export default {
       this.wallOn = !this.wallOn;
       this.loadingWall = false;
     },
-    async getStatuses() {
-      this.loadingCeiling = true;
-      this.loadingWall = true;
-      const result = await this.makeCall('lightning/statuses');
-      this.loadingWall = false;
-      this.loadingCeiling = false;
-      this.ceilingOn = result.ceilingOn;
-      this.wallOn = result.wallOn;
+    async getStatus(controller) {
+      this.loading.push(controller);
+      try {
+        const result = await this.makeCall(`lightning/status/${controller}`);
+        this[controller] = result.ceilingOn;
+        this.loading = this.loading.filter(v => v !== controller);
+      } catch (error) {
+        setTimeout(() => this.getStatus(controller), 1000);
+      }
     },
     async makeCall(data) {
       const response = await axios.post(`https://home-control2.azurewebsites.net/api/${data}`);

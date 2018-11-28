@@ -1,6 +1,9 @@
 <template>
   <v-card style="overflow-x: auto">
-    <chart-internal :data="filteredDays" :disable-animations="disableAnimations" :styles="myStyles"/>
+    <v-layout v-if="loading" class="my-5" style="position: relative; top: calc(50% - 40px)">
+      <v-progress-circular style="margin: auto;" :size="80" color="primary" indeterminate/>
+    </v-layout>
+    <chart-internal v-else :data="filteredDays" :disable-animations="disableAnimations" :styles="myStyles"/>
   </v-card>
 </template>
 
@@ -20,6 +23,7 @@ export default {
     data: {
       type: Array,
     },
+    loading: Boolean,
     disableAnimations: {
       type: Boolean,
       default: false,
