@@ -5,10 +5,11 @@ class LightsStripController {
         this.controllerUrl = 'http://192.168.31.242';
         this.status = {
             mode: 'Off',
+            brightness: '255',
             palette: 'Rainbow',
-            speed: 1,
-            customPaletteSize: 8,
-            customPaletteColors: [],
+            speed: '30',
+            customPaletteSize: '8',
+            customPaletteColors: ['#000000', '#000000', '#000000', '#000000', '#000000', '#000000', '#000000', '#000000'],
           };
     }
 
