@@ -95,9 +95,9 @@ void loop() {
   FastLED.delay(500 / speed);
 }
 
-void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length){
+void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {
   // Serial.println("WHAAAT");
-  if (type == WStype_TEXT){
+  if (type == WStype_TEXT) {
     // Format: X:Y&X:Y&X:Y&X:Y&X:Y...X:Y
     uint8_t index = 0;
     payload[length] = 0;
@@ -105,19 +105,19 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
 
     while (pair != 0)
     {
-        // Split the command in two values
-        char* separator = strchr(pair, ':');
-        if (separator != 0)
-        {
-          *separator = 0;
-          int hue = atoi(pair);
-          ++separator;
-          int brightness = atoi(separator);
-          leds[index * 2] = CHSV(hue, 255, brightness);
-          leds[(index * 2) + 1] = CHSV(hue, 255, brightness);
-          index++;
-        }
-        pair = strtok(0, "&");
+      // Split the command in two values
+      char* separator = strchr(pair, ':');
+      if (separator != 0)
+      {
+        *separator = 0;
+        int hue = atoi(pair);
+        ++separator;
+        int brightness = atoi(separator);
+        leds[index * 2] = CHSV(hue, 255, brightness);
+        leds[(index * 2) + 1] = CHSV(hue, 255, brightness);
+        index++;
+      }
+      pair = strtok(0, "&");
     }
   }
 }
@@ -138,7 +138,7 @@ void handleUpdate() {
     server.send(400);
     return;
   }
- 
+
   if (palette == "Red") {
     Serial.println("Mode is Red");
     SetupRedPalette();
@@ -172,37 +172,37 @@ void handleUpdate() {
 }
 
 void handlePalette(uint8_t colorIndex) {
-  for( int i = 0; i < NUM_LEDS; i++) {
-      leds[i] = ColorFromPalette( currentPalette, colorIndex, brightness, currentBlending);
-      colorIndex++;
+  for ( int i = 0; i < NUM_LEDS; i++) {
+    leds[i] = ColorFromPalette( currentPalette, colorIndex, brightness, LINEARBLEND);
+    colorIndex+=3;
   }
 }
 
 void SetupRedPalette()
 {
-    CRGB red  = CHSV( HUE_RED, 255, 255);
-    CRGB black  = CRGB::Black;
-    
-    currentPalette = CRGBPalette16(black, red, red, red, black, black, black, black, black, red, red, red, black, black, black, black);
+  CRGB red  = CHSV( HUE_RED, 255, 255);
+  CRGB black  = CRGB::Black;
+
+  currentPalette = CRGBPalette16(black, red, red, red, black, black, black, black, black, red, red, red, black, black, black, black);
 }
 
 void SetupGreenPalette()
 {
-    CRGB green  = CHSV( HUE_GREEN, 255, 255);
-    CRGB black  = CRGB::Black;
-    
-    currentPalette = CRGBPalette16(black, green, green, green, black, black, black, black, black, green, green, green, black, black, black, black);
+  CRGB green  = CHSV( HUE_GREEN, 255, 255);
+  CRGB black  = CRGB::Black;
+
+  currentPalette = CRGBPalette16(black, green, green, green, black, black, black, black, black, green, green, green, black, black, black, black);
 }
 
 void SetupBluePalette()
 {
-    CRGB blue  = CHSV( HUE_BLUE, 255, 255);
-    CRGB black  = CRGB::Black;
-    
-    currentPalette = CRGBPalette16(black, blue, blue, blue, black, black, black, black, black, blue, blue, blue, black, black, black, black);
+  CRGB blue  = CHSV( HUE_BLUE, 255, 255);
+  CRGB black  = CRGB::Black;
+
+  currentPalette = CRGBPalette16(black, blue, blue, blue, black, black, black, black, black, blue, blue, blue, black, black, black, black);
 }
 
 void SetupRainbowPalette()
 {
-    currentPalette = RainbowColors_p;
+  currentPalette = RainbowColors_p;
 }

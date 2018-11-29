@@ -65,6 +65,7 @@ export default {
     },
   },
   data: () => ({
+    debounceTimeout: null,
     show: false,
     loading: false,
     width: 1000,
@@ -114,10 +115,13 @@ export default {
         ...this.selects,
       };
       data.customPaletteColors = data.customPaletteColors.map(c => parseInt(c.replace('#', ''), 16));
-      axios.post('https://home-control2.azurewebsites.net/api', {
-        controller: 'lightsStrip/update',
-        data,
-      });
+      clearTimeout(this.debounceTimeout);
+      this.debounceTimeout = setTimeout(() => {
+        axios.post('https://home-control2.azurewebsites.net/api', {
+          controller: 'lightsStrip/update',
+          data,
+        });
+      }, 300);
     },
     async getStatus() {
       try {

@@ -9,12 +9,12 @@
     >
       lens
     </v-icon>
-    <picker v-if="selectedColor !== null" @input="colorUpdated" :value="getColor"></picker>
+    <picker v-if="selectedColor !== null" @input="colorUpdated" :width="100" :height="100" :value="getColor(selectedColor)"></picker>
   </div>
 </template>
 
 <script>
-import { Compact } from 'vue-color';
+import ColorPicker from 'vue-color-picker-wheel';
 
 export default {
   props: {
@@ -22,7 +22,7 @@ export default {
     count: Number,
   },
   components: {
-    Picker: Compact,
+    Picker: ColorPicker,
   },
   data: () => ({
     selectedColor: null,
@@ -37,7 +37,7 @@ export default {
   methods: {
     colorUpdated(newColor) {
       let newValue = [...this.value];
-      newValue[this.selectedColor] = newColor.hex;
+      newValue[this.selectedColor] = newColor;
       newValue = newValue.map(v => v || '#000000');
       this.$emit('input', newValue);
     },
