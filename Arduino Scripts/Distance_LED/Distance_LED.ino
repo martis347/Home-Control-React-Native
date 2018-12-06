@@ -58,6 +58,7 @@ void FadeIn() {
   if (isTurnedOn) {
     return;
   }
+  Serial.println("ON");
   for(int i = 1; i <= maxValue; i++) {
     leds[0].setRGB(i, i, i);
     FastLED.show();
@@ -70,6 +71,8 @@ void FadeOut() {
   if (!isTurnedOn) {
     return;
   }
+  Serial.println("OFF");
+
   for(int i = maxValue; i >= 0; i--) {
     leds[0].setRGB(i, i, i);
     FastLED.show();
@@ -85,7 +88,6 @@ long MeasureDistance() {
   digitalWrite(trigPin, LOW);
   long duration = pulseIn(echoPin, HIGH);
   
-
   return duration;
 }
 
