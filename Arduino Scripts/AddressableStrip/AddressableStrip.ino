@@ -7,6 +7,7 @@
 #include <WiFiClient.h>
 #include <WebSocketsServer.h>
 #include <ArduinoJson.h>
+#include <QueueArray.h>
 
 #define LED_PIN     5
 #define NUM_LEDS    100
@@ -79,8 +80,18 @@ void loop() {
   webSocket.loop();
 
   if (mode == "Palette") {
-    startIndex = startIndex + 1;
-    handlePalette(startIndex);
+    if (palette == "Christmas") {
+      handleChristmas();
+    } else if (palette == "Christmas2") {
+      handleChristmas2();
+    } else if (palette == "Strobe") {
+      handleStrobe();
+    } else if (palette == "Rain") {
+      handleRain();
+    } else {
+      startIndex = startIndex + 1;
+      handlePalette(startIndex);
+    }
   }
   else if (mode == "Canvas") {
     // Do nothing, websockets will handle that
@@ -139,7 +150,9 @@ void handleUpdate() {
     return;
   }
 
-  if (palette == "Red") {
+  if (palette == "Christmas" || palette == "Christmas2") {
+    Serial.println("Mode is Christmas");
+  } else if (palette == "Red") {
     Serial.println("Mode is Red");
     SetupRedPalette();
   } else if (palette == "Green") {
@@ -176,6 +189,111 @@ void handlePalette(uint8_t colorIndex) {
     leds[i] = ColorFromPalette( currentPalette, colorIndex, brightness, LINEARBLEND);
     colorIndex+=3;
   }
+}
+
+void handleChristmas() {
+  CRGB lights[10];
+  lights[0] = CRGB::Blue;
+  lights[1] = CRGB::Green;
+  lights[2] = CRGB::Red;
+  lights[3] = CHSV(128, 255, 255);
+  lights[4] = CHSV(32, 255, 255);
+  lights[5] = CHSV(224, 255, 255);
+  lights[6] = CHSV(192, 255, 255);
+
+  for (int i = 0; i < 100; i += 5) {
+    int randomNum = random(6);
+    int randomNum2 = random(3);
+    if (randomNum2 == 0) {
+      leds[i] = CRGB::Black;
+      leds[i + 1] = CRGB::Black;
+      leds[i + 2] = lights[randomNum];
+      leds[i + 3] = CRGB::Black;
+      leds[i + 4] = CRGB::Black;
+    } else if (randomNum2 == 1) {
+      leds[i] = lights[randomNum];
+      leds[i + 1] = CRGB::Black;
+      leds[i + 2] = CRGB::Black;
+      leds[i + 3] = CRGB::Black;
+      leds[i + 4] = CRGB::Black;
+    } else if (randomNum2 == 2) {
+      leds[i] = CRGB::Black;
+      leds[i + 1] = lights[randomNum];
+      leds[i + 2] = CRGB::Black;
+      leds[i + 3] = CRGB::Black;
+      leds[i + 4] = CRGB::Black;
+    }
+    
+  }
+
+  FastLED.delay(30000 / speed);
+}
+
+int christmas2Brightness = 255;
+bool christmas2GoingUp = false;
+int christmas2Color = random(256);
+
+void handleChristmas2() {
+  if (christmas2GoingUp) {
+    christmas2Brightness += 2;
+  } else {
+    christmas2Brightness -= 2;
+  }
+
+  if (christmas2Brightness > 255) {
+    christmas2GoingUp = false;
+    christmas2Brightness = 255;
+  } else if (christmas2Brightness < 0) {
+    christmas2GoingUp = true;
+    christmas2Brightness = 0;
+    christmas2Color = random(256);
+  }
+  
+  fill_solid(leds, NUM_LEDS, CHSV(christmas2Color, 255, christmas2Brightness));
+
+  if (christmas2Brightness == 0) {
+    FastLED.delay(1500);
+  }
+  FastLED.delay(80 / speed);
+}
+
+bool strobeOn = false;
+void handleStrobe() {
+  for (int i = 0; i < NUM_LEDS; i++) {
+    leds[i] = strobeOn ? CRGB::White : CRGB::Black;
+  }
+  
+  strobeOn = !strobeOn;
+  if (strobeOn) {
+    FastLED.delay(1500 / speed);
+  }
+  FastLED.delay(600 / speed);
+}
+
+struct CHSV_drop {
+  CHSV color;
+  int index;
+};
+
+QueueArray <CHSV_drop> rainValues;
+void handleRain() {
+  CHSV_drop drop;
+  drop.color = CHSV(random(256), 255, 255);
+  drop.index = random(0, 100);
+
+  rainValues.enqueue(drop);
+  if (rainValues.count() > 15) {
+    rainValues.dequeue();
+  }
+
+  for (int i = 0; i < NUM_LEDS; i++) {
+    leds[i] = CRGB::Black;
+  }
+  for (int i = 0; i < rainValues.count(); i++) {
+    leds[rainValues[i].index] = rainValues[i].color;
+  }
+
+  FastLED.delay(5000 / speed);
 }
 
 void SetupRedPalette()

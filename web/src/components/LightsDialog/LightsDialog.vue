@@ -79,7 +79,7 @@ export default {
     },
     options: ['Off', 'Palette', 'Canvas'],
     speeds: [{ value: '100', label: 'x3' }, { value: '60', label: 'x2' }, { value: '30', label: 'x1' }, { value: '15', label: 'x0.5' }, { value: '10', label: 'x0.3' }, { value: '4', label: 'x0.1' }],
-    palettes: ['Rainbow', 'Red', 'Green', 'Blue', 'Custom'],
+    palettes: ['Christmas', 'Christmas2', 'Rainbow', 'Red', 'Green', 'Blue', 'Strobe', 'Custom'],
     paletteSizes: ['4', '8', '16'],
   }),
   watch: {
