@@ -54,13 +54,13 @@ class GoogleAssistantController {
 		const ceilingWords = ['ceiling', 'top', 'big', 'bright'];
 		if (ceilingWords.some(w => content.includes(w))) {
 			LightningController.switchCeiling(newValue);
-			switched = true;
+			return;
 		}
 
 		const wallWords = ['wall', 'small', 'weak', 'side'];
 		if (wallWords.some(w => content.includes(w))) {
 			LightningController.switchWall(newValue);
-			switched = true;
+			return;
 		}
 
 		const bothLightsWords = ['all', 'both', 'every'];
