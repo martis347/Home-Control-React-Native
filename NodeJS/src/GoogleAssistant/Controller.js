@@ -10,16 +10,17 @@ class GoogleAssistantController {
 	}
 
 	handleRequest({ content, action }) {
+		const lowercaseContent = content.toLowerCase();
 		if (action === 'everything off') {
 			this.everythingOff();
 		} else if (action === 'back home') {
 			this.backHome();
-		} else if (this.lightningWords.some(w => content.includes(w))) {
-			this.handleLightning(content);
-		} else if (this.audioWords.some(w => content.includes(w))) {
-			this.handleAudio(content);
-		} else if (this.radioWords.some(w => content.includes(w))) {
-			this.handleRadio(content);
+		} else if (this.lightningWords.some(w => lowercaseContent.includes(w))) {
+			this.handleLightning(lowercaseContent);
+		} else if (this.audioWords.some(w => lowercaseContent.includes(w))) {
+			this.handleAudio(lowercaseContent);
+		} else if (this.radioWords.some(w => lowercaseContent.includes(w))) {
+			this.handleRadio(lowercaseContent);
 		}
 	}
 
