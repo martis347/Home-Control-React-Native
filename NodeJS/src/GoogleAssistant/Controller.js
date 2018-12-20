@@ -73,7 +73,7 @@ class GoogleAssistantController {
 			RadioController.transmitIR(149389439);
 			return;
 		}
-		if (content.includes('off')) {
+		if (content.includes('off') || content.includes('on')) {
 			RadioController.transmitIR(149356799);
 			return;
 		}
