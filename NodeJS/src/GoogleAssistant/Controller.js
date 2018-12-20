@@ -115,6 +115,7 @@ class GoogleAssistantController {
 			} else {
 				RadioController.transmitIR(149369039);
 			}
+			howManyTimes--;
 		}
 	}
 
