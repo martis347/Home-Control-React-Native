@@ -127,7 +127,8 @@ class GoogleAssistantController {
 		}
 
 		const stations = Object.keys(RadioController.streams);
-		const currentStationIndex = stations.indexOf(RadioController.status.stream);
+		const currentStationTitle = Object.entries(RadioController.streams).find(([, value]) => value === RadioController.status.stream)[0];
+		const currentStationIndex = stations.indexOf(currentStationTitle);
 		if (content.includes('on')) {
 			RadioController.turnOnRadio(stations[0]);
 		} else if (content.includes('next')) {
