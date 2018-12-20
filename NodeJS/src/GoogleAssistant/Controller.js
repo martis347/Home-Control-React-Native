@@ -12,10 +12,10 @@ class GoogleAssistantController {
 	handleRequest({ content, action }) {
 		const lowercaseContent = content.toLowerCase();
 		console.log(`Content: ${lowercaseContent}`);
-		if (action === 'everything off') {
+		if (action === 'everything off' || (content.includes('everything') && content.includes('off'))) {
 			console.log('everythingOff');
 			this.everythingOff();
-		} else if (action === 'back home') {
+		} else if (action === 'back home' || (content.includes('back') && content.includes('home')) || (content.includes('everything') && content.includes('on'))) {
 			console.log('backHome');
 			this.backHome();
 		} else if (this.lightningWords.some(w => lowercaseContent.includes(w))) {
