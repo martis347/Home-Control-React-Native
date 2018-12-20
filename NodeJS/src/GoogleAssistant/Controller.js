@@ -1,5 +1,6 @@
 import LightningController from '../Lightning/Controller';
 import RadioController from '../Radio/Controller';
+import LightsStripController from '../LightsStrip/Controller';
 
 class GoogleAssistantController {
 	constructor() {
@@ -8,14 +9,34 @@ class GoogleAssistantController {
 		this.radioWords = ['radio', 'station'];
 	}
 
-	handleRequest({ content }) {
-		if (this.lightningWords.some(w => content.includes(w))) {
+	handleRequest({ content, action }) {
+		if (action === 'everything off') {
+			this.everythingOff();
+		} else if (action === 'back home') {
+			this.backHome();
+		} else if (this.lightningWords.some(w => content.includes(w))) {
 			this.handleLightning(content);
 		} else if (this.audioWords.some(w => content.includes(w))) {
 			this.handleAudio(content);
 		} else if (this.radioWords.some(w => content.includes(w))) {
 			this.handleRadio(content);
 		}
+	}
+
+	backHome() {
+		LightningController.switchCeiling(true);
+		RadioController.transmitIR(149356799);
+		RadioController.turnOnRadio(RadioController.streams.m1);
+	}
+
+	everythingOff() {
+		LightningController.switchCeiling(false);
+		LightningController.switchWall(false);
+		RadioController.transmitIR(149356799);
+		LightsStripController.update({
+			...LightsStripController.status,
+			mode: 'Off'
+		});
 	}
 
 	handleLightning(content) {
