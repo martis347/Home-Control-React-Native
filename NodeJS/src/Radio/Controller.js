@@ -31,14 +31,13 @@ class RadioController {
 			return;
 		}
 		if (this.player) {
-			await this.turnOffSpeakers(true);
 			this.player.stop();
 		}
 		this.player = new MPlayer();
 		this.player.on('status', (status) => {
 			this.status.title = status.title;
 		});
-		this.player.openFile(stream, { volume: 5 });
+		this.player.openFile(stream, { volume: 100 });
 
 		while(!this.player.status.position) {
 			await new Promise((resolve) => {
@@ -48,50 +47,23 @@ class RadioController {
 			});
 		}
 		this.player.volume(this.status.volume || 100);
-		await this.turnOnSpeakers();
 
 		this.status.stream = radioToPlay;
 		this.status.on = true;
 		this.status.volume = this.status.volume || 100;
 	}
 
-	async turnOnSpeakers() {
-		console.log(`turnOnSpeakers`);
-		try {
-			await axios.get(`${this.controllerUrl}/on`, { timeout: 500 });
-		} catch (error) {
-			console.error(error);
-			console.log(`${this.controllerUrl}/on Did not respond.`);
-		}
-	}
-
-	setSpeakersVolume(volume) {
-		console.log(`setSpeakersVolume`);
-		if (!this.player) {
-			return;
-		}
-
-		this.player.volume(Number(volume));
-		this.status.volume = Number(volume);
-	}
-
-	async turnOffSpeakers(keepVolume = false) {
+	async turnOffRadio() {
 		console.log(`turnOffSpeakers`);
 		if (!this.player) {
 			return;
-		}
-		try {
-			await axios.get(`${this.controllerUrl}/off`, { timeout: 500 });
-		} catch (error) {
-			console.error(error);
-			console.log(`${this.controllerUrl}/off Did not respond.`);
 		}
 
 		this.player.stop();
 		this.status = {
 			title: '',
 			stream: '',
-			volume: keepVolume ? this.status.volume : 0,
+			volume: this.status.volume,
 			on: false,
 		}
 	}

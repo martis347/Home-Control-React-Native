@@ -1,4 +1,5 @@
 import LightningModule from './src/Lightning/Module';
+import GoogleAssistantModule from './src/GoogleAssistant/Module';
 import RadioModule from './src/Radio/Module';
 import YoutubeModule from './src/Youtube/Module';
 import LightsStripModule from './src/LightsStrip/Module';
@@ -14,6 +15,7 @@ LightningModule.initialize(app);
 RadioModule.initialize(app);
 YoutubeModule.initialize(app);
 LightsStripModule.initialize(app);
+GoogleAssistantModule.initialize(app);
 
 app.listen(3001, () => console.log('Listening on Port 3001'));
 setTimeout(() => {

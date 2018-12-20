@@ -5,17 +5,9 @@ const initialize = app => {
 		res.sendStatus(200);
 		controller.turnOnRadio(req.params.radioName);
 	});
-	app.get('/radio/volume/:volume', (req, res) => {
-		res.sendStatus(200);
-		controller.setSpeakersVolume(req.params.volume);
-	});
 	app.get('/radio/off', (req, res) => {
 		res.sendStatus(200);
-		controller.turnOffSpeakers();
-	});
-	app.get('/radio/speakers', (req, res) => {
-		res.sendStatus(200);
-		controller.turnOnSpeakers();
+		controller.turnOffRadio();
 	});
 	app.get('/radio/transmit/:code', (req, res) => {
 		res.sendStatus(200);
