@@ -110,13 +110,11 @@ class GoogleAssistantController {
 		}
 		
 		while (howManyTimes > 0) {
-			setTimeout(() => {
-				if (newValue) {
-					RadioController.transmitIR(149393519);
-				} else {
-					RadioController.transmitIR(149369039);
-				}
-			}, 130 * howManyTimes);
+			if (newValue) {
+				RadioController.transmitIR(149393519);
+			} else {
+				RadioController.transmitIR(149369039);
+			}
 		}
 	}
 
