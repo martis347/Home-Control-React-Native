@@ -129,14 +129,14 @@ class GoogleAssistantController {
 		} else if (content.includes('previous') && currentStationIndex !== -1) {
 			RadioController.turnOnRadio(((currentStationIndex + stations.length) - 1) % stations.length);
 		} else {
-			if (content.includes('m1') || content.includes('one')) {
-				RadioController.turnOnRadio(RadioController.streams.m1);
+			if (content.includes('one') || content.includes('1')) {
+				RadioController.turnOnRadio('m1');
 			} else if (content.includes('power') || content.includes('hit') || content.includes('phr')) {
-				RadioController.turnOnRadio(RadioController.streams.powerhitradio);
+				RadioController.turnOnRadio('powerhitradio');
 			} else if (content.includes('rock')) {
-				RadioController.turnOnRadio(RadioController.streams.rockfm);
+				RadioController.turnOnRadio('rockfm');
 			} else if (content.includes('relax')) {
-				RadioController.turnOnRadio(RadioController.streams.relaxfm);
+				RadioController.turnOnRadio('relaxfm');
 			}
 		}
 	}
