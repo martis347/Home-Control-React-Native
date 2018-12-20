@@ -10,7 +10,7 @@ class GoogleAssistantController {
 	}
 
 	handleRequest({ content, action }) {
-		const lowercaseContent = content.toLowerCase();
+		const lowercaseContent = (content || '').toLowerCase();
 		console.log(`Content: ${lowercaseContent}`);
 
 		if (action === 'everything off' || (lowercaseContent.includes('everything') && lowercaseContent.includes('off'))) {
@@ -35,7 +35,7 @@ class GoogleAssistantController {
 	backHome() {
 		LightningController.switchCeiling(true);
 		RadioController.transmitIR(149356799);
-		RadioController.turnOnRadio(RadioController.streams.m1);
+		RadioController.turnOnRadio('m1');
 	}
 
 	everythingOff() {
