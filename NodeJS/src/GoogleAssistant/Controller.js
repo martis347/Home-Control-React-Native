@@ -127,14 +127,8 @@ class GoogleAssistantController {
 		}
 
 		const stations = Object.keys(RadioController.streams);
-		const currentStationTitle = Object.entries(RadioController.streams).find(([, value]) => value === RadioController.status.stream)[0];
-		const currentStationIndex = stations.indexOf(currentStationTitle);
 		if (content.includes('on')) {
 			RadioController.turnOnRadio(stations[0]);
-		} else if (content.includes('next')) {
-			RadioController.turnOnRadio(stations[(currentStationIndex + 1) % stations.length]);
-		} else if (content.includes('previous') && currentStationIndex !== -1) {
-			RadioController.turnOnRadio(stations[((currentStationIndex + stations.length) - 1) % stations.length]);
 		} else {
 			if (content.includes('one') || content.includes('1')) {
 				RadioController.turnOnRadio('m1');
