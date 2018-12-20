@@ -11,15 +11,21 @@ class GoogleAssistantController {
 
 	handleRequest({ content, action }) {
 		const lowercaseContent = content.toLowerCase();
+		console.log(`Content: ${lowercaseContent}`);
 		if (action === 'everything off') {
+			console.log('everythingOff');
 			this.everythingOff();
 		} else if (action === 'back home') {
+			console.log('backHome');
 			this.backHome();
 		} else if (this.lightningWords.some(w => lowercaseContent.includes(w))) {
+			console.log('handleLightning');
 			this.handleLightning(lowercaseContent);
 		} else if (this.audioWords.some(w => lowercaseContent.includes(w))) {
+			console.log('handleAudio');
 			this.handleAudio(lowercaseContent);
 		} else if (this.radioWords.some(w => lowercaseContent.includes(w))) {
+			console.log('handleRadio');
 			this.handleRadio(lowercaseContent);
 		}
 	}
@@ -94,12 +100,12 @@ class GoogleAssistantController {
 		let howManyTimes = 5;
 
 		const wordsThatMeanMuch = ['lot', 'much', 'many']
-		if (wordsThatMeanMuch.some(w => content.includes(w))) { // alot
+		if (wordsThatMeanMuch.some(w => content.includes(w))) {
 			howManyTimes = 10;
 		}
 
 		const wordsThatMeanlittle = ['little', 'small', 'not much']
-		if (wordsThatMeanlittle.some(w => content.includes(w))) { // alot
+		if (wordsThatMeanlittle.some(w => content.includes(w))) {
 			howManyTimes = 3;
 		}
 		
@@ -125,9 +131,9 @@ class GoogleAssistantController {
 		if (content.includes('on')) {
 			RadioController.turnOnRadio(stations[0]);
 		} else if (content.includes('next')) {
-			RadioController.turnOnRadio((currentStationIndex + 1) % stations.length);
+			RadioController.turnOnRadio(stations[(currentStationIndex + 1) % stations.length]);
 		} else if (content.includes('previous') && currentStationIndex !== -1) {
-			RadioController.turnOnRadio(((currentStationIndex + stations.length) - 1) % stations.length);
+			RadioController.turnOnRadio(stations[((currentStationIndex + stations.length) - 1) % stations.length]);
 		} else {
 			if (content.includes('one') || content.includes('1')) {
 				RadioController.turnOnRadio('m1');
