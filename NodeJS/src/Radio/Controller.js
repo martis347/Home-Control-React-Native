@@ -74,7 +74,7 @@ class RadioController {
 	}
 
 	transmitIR(code) {
-		console.log(`transmitIR`);
+		console.log(`transmitIR ${code}`);
 		axios.get(`${this.speakersControllerUrl}/transmit?code=${code}`);
 	}
 }

@@ -109,13 +109,12 @@ class GoogleAssistantController {
 			howManyTimes = 3;
 		}
 		
-		while (howManyTimes > 0) {
+		for (let index = 0; index < howManyTimes; index++) {
 			if (newValue) {
 				RadioController.transmitIR(149393519);
 			} else {
 				RadioController.transmitIR(149369039);
 			}
-			howManyTimes--;
 		}
 	}
 
