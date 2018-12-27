@@ -4,6 +4,8 @@ import youtube from './modules/youtube';
 import speakers from './modules/speakers';
 import radio from './modules/radio';
 import lightning from './modules/lightning';
+import weather from './modules/weather';
+import lightsStrip from './modules/lightsStrip';
 
 Vue.use(Vuex);
 
@@ -18,6 +20,8 @@ export default new Vuex.Store({
     youtube,
     speakers,
     lightning,
+    weather,
+    lightsStrip,
   },
   actions: {
     updateDisableAnimations({ commit, state }) {

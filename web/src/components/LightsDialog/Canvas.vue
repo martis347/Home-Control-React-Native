@@ -2,10 +2,21 @@
   <div>
     <v-layout>
       <v-flex xs3 md2 class="mr-4">
-        <v-text-field type="number" v-model="colorSensitivity" min="0" max="10" label="Color Sensitivity"/>
+        <v-text-field
+          type="number"
+          v-model="colorSensitivity"
+          min="0"
+          max="10"
+          label="Color Sensitivity"/>
       </v-flex>
       <v-flex xs3 md2>
-        <v-text-field type="number" v-model="ledFadeTime" min="0" max="10" step="0.2" label="Led fade duration"/>
+        <v-text-field
+          type="number"
+          v-model="ledFadeTime"
+          min="0"
+          max="10"
+          step="0.2"
+          label="Led fade duration"/>
       </v-flex>
     </v-layout>
     <canvas

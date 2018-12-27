@@ -19,12 +19,7 @@
         <v-flex xs9>
           <v-layout :column="smallView" :class="`mx-${padding}`">
             <v-flex md4>
-              <week-weather-list
-                :loading="!loaded"
-                :current="current"
-                :dailyData="daily"
-                style="height: 300px;"
-              />
+              <week-weather-list style="height: 300px;" />
             </v-flex>
             <v-flex md8 v-if="!smallView">
               <clock-with-date :class="`ml-${padding}`" style="height: 300px;"/>
@@ -32,7 +27,7 @@
           </v-layout>
           <v-layout :class="`mt-3`">
             <v-flex xs12>
-              <weather-chart :loading="!loaded" :class="`mx-${padding}`" :data="hourly"/>
+              <weather-chart :class="`mx-${padding}`"/>
             </v-flex>
           </v-layout>
         </v-flex>
@@ -70,8 +65,7 @@
 </template>
 
 <script>
-import axios from 'axios';
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import YoutubeSearch from '../components/YoutubeSearch.vue';
 import SpeakersControls from '../components/SpeakersControls.vue';
 import RadioControls from '../components/RadioControls.vue';
@@ -96,27 +90,19 @@ export default {
     LightsDialog,
   },
   data: () => ({
-    hourly: [],
-    daily: [],
-    current: null,
     iteration: 0,
-    loaded: false,
     showSettingsDialog: false,
     showLightsDialog: false,
   }),
   mounted() {
     this.loadWeatherData();
-    setInterval(this.loadWeatherData, 15 * 60 * 1000);
+    setInterval(() => {
+      this.loadWeatherData();
+      this.iteration += 1;
+    }, 15 * 60 * 1000);
   },
   methods: {
-    async loadWeatherData() {
-      const { data } = await axios.get('https://home-control2.azurewebsites.net/api/weather');
-      this.hourly = data.hourly;
-      this.daily = data.daily;
-      this.current = data.current;
-      this.iteration += 1;
-      this.loaded = true;
-    },
+    ...mapActions('weather', ['loadWeatherData']),
   },
   computed: {
     ...mapState(['isDark']),

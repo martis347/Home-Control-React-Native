@@ -9,7 +9,12 @@
     >
       lens
     </v-icon>
-    <picker v-if="selectedColor !== null" @input="colorUpdated" :width="100" :height="100" :value="getColor(selectedColor)"></picker>
+    <picker
+      v-if="selectedColor !== null"
+      @input="colorUpdated"
+      :width="100"
+      :height="100"
+      :value="getColor(selectedColor)"></picker>
   </div>
 </template>
 

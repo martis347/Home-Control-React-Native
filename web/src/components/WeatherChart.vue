@@ -20,12 +20,6 @@ export default {
     daysOfWeek: ['Sekmadienis', 'Pirmadienis', 'Antradienis', 'Trečiadienis', 'Ketvirtadienis', 'Penktadienis', 'Šeštadienis'],
     daysToShow: 48,
   }),
-  props: {
-    data: {
-      type: Array,
-    },
-    loading: Boolean,
-  },
   methods: {
     updateChart(value) {
       this.daysToShow = value;
@@ -34,8 +28,9 @@ export default {
   },
   computed: {
     ...mapState(['disableAnimations']),
+    ...mapState('weather', ['hourly', 'loading']),
     filteredDays() {
-      const result = this.data.slice(0, this.daysToShow);
+      const result = this.hourly.slice(0, this.daysToShow);
 
       return result;
     },

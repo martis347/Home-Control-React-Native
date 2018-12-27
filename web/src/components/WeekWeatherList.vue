@@ -10,7 +10,7 @@
         <span style="font-size: 23px;" class="text-truncate">{{ current.summary }}</span>
       </v-card-text>
       <v-list>
-        <template v-for="day in dailyData" >
+        <template v-for="day in daily" >
           <v-list-tile :key="day.id" @click="() => {}">
           <v-list-tile-content>
             <v-list-tile-title>
@@ -45,12 +45,8 @@ export default {
     }
   },
   computed: {
+    ...mapState('weather', ['daily', 'current', 'loading']),
     ...mapState(['disableAnimations']),
-  },
-  props: {
-    dailyData: Array,
-    current: Object,
-    loading: Boolean,
   },
 };
 </script>
