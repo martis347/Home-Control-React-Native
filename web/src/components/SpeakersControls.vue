@@ -4,27 +4,76 @@
       <v-subheader>Speakers Controls</v-subheader>
     </v-layout>
     <v-flex>
-      <v-btn :ripple="!disableAnimations" color="red" small flat fab outline @click="sendRequest(149356799)">
+      <v-btn
+        color="red"
+        small
+        flat
+        fab
+        outline
+        :ripple="!disableAnimations"
+        @click="switchPower">
         <v-icon>power_settings_new</v-icon>
       </v-btn>
-      <v-btn :ripple="!disableAnimations" color="primary" small flat fab outline @click="sendRequest(149389439)">
+      <v-btn
+        :ripple="!disableAnimations"
+        color="primary"
+        small
+        flat
+        fab
+        outline
+        @click="mute">
         <v-icon>volume_mute</v-icon>
       </v-btn>
       <span class="mx-3" v-if="$vuetify.breakpoint.lgAndUp"/>
-      <v-btn :ripple="!disableAnimations" color="primary" small flat fab outline @click="sendRequest(149393519, 3)">
-        <v-icon>volume_up</v-icon>
-      </v-btn>
-      <v-btn :ripple="!disableAnimations" color="primary" small flat fab outline @click="sendRequest(149369039, 3)">
+      <v-btn
+        :ripple="!disableAnimations"
+        color="primary"
+        small
+        flat
+        fab
+        outline
+        @click="volumeDown">
         <v-icon>volume_down</v-icon>
       </v-btn>
+      <v-btn
+        :ripple="!disableAnimations"
+        color="primary"
+        small
+        flat
+        fab
+        outline
+        @click="volumeUp">
+        <v-icon>volume_up</v-icon>
+      </v-btn>
       <span v-if="!smallView" class="mx-3"/>
-      <v-btn :ripple="!disableAnimations" color="primary" small flat fab outline @click="sendRequest(149385359)">
+      <v-btn
+        :ripple="!disableAnimations"
+        color="primary"
+        small
+        flat
+        fab
+        outline
+        @click="bluetoothMode">
         <v-icon>bluetooth</v-icon>
       </v-btn>
-      <v-btn :ripple="!disableAnimations" color="primary" small flat fab outline @click="sendRequest(149377199)">
+      <v-btn
+        :ripple="!disableAnimations"
+        color="primary"
+        small
+        flat
+        fab
+        outline
+        @click="radioMode">
         <v-icon>radio</v-icon>
       </v-btn>
-      <v-btn :ripple="!disableAnimations" color="primary" small flat fab outline @click="sendRequest(149401679)">
+      <v-btn
+        :ripple="!disableAnimations"
+        color="primary"
+        small
+        flat
+        fab
+        outline
+        @click="tvMode">
         <v-icon>tv</v-icon>
       </v-btn>
     </v-flex>
@@ -32,25 +81,14 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { mapActions, mapState } from 'vuex';
 
 export default {
-  data: () => ({
-  }),
-  props: {
-    disableAnimations: {
-      type: Boolean,
-      default: false,
-    },
-  },
   methods: {
-    async sendRequest(code, repeatTimes = 1) {
-      while (repeatTimes-- > 0) { // eslint-disable-line
-        axios.post(`https://home-control2.azurewebsites.net/api/radio/transmit/${code}`);
-      }
-    },
+    ...mapActions('speakers', ['switchPower', 'mute', 'volumeDown', 'volumeUp', 'bluetoothMode', 'radioMode', 'tvMode']),
   },
   computed: {
+    ...mapState(['disableAnimations']),
     smallView() {
       return this.$vuetify.breakpoint.smAndDown;
     },

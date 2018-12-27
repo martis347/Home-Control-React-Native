@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import ChartInternal from './ChartInternal.vue';
 
 export default {
@@ -24,10 +25,6 @@ export default {
       type: Array,
     },
     loading: Boolean,
-    disableAnimations: {
-      type: Boolean,
-      default: false,
-    },
   },
   methods: {
     updateChart(value) {
@@ -36,6 +33,7 @@ export default {
     },
   },
   computed: {
+    ...mapState(['disableAnimations']),
     filteredDays() {
       const result = this.data.slice(0, this.daysToShow);
 

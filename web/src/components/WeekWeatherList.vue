@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Skycons from '../../skycons';
 
 export default {
@@ -43,14 +44,13 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState(['disableAnimations']),
+  },
   props: {
     dailyData: Array,
     current: Object,
     loading: Boolean,
-    disableAnimations: {
-      type: Boolean,
-      default: false,
-    },
   },
 };
 </script>

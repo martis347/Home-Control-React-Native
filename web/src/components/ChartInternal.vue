@@ -1,6 +1,7 @@
 <script>
 import { Bar } from 'vue-chartjs';
 import ChartJsPluginDataLabels from 'chartjs-plugin-datalabels';
+import { mapState } from 'vuex';
 
 export default {
   name: 'ChartInternal',
@@ -12,10 +13,9 @@ export default {
     data: {
       type: Array,
     },
-    disableAnimations: {
-      type: Boolean,
-      default: false,
-    },
+  },
+  computed: {
+    ...mapState(['disableAnimations']),
   },
   mounted() {
     this.renderChart(

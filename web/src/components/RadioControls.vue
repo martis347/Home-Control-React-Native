@@ -4,26 +4,71 @@
       <v-layout hidden-md-and-down>
         <v-subheader>Radio</v-subheader>
       </v-layout>
-      <span class="grey--text text-truncate" style="text-align: center;" v-show="radioStatus.title">
-        {{ radioStatus.title }}
+      <span class="grey--text text-truncate" style="text-align: center;" v-show="streamTitle">
+        {{ streamTitle }}
       </span>
       <v-layout>
         <v-flex class="text-xs-center">
-          <v-btn :ripple="!disableAnimations" color="red" fab small flat outline @click="turnOffRadio">
+          <v-btn
+            :ripple="!disableAnimations"
+            :loading="loadedStationName === null"
+            color="red"
+            fab
+            small
+            flat
+            outline
+            @click="setStation(null)"
+          >
             <v-icon>power_settings_new</v-icon>
           </v-btn>
         </v-flex>
         <v-flex class="text-xs-center">
-          <v-btn :ripple="!disableAnimations" :style="{ 'min-width': '70px' }" color="primary" :outline="radioStatus.stream !== 'm1'" small :flat="radioStatus.stream !== 'm1'" @click="turnRadio('m1')">
+          <v-btn
+            :ripple="!disableAnimations"
+            :style="{ 'min-width': '70px' }"
+            :loading="loadedStationName === 'm1'"
+            :outline="stationName !== 'm1'"
+            :flat="stationName !== 'm1'"
+            color="primary"
+            small
+            @click="setStation('m1')"
+          >
             M-1
           </v-btn>
-          <v-btn :ripple="!disableAnimations" :style="{ 'min-width': '70px' }" color="primary" :outline="radioStatus.stream !== 'phr'" small :flat="radioStatus.stream !== 'phr'" @click="turnRadio('phr')">
+          <v-btn
+            :ripple="!disableAnimations"
+            :style="{ 'min-width': '70px' }"
+            :loading="loadedStationName === 'phr'"
+            :outline="stationName !== 'phr'"
+            :flat="stationName !== 'phr'"
+            color="primary"
+            small
+            @click="setStation('phr')"
+          >
             PHR
           </v-btn>
-          <v-btn :ripple="!disableAnimations" :style="{ 'min-width': '70px' }" color="primary" :outline="radioStatus.stream !== 'relaxfm'" small :flat="radioStatus.stream !== 'relaxfm'" @click="turnRadio('relaxfm')">
+          <v-btn
+            :ripple="!disableAnimations"
+            :style="{ 'min-width': '70px' }"
+            :loading="loadedStationName === 'relaxfm'"
+            :outline="stationName !== 'relaxfm'"
+            :flat="stationName !== 'relaxfm'"
+            color="primary"
+            small
+            @click="setStation('relaxfm')"
+          >
             Relax FM
           </v-btn>
-          <v-btn :ripple="!disableAnimations" :style="{ 'min-width': '70px' }" color="primary" :outline="radioStatus.stream !== 'rockfm'" small :flat="radioStatus.stream !== 'rockfm'" @click="turnRadio('rockfm')">
+          <v-btn
+            :ripple="!disableAnimations"
+            :style="{ 'min-width': '70px' }"
+            :loading="loadedStationName === 'rockfm'"
+            :outline="stationName !== 'rockfm'"
+            :flat="stationName !== 'rockfm'"
+            color="primary"
+            small
+            @click="setStation('rockfm')"
+          >
             Rock FM
           </v-btn>
         </v-flex>
@@ -33,74 +78,22 @@
 </template>
 
 <script>
-import axios from 'axios';
+import { mapActions, mapState } from 'vuex';
 
 export default {
-  data: () => ({
-    radioStatus: {
-      title: '',
-      stream: '',
-      volume: 0,
-      on: false,
-      fab: false,
-    },
-    lightningStatus: {
-      mode: '',
-      on: false,
-    },
-  }),
-  props: {
-    disableAnimations: {
-      type: Boolean,
-      default: false,
-    },
+  mounted() {
+    this.refreshRadioStatus();
+    setTimeout(this.refreshRadioStatus, 1000 * 60 * 2); // refresh every 2 minutes
   },
   methods: {
-    async turnRadio(station) {
-      this.radioStatus.stream = station;
-      await this.makeCall(`radio/on/${station}`);
-      setTimeout(() => {
-        this.refresh();
-      }, 3000);
-    },
-    async turnOffRadio() {
-      this.radioStatus.stream = '';
-      await this.makeCall('radio/off');
-      setTimeout(() => {
-        this.refresh();
-      }, 3000);
-    },
-    async updateVolume(amount) {
-      this.radioStatus.volume += amount;
-      await this.makeCall(`radio/volume/${this.radioStatus.volume}`);
-    },
-    async setBrightness(mode) {
-      await this.makeCall(`lightning/on/${mode}`);
-      this.refresh();
-    },
-    async setBrightnessOff() {
-      await this.makeCall('lightning/off');
-      this.refresh();
-    },
-    async updateRadioStatus() {
-      const response = await this.makeCall('radio/status');
-      this.radioStatus = response;
-    },
-    async makeCall(data) {
-      const response = await axios.post(`https://home-control2.azurewebsites.net/api/${data}`);
-      return response.data;
-    },
-    refresh() {
-      this.updateRadioStatus();
-    },
+    ...mapActions('radio', ['setStation', 'refreshRadioStatus']),
   },
   computed: {
+    ...mapState('radio', ['streamTitle', 'stationName', 'loadedStationName']),
+    ...mapState(['disableAnimations']),
     smallView() {
       return this.$vuetify.breakpoint.smAndDown;
     },
-  },
-  mounted() {
-    this.refresh();
   },
 };
 </script>

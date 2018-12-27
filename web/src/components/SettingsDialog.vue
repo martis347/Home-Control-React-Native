@@ -7,9 +7,9 @@
         Settings
       </v-card-title>
       <v-list>
-        <v-list-tile @click.stop="switchDark">
+        <v-list-tile @click.stop="updateIsDark">
           <v-list-tile-action>
-            <v-checkbox :ripple="!settings.disableAnimations" v-model="settings.isDark" @click.stop="switchDark"></v-checkbox>
+            <v-checkbox :ripple="!disableAnimations" v-model="isDark" @click.stop="updateIsDark"></v-checkbox>
           </v-list-tile-action>
 
           <v-list-tile-content>
@@ -17,9 +17,9 @@
             <v-list-tile-sub-title>Use Dark theme</v-list-tile-sub-title>
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile @click.stop="switchAnimations">
+        <v-list-tile @click.stop="updateDisableAnimations">
           <v-list-tile-action>
-            <v-checkbox :ripple="!settings.disableAnimations" v-model="settings.disableAnimations" @click.stop="switchAnimations"></v-checkbox>
+            <v-checkbox :ripple="!disableAnimations" v-model="disableAnimations" @click.stop="updateDisableAnimations"></v-checkbox>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Disable animations</v-list-tile-title>
@@ -32,33 +32,17 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
+
 export default {
   props: {
     value: Boolean,
   },
   data: () => ({
     show: false,
-    settings: {
-      isDark: true,
-      disableAnimations: false,
-    },
   }),
-  beforeMount() {
-    const isDark = localStorage.getItem('isDark');
-    if (isDark === undefined) {
-      this.settings.isDark = true;
-    } else {
-      this.settings.isDark = isDark === 'true';
-    }
-
-    const disableAnimations = localStorage.getItem('disableAnimations');
-    if (disableAnimations === undefined) {
-      this.settings.disableAnimations = false;
-    } else {
-      this.settings.disableAnimations = disableAnimations === 'true';
-    }
-
-    this.$emit('settings', this.settings);
+  computed: {
+    ...mapState(['disableAnimations', 'isDark']),
   },
   watch: {
     show(newV) {
@@ -74,16 +58,7 @@ export default {
     },
   },
   methods: {
-    switchDark() {
-      this.settings.isDark = !this.settings.isDark;
-      localStorage.setItem('isDark', this.settings.isDark);
-      this.$emit('settings', this.settings);
-    },
-    switchAnimations() {
-      this.settings.disableAnimations = !this.settings.disableAnimations;
-      localStorage.setItem('disableAnimations', this.settings.disableAnimations);
-      this.$emit('settings', this.settings);
-    },
+    ...mapActions(['updateDisableAnimations', 'updateIsDark']),
   },
 };
 </script>

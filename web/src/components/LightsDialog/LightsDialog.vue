@@ -2,7 +2,12 @@
   <v-dialog v-model="show" :width="width">
     <v-card class="card">
       <v-layout v-if="loading">
-        <v-progress-circular style="margin: auto;" class="my-5" :size="80" color="primary" indeterminate/>
+        <v-progress-circular
+style="margin: auto;"
+class="my-5"
+:size="80"
+color="primary"
+indeterminate/>
       </v-layout>
       <template v-else>
         <v-container fluid grid-list-xl>
@@ -29,7 +34,12 @@
               <v-select label="Palette" v-model="selects.palette" :items="palettes"/>
             </v-flex>
             <v-flex xs3 md2 v-if="selects.mode === 'Palette'">
-              <v-select label="Speed" v-model="selects.speed" :items="speeds" item-text="label" item-value="value"/>
+              <v-select
+                label="Speed"
+                v-model="selects.speed"
+                :items="speeds"
+                item-text="label"
+                item-value="value"/>
             </v-flex>
             <v-flex xs3 md2 v-if="selects.mode === 'Palette' && selects.palette === 'Custom'">
               <v-select label="Palette Size" v-model="selects.customPaletteSize" :items="paletteSizes"/>
@@ -49,6 +59,7 @@
 
 <script>
 import axios from 'axios';
+import { mapState } from 'vuex';
 import MyCanvas from './Canvas.vue';
 import CustomPalette from './CustomPalette.vue';
 
@@ -59,10 +70,9 @@ export default {
   },
   props: {
     value: Boolean,
-    disableAnimations: {
-      type: Boolean,
-      default: false,
-    },
+  },
+  computed: {
+    ...mapState(['disableAnimations']),
   },
   data: () => ({
     debounceTimeout: null,
