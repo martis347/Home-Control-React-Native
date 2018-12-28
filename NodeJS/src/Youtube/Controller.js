@@ -33,11 +33,10 @@ class BrowserController {
 			this.state.queue = queue;
 		}
 
-		return this.state;
-	}
-
-	getState() {
-		return this.state;
+		return {
+			...this.state,
+			history: this.state.history.reverse().slice(0, 10),
+		};
 	}
 
 	async startYoutube(videoId) {
