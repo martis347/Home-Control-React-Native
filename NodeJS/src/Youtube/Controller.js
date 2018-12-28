@@ -26,8 +26,12 @@ class BrowserController {
 			this.state.history.push(currentlyPlaying);
 		}
 
-		this.state.currentlyPlaying = currentlyPlaying;
-		this.state.queue = queue;
+		if (currentlyPlaying) {
+			this.state.currentlyPlaying = currentlyPlaying;
+		}
+		if (queue) {
+			this.state.queue = queue;
+		}
 
 		return this.state;
 	}

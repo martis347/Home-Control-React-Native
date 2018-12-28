@@ -36,11 +36,11 @@ export default {
       }));
       commit('saveResults', searchResults);
     },
-    async syncState({ commit, state }) {
+    async syncState({ commit, state }, initial = false) {
       commit('sync');
       const { data } = await apiService.post('', {
         controller: 'youtube/syncState',
-        data: {
+        data: initial ? {} : {
           currentlyPlaying: state.currentlyPlaying,
           queue: state.playQueue,
         },
