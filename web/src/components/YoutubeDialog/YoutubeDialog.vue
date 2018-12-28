@@ -74,9 +74,6 @@ export default {
   props: {
     value: Boolean,
   },
-  mounted() {
-    this.syncState();
-  },
   data: () => ({
     show: false,
   }),
@@ -86,6 +83,7 @@ export default {
     },
     value(newV) {
       this.show = newV;
+      this.syncState();
     },
   },
   computed: {

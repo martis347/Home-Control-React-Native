@@ -22,7 +22,7 @@ class BrowserController {
 
 	syncState({ currentlyPlaying, queue }) {
 		const lastPlayedVideo = this.state.history[this.state.history.length - 1];
-		if (lastPlayedVideo && currentlyPlaying && lastPlayedVideo.id === currentlyPlaying.id) {
+		if (currentlyPlaying && ((lastPlayedVideo && lastPlayedVideo.id !== currentlyPlaying.id) || this.state.history.length === 0)) {
 			this.state.history.push(currentlyPlaying);
 		}
 
