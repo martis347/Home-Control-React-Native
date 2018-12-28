@@ -30,21 +30,15 @@ export default {
     ...mapState('youtube', ['playQueue', 'searchResults']),
   },
   methods: {
-    ...mapActions('youtube', ['syncState', 'play', 'playFromQueue', 'findRelatedVideos']),
-    async onStateChange(event) {
-      if (event.data === 0) {
-        await this.syncState({ readOnly: true });
-        if (this.playQueue.length > 0) {
-          this.playFromQueue();
-        } else {
-          await this.findRelatedVideos({ id: this.playedVideoId });
-          await this.play(this.searchResults[0]);
-        }
-      }
-    },
+    ...mapActions('youtube', ['syncState', 'play', 'playNext', 'findRelatedVideos']),
     getRandomInt(min, max) {
       const result = Math.floor(Math.random() * ((max - min) + 1)) + min;
       return result;
+    },
+    async onStateChange(event) {
+      if (event.data === 0) {
+        this.playNext();
+      }
     },
     playVideoInternal(id) {
       console.log(id);

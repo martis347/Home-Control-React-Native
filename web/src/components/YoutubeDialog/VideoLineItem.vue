@@ -21,7 +21,7 @@
         Play Now
         <v-list-tile-action slot="activator">
           <v-btn icon @click="$emit('action', 'play') && onPlay()" :loading="loadingPlay">
-            <v-icon color="primary">play_arrow</v-icon>
+            <v-icon color="green">play_arrow</v-icon>
           </v-btn>
         </v-list-tile-action>
       </v-tooltip>
@@ -29,7 +29,7 @@
         Find related videos
         <v-list-tile-action slot="activator">
           <v-btn icon @click="$emit('action', 'findRelatedVideos')">
-            <v-icon color="primary">search</v-icon>
+            <v-icon color="blue">search</v-icon>
           </v-btn>
         </v-list-tile-action>
       </v-tooltip>
@@ -37,7 +37,7 @@
         Move to the top of the queue
         <v-list-tile-action slot="activator">
           <v-btn icon @click="$emit('action', 'moveToTopOfTheQueue')">
-            <v-icon color="primary">expand_less</v-icon>
+            <v-icon color="yellow">expand_less</v-icon>
           </v-btn>
         </v-list-tile-action>
       </v-tooltip>
@@ -45,7 +45,7 @@
         Remove from queue
         <v-list-tile-action slot="activator">
           <v-btn icon @click="$emit('action', 'removeFromQueue')">
-            <v-icon color="primary">remove</v-icon>
+            <v-icon color="red">remove</v-icon>
           </v-btn>
         </v-list-tile-action>
       </v-tooltip>
@@ -53,7 +53,7 @@
         Add to queue
         <v-list-tile-action slot="activator">
           <v-btn icon @click="$emit('action', 'addToQueue')">
-            <v-icon color="primary">queue</v-icon>
+            <v-icon color="teal">queue</v-icon>
           </v-btn>
         </v-list-tile-action>
       </v-tooltip>

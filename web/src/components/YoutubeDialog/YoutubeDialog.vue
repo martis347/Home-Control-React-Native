@@ -22,10 +22,18 @@
               @click="stopPlaying">
               <v-icon>stop</v-icon>
             </v-btn>
+            <v-btn
+              color="primary"
+              fab
+              small
+              @click="playNext"
+            >
+              <v-icon>skip_next</v-icon>
+            </v-btn>
           </v-flex>
         </v-layout>
         <template v-if="currentlyPlaying">
-          <div class="pl-3"><span style="color: rgba(255,255,255,0.7);">Currently Playing: </span>{{ currentlyPlaying.title }}</div>
+          <div class="pl-3 pb-3"><span style="color: rgba(255,255,255,0.7);">Currently Playing: </span>{{ currentlyPlaying.title }}</div>
         </template>
       </div>
       <v-divider/>
@@ -102,7 +110,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('youtube', ['search', 'findRelatedVideos', 'play', 'stopPlaying', 'syncState', 'addToQueue', 'removeFromQueue', 'moveToTopOfTheQueue', 'clearSearchResults']),
+    ...mapActions('youtube', ['search', 'findRelatedVideos', 'play', 'stopPlaying', 'playNext', 'syncState', 'addToQueue', 'removeFromQueue', 'moveToTopOfTheQueue', 'clearSearchResults']),
     ...mapMutations('youtube', ['updateSearch']),
     onAction({ data, video }) {
       this[data](video);

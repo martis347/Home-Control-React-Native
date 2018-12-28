@@ -1,5 +1,5 @@
 <template>
-  <div class="pb-4">
+  <div class="pb-4" v-if="videos.length > 0">
     <v-subheader>
       <v-icon color="primary" class="mr-1">
         {{ icon }}
@@ -9,8 +9,7 @@
         <v-icon color="red">clear</v-icon>
       </v-btn>
     </v-subheader>
-    <span class="ml-3" style="color: rgba(255,255,255,0.7);" v-if="videos.length === 0">Empty ¯\_(ツ)_/¯</span>
-    <v-list v-else two-line :style="{ 'max-height': `${height}px`, 'overflow-y': 'scroll', 'overflow-x': 'hidden' }">
+    <v-list two-line :style="{ 'max-height': `${height}px`, 'overflow-y': 'scroll', 'overflow-x': 'hidden' }">
       <video-line-item
         v-for="(video, index) in videos"
         :key="index"

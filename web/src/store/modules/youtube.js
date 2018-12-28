@@ -1,6 +1,11 @@
 import axios from 'axios';
 import apiService from '@/services/api-service';
 
+const getRandomInt = (min, max) => {
+  const result = Math.floor(Math.random() * ((max - min) + 1)) + min;
+  return result;
+};
+
 export default {
   namespaced: true,
   state: {
@@ -54,13 +59,20 @@ export default {
       commit('videoLoaded');
       dispatch('syncState');
     },
-    async playFromQueue({ commit, dispatch, state }) {
-      const firstVideoInQueue = state.playQueue[0];
-      commit('startVideoPlaying', firstVideoInQueue);
-      apiService.post(`youtube/start/${firstVideoInQueue.id}`);
-      await new Promise(resolve => setTimeout(resolve, 5000));
-      commit('videoLoaded');
-      commit('removeFirstVideoFromQueue');
+    async playNext({ commit, dispatch, state }) {
+      await dispatch('syncState', { readOnly: true });
+      if (state.playQueue.length === 0) {
+        await dispatch('findRelatedVideos', state.currentlyPlaying);
+        const videoToPlay = state.searchResults[getRandomInt(0, state.searchResults.length - 1)];
+        await dispatch('clearSearchResults');
+        await dispatch('play', videoToPlay);
+      } else {
+        const firstVideoInQueue = state.playQueue[0];
+        commit('startVideoPlaying', firstVideoInQueue);
+        await apiService.post(`youtube/start/${firstVideoInQueue.id}`);
+        commit('videoLoaded');
+        commit('removeFirstVideoFromQueue');
+      }
       dispatch('syncState');
     },
     stopPlaying({ commit, dispatch }) {
@@ -100,7 +112,7 @@ export default {
     },
     syncState(state, newState) {
       state.playQueue = newState.queue;
-      state.playHistory = newState.history.slice(0, 10);
+      state.playHistory = newState.history;
       state.currentlyPlaying = newState.currentlyPlaying;
       state.syncing = false;
     },
