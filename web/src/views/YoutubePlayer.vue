@@ -6,48 +6,51 @@
 
 <script>
 import YouTubePlayer from 'youtube-player';
-import axios from 'axios';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   data: () => ({
     player: null,
     showPlayer: false,
     playedVideoId: '',
-    last3VideoIds: [],
   }),
   mounted() {
     this.showPlayer = Object.prototype.hasOwnProperty.call(this.$route.query, 'show');
     this.player = YouTubePlayer('video-player');
     if (this.$route.params.videoId) {
-      this.playVideo(this.$route.params.videoId);
+      this.playVideoInternal(this.$route.params.videoId);
     }
 
-    this.player.on('stateChange', async (event) => {
-      if (event.data === 0) {
-        const { data } = await axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=${this.playedVideoId}&type=video&key=AIzaSyDfLd9pl_DpU84NvwXznFkmUsjM9kiiAiI`);
-        const videoIds = data.items.map(i => i.id.videoId).filter(id => !this.last3VideoIds.includes(id));
-        const nextVideoId = videoIds[this.getRandomInt(0, videoIds.length - 1)];
-        this.playVideo(nextVideoId);
-      }
-    });
+    this.player.on('stateChange', this.onStateChange.bind(this));
 
-    window.playVideo = this.playVideo;
+    window.playVideo = this.playVideoInternal;
     window.stopPlaying = this.stop;
   },
+  computed: {
+    ...mapState('youtube', ['playQueue', 'searchResults']),
+  },
   methods: {
+    ...mapActions('youtube', ['syncState', 'play', 'playFromQueue', 'findRelatedVideos']),
+    async onStateChange(event) {
+      if (event.data === 0) {
+        await this.syncState({ readOnly: true });
+        if (this.playQueue.length > 0) {
+          this.playFromQueue();
+        } else {
+          await this.findRelatedVideos({ id: this.playedVideoId });
+          await this.play(this.searchResults[0]);
+        }
+      }
+    },
     getRandomInt(min, max) {
       const result = Math.floor(Math.random() * ((max - min) + 1)) + min;
       return result;
     },
-    playVideo(id) {
+    playVideoInternal(id) {
       console.log(id);
       this.player.loadVideoById(id);
       this.playedVideoId = id;
-      this.last3VideoIds.push(id);
       this.$router.push({ params: { videoId: id } });
-      if (this.last3VideoIds.length === 3) {
-        this.last3VideoIds = this.last3VideoIds.slice(1);
-      }
     },
     stop() {
       this.player.stopVideo();

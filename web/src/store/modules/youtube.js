@@ -36,11 +36,11 @@ export default {
       }));
       commit('saveResults', searchResults);
     },
-    async syncState({ commit, state }, initial = false) {
+    async syncState({ commit, state }, { readOnly } = { readOnly: false }) {
       commit('sync');
       const { data } = await apiService.post('', {
         controller: 'youtube/syncState',
-        data: initial ? {} : {
+        data: readOnly ? {} : {
           currentlyPlaying: state.currentlyPlaying,
           queue: state.playQueue,
         },
@@ -52,6 +52,15 @@ export default {
       apiService.post(`youtube/start/${video.id}`);
       await new Promise(resolve => setTimeout(resolve, 5000));
       commit('videoLoaded');
+      dispatch('syncState');
+    },
+    async playFromQueue({ commit, dispatch, state }) {
+      const firstVideoInQueue = state.playQueue[0];
+      commit('startVideoPlaying', firstVideoInQueue);
+      apiService.post(`youtube/start/${firstVideoInQueue.id}`);
+      await new Promise(resolve => setTimeout(resolve, 5000));
+      commit('videoLoaded');
+      commit('removeFirstVideoFromQueue');
       dispatch('syncState');
     },
     stopPlaying({ commit, dispatch }) {
@@ -70,6 +79,9 @@ export default {
     moveToTopOfTheQueue({ commit, dispatch }, video) {
       commit('moveToTopOfTheQueue', video);
       dispatch('syncState');
+    },
+    clearSearchResults({ commit }) {
+      commit('clearSearchResults');
     },
   },
   mutations: {
@@ -103,6 +115,7 @@ export default {
       state.currentlyPlaying = null;
     },
     addToQueue(state, video) {
+      state.playQueue = state.playQueue.filter(v => v.id !== video.id);
       state.playQueue.push(video);
     },
     removeFromQueue(state, video) {
@@ -112,6 +125,12 @@ export default {
       state.playQueue = state.playQueue.filter(v => v.id !== video.id);
 
       state.playQueue = [video, ...state.playQueue];
+    },
+    removeFirstVideoFromQueue(state) {
+      state.playQueue = state.playQueue.filter((_, index) => index !== 0);
+    },
+    clearSearchResults(state) {
+      state.searchResults = [];
     },
   },
 };

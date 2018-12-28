@@ -3,7 +3,7 @@
     <v-card>
       <div class="pt-3">
         <v-layout>
-          <v-flex xs8 md6>
+          <v-flex xs6>
             <v-text-field v-model="searchQueryString" class="ml-3" @keyup.enter.native="search" label="Search"/>
           </v-flex>
           <v-flex>
@@ -25,8 +25,7 @@
           </v-flex>
         </v-layout>
         <template v-if="currentlyPlaying">
-          <div class="pl-3"><span style="color: rgba(255,255,255,0.7);">Currently Playing:</span>{{ currentlyPlaying.title }}</div>
-          <div class="pl-3 pb-2">{{ currentlyPlaying.description.slice(0, 50) }}</div>
+          <div class="pl-3"><span style="color: rgba(255,255,255,0.7);">Currently Playing: </span>{{ currentlyPlaying.title }}</div>
         </template>
       </div>
       <v-divider/>
@@ -35,9 +34,11 @@
           <videos-list
             title="Search Results"
             icon="search"
+            show-clear
             :videos="searchResults"
             :actions="['play', 'findRelatedVideos', 'addToQueue']"
             @action="data => onAction(data)"
+            @clear="clearSearchResults"
           />
         </v-flex>
         <v-flex xs12 lg6>
@@ -83,7 +84,9 @@ export default {
     },
     value(newV) {
       this.show = newV;
-      this.syncState();
+      if (newV) {
+        this.syncState({ readOnly: true });
+      }
     },
   },
   computed: {
@@ -99,7 +102,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('youtube', ['search', 'findRelatedVideos', 'play', 'stopPlaying', 'syncState', 'addToQueue', 'removeFromQueue', 'rearrangeInQueue']),
+    ...mapActions('youtube', ['search', 'findRelatedVideos', 'play', 'stopPlaying', 'syncState', 'addToQueue', 'removeFromQueue', 'moveToTopOfTheQueue', 'clearSearchResults']),
     ...mapMutations('youtube', ['updateSearch']),
     onAction({ data, video }) {
       this[data](video);
