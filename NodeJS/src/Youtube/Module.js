@@ -9,6 +9,10 @@ const initialize = app => {
 		res.sendStatus(200);
 		controller.stopYoutube();
 	});
+	app.post('/youtube/syncState', (req, res) => {
+		res.sendStatus(200);
+		controller.syncState(req.body);
+	});
 }
 
 export default {

@@ -34,6 +34,7 @@
       </v-layout>
       <settings-dialog v-model="showSettingsDialog"/>
       <lights-dialog v-model="showLightsDialog"/>
+      <youtube-dialog v-model="showYoutubeDialog"/>
       <v-speed-dial
         :value="true"
         color="primary"
@@ -59,6 +60,15 @@
         >
           <v-icon>wb_incandescent</v-icon>
         </v-btn>
+        <v-btn
+          fab
+          color="#FF0000"
+          dark
+          small
+          @click.stop="showYoutubeDialog = !showYoutubeDialog"
+        >
+          <v-icon>play_arrow</v-icon>
+        </v-btn>
       </v-speed-dial>
     </v-content>
   </v-app>
@@ -75,6 +85,7 @@ import ClockWithDate from '../components/ClockWithDate.vue';
 import WeatherChart from '../components/WeatherChart.vue';
 import LightningCard from '../components/LightningCard.vue';
 import LightsDialog from '../components/LightsDialog/LightsDialog.vue';
+import YoutubeDialog from '../components/YoutubeDialog/YoutubeDialog.vue';
 
 export default {
   name: 'App',
@@ -88,11 +99,13 @@ export default {
     WeatherChart,
     LightningCard,
     LightsDialog,
+    YoutubeDialog,
   },
   data: () => ({
     iteration: 0,
     showSettingsDialog: false,
     showLightsDialog: false,
+    showYoutubeDialog: false,
   }),
   mounted() {
     this.loadWeatherData();

@@ -8,9 +8,11 @@ import cors from 'cors';
 import axios from 'axios';
 import bodyParser from 'body-parser';
 
-var app = express();
+const app = express();
+
 app.use(cors())
 app.use(bodyParser.json());
+
 LightningModule.initialize(app);
 RadioModule.initialize(app);
 YoutubeModule.initialize(app);

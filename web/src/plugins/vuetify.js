@@ -1,5 +1,5 @@
 import Vuetify, {
-  VLayout, VApp, VCard, VBtn, VSubheader, VFlex, VIcon, VCardText, VListTileSubTitle, VListTileTitle, VListTileContent, VCheckbox, VListTileAction, VListTile, VList, VCardTitle, VDialog, VDivider, VTextField, VContent, VListTileAvatar, VProgressCircular, VSpeedDial, VSelect, VContainer, VRadioGroup, VRadio, VSlider,
+  VLayout, VApp, VCard, VBtn, VSubheader, VFlex, VIcon, VCardText, VListTileSubTitle, VListTileTitle, VListTileContent, VCheckbox, VListTileAction, VListTile, VList, VCardTitle, VDialog, VDivider, VTextField, VContent, VListTileAvatar, VProgressCircular, VSpeedDial, VSelect, VContainer, VRadioGroup, VRadio, VSlider, VTooltip,
 } from 'vuetify/lib';
 import Vue from 'vue';
 import * as directives from 'vuetify/es5/directives';
@@ -13,7 +13,7 @@ Vue.use(Vuetify, {
     error: '#b71c1c',
   },
   components: {
-    VLayout, VApp, VCard, VBtn, VSubheader, VFlex, VIcon, VCardText, VListTileSubTitle, VListTileTitle, VListTileContent, VCheckbox, VListTileAction, VListTile, VList, VCardTitle, VDialog, VDivider, VTextField, VContent, VListTileAvatar, VProgressCircular, VSpeedDial, VSelect, VContainer, VRadioGroup, VRadio, VSlider,
+    VLayout, VApp, VCard, VBtn, VSubheader, VFlex, VIcon, VCardText, VListTileSubTitle, VListTileTitle, VListTileContent, VCheckbox, VListTileAction, VListTile, VList, VCardTitle, VDialog, VDivider, VTextField, VContent, VListTileAvatar, VProgressCircular, VSpeedDial, VSelect, VContainer, VRadioGroup, VRadio, VSlider, VTooltip,
   },
   iconfont: 'md',
   directives,
