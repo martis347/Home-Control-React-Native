@@ -45,7 +45,7 @@
             title="Play Queue"
             icon="queue_music"
             :height="200"
-            :videos="searchResults"
+            :videos="playQueue"
             :actions="['play', 'findRelatedVideos', 'removeFromQueue', 'moveToTopOfTheQueue']"
             @action="data => onAction(data)"
           />
@@ -53,7 +53,7 @@
             title="Play History"
             icon="history"
             :height="200"
-            :videos="searchResults"
+            :videos="playHistory"
             :actions="['play', 'findRelatedVideos', 'addToQueue']"
             @action="data => onAction(data)"
           />

@@ -10,8 +10,7 @@ const initialize = app => {
 		controller.stopYoutube();
 	});
 	app.post('/youtube/syncState', (req, res) => {
-		res.sendStatus(200);
-		controller.syncState(req.body);
+		res.send(controller.syncState(req.body));
 	});
 }
 

@@ -38,9 +38,12 @@ export default {
     },
     async syncState({ commit, state }) {
       commit('sync');
-      const newState = await apiService.post('youtube/syncState', {
-        currentlyPlaying: state.currentlyPlaying,
-        queue: state.playQueue,
+      const newState = await apiService.post('', {
+        controller: 'youtube/syncState',
+        data: {
+          currentlyPlaying: state.currentlyPlaying,
+          queue: state.playQueue,
+        },
       });
       commit('syncState', newState);
     },
