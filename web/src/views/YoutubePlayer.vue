@@ -14,6 +14,9 @@ export default {
     showPlayer: false,
     playedVideoId: '',
   }),
+  computed: {
+    ...mapState('youtube', ['playQueue', 'searchResults']),
+  },
   mounted() {
     this.showPlayer = Object.prototype.hasOwnProperty.call(this.$route.query, 'show');
     this.player = YouTubePlayer('video-player');
@@ -25,9 +28,6 @@ export default {
 
     window.playVideo = this.playVideoInternal;
     window.stopPlaying = this.stop;
-  },
-  computed: {
-    ...mapState('youtube', ['playQueue', 'searchResults']),
   },
   methods: {
     ...mapActions('youtube', ['syncState', 'play', 'playNext', 'findRelatedVideos']),

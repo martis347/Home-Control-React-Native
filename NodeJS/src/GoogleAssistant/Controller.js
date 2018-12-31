@@ -37,7 +37,7 @@ class GoogleAssistantController {
 		}
 	}
 
-	play(name) {
+	async play(name) {
 		const { data } = await axios.get(`https://content.googleapis.com/youtube/v3/search?maxResults=10&type=video&q=${name}&part=snippet&key=AIzaSyDfLd9pl_DpU84NvwXznFkmUsjM9kiiAiI`);
 		const videoToPlay = data.items[0];
 		
