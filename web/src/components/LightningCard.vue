@@ -8,11 +8,11 @@
         <v-layout>
           <v-flex>
             <v-btn
-              small
               :outline="!ceilingOn"
               :loading="loadingCeiling"
-              color="primary"
               :ripple="!disableAnimations"
+              small
+              color="primary"
               @click="switchCeiling">
               <v-icon>flash_on</v-icon>
             </v-btn>
@@ -26,11 +26,11 @@
         <v-layout>
           <v-flex>
             <v-btn
-              small
               :outline="!wallOn"
               :loading="loadingWall"
-              color="primary"
               :ripple="!disableAnimations"
+              small
+              color="primary"
               @click="switchWall">
               <v-icon>flash_on</v-icon>
             </v-btn>
@@ -45,15 +45,15 @@
 import { mapActions, mapState } from 'vuex';
 
 export default {
+  computed: {
+    ...mapState(['disableAnimations']),
+    ...mapState('lightning', ['ceilingOn', 'loadingCeiling', 'wallOn', 'loadingWall']),
+  },
   mounted() {
     this.refreshStatus();
   },
   methods: {
     ...mapActions('lightning', ['switchWall', 'switchCeiling', 'refreshStatus']),
-  },
-  computed: {
-    ...mapState(['disableAnimations']),
-    ...mapState('lightning', ['ceilingOn', 'loadingCeiling', 'wallOn', 'loadingWall']),
   },
 };
 </script>

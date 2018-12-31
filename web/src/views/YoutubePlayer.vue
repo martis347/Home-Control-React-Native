@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-show="showPlayer" id="video-player"></div>
+    <div v-show="showPlayer" id="video-player"/>
   </div>
 </template>
 

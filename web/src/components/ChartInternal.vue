@@ -5,13 +5,14 @@ import { mapState } from 'vuex';
 
 export default {
   name: 'ChartInternal',
-  extends: Bar,
   components: {
     ChartJsPluginDataLabels,
   },
+  extends: Bar,
   props: {
     data: {
       type: Array,
+      required: true,
     },
   },
   computed: {

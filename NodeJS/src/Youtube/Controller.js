@@ -20,7 +20,7 @@ class BrowserController {
 		this.startBrowser(this);
 	}
 
-	syncState({ currentlyPlaying, queue }) {
+	syncState({ currentlyPlaying, queue } = {}) {
 		const lastPlayedVideo = this.state.history[this.state.history.length - 1];
 		if (currentlyPlaying && ((lastPlayedVideo && lastPlayedVideo.id !== currentlyPlaying.id) || this.state.history.length === 0)) {
 			this.state.history.push(currentlyPlaying);
@@ -37,6 +37,15 @@ class BrowserController {
 			...this.state,
 			history: this.state.history.reverse().slice(0, 10),
 		};
+	}
+
+	async playVideo(video) {
+			this.state.currentlyPlaying = video;
+			this.state.history.push(video);
+
+			await this.currentPage.evaluate((id) => {
+				window.playVideo(id);
+			}, video.id);
 	}
 
 	async startYoutube(videoId) {

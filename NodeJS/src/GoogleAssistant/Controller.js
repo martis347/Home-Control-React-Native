@@ -1,6 +1,8 @@
 import LightningController from '../Lightning/Controller';
 import RadioController from '../Radio/Controller';
 import LightsStripController from '../LightsStrip/Controller';
+import YoutubeController from '../Youtube/Controller';
+import axios from 'axios';
 
 class GoogleAssistantController {
 	constructor() {
@@ -20,6 +22,9 @@ class GoogleAssistantController {
 		} else if(action === 'back home' || (lowercaseContent.includes('back') && lowercaseContent.includes('home')) || (lowercaseContent.includes('everything') && lowercaseContent.includes('on'))) {
 			console.log('backHome');
 			this.backHome();
+		} else if(action === 'play') {
+			console.log('play');
+			this.play(lowercaseContent);
 		} else if (this.lightningWords.some(w => lowercaseContent.includes(w))) {
 			console.log('handleLightning');
 			this.handleLightning(lowercaseContent);
@@ -30,6 +35,18 @@ class GoogleAssistantController {
 			console.log('handleRadio');
 			this.handleRadio(lowercaseContent);
 		}
+	}
+
+	play(name) {
+		const { data } = await axios.get(`https://content.googleapis.com/youtube/v3/search?maxResults=10&type=video&q=${name}&part=snippet&key=AIzaSyDfLd9pl_DpU84NvwXznFkmUsjM9kiiAiI`);
+		const videoToPlay = data.items[0];
+		
+		YoutubeController.playVideo({
+			id: videoToPlay.id.videoId,
+			title: videoToPlay.snippet.title,
+			description: videoToPlay.snippet.description,
+			thumbnail: videoToPlay.snippet.thumbnails.default.url,
+		});
 	}
 
 	backHome() {
