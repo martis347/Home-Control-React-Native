@@ -9,23 +9,23 @@
           v-if="loading"
           indeterminate
           color="primary"
-        ></v-progress-circular>
+        />
         <img v-else :src="thumbnail">
       </v-list-tile-avatar>
 
       <v-list-tile-content>
-        <v-list-tile-title v-html="title"></v-list-tile-title>
-        <v-list-tile-sub-title v-html="description"></v-list-tile-sub-title>
+        <v-list-tile-title v-html="title"/>
+        <v-list-tile-sub-title v-html="description"/>
       </v-list-tile-content>
-      <v-tooltip top style="width: 36px;" v-if="actions.includes('play')">
+      <v-tooltip v-if="actions.includes('play')" top style="width: 36px;">
         Play Now
         <v-list-tile-action slot="activator">
-          <v-btn icon @click="$emit('action', 'play') && onPlay()" :loading="loadingPlay">
+          <v-btn :loading="loadingPlay" icon @click="$emit('action', 'play') && onPlay()">
             <v-icon color="green">play_arrow</v-icon>
           </v-btn>
         </v-list-tile-action>
       </v-tooltip>
-      <v-tooltip top style="width: 36px;" v-if="actions.includes('findRelatedVideos')">
+      <v-tooltip v-if="actions.includes('findRelatedVideos')" top style="width: 36px;">
         Find related videos
         <v-list-tile-action slot="activator">
           <v-btn icon @click="$emit('action', 'findRelatedVideos')">
@@ -33,7 +33,7 @@
           </v-btn>
         </v-list-tile-action>
       </v-tooltip>
-      <v-tooltip top style="width: 36px;" v-if="actions.includes('moveToTopOfTheQueue')">
+      <v-tooltip v-if="actions.includes('moveToTopOfTheQueue')" top style="width: 36px;">
         Move to the top of the queue
         <v-list-tile-action slot="activator">
           <v-btn icon @click="$emit('action', 'moveToTopOfTheQueue')">
@@ -41,7 +41,7 @@
           </v-btn>
         </v-list-tile-action>
       </v-tooltip>
-      <v-tooltip top style="width: 36px;" v-if="actions.includes('removeFromQueue')">
+      <v-tooltip v-if="actions.includes('removeFromQueue')" top style="width: 36px;">
         Remove from queue
         <v-list-tile-action slot="activator">
           <v-btn icon @click="$emit('action', 'removeFromQueue')">
@@ -49,7 +49,7 @@
           </v-btn>
         </v-list-tile-action>
       </v-tooltip>
-      <v-tooltip top style="width: 36px;" v-if="actions.includes('addToQueue')">
+      <v-tooltip v-if="actions.includes('addToQueue')" top style="width: 36px;">
         Add to queue
         <v-list-tile-action slot="activator">
           <v-btn icon @click="$emit('action', 'addToQueue')">

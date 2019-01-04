@@ -9,7 +9,7 @@
       <v-list>
         <v-list-tile @click.stop="updateIsDark">
           <v-list-tile-action>
-            <v-checkbox :ripple="!disableAnimations" v-model="isDark" @click.stop="updateIsDark"></v-checkbox>
+            <v-checkbox :ripple="!disableAnimations" v-model="isDark" @click.stop="updateIsDark"/>
           </v-list-tile-action>
 
           <v-list-tile-content>
@@ -19,7 +19,7 @@
         </v-list-tile>
         <v-list-tile @click.stop="updateDisableAnimations">
           <v-list-tile-action>
-            <v-checkbox :ripple="!disableAnimations" v-model="disableAnimations" @click.stop="updateDisableAnimations"></v-checkbox>
+            <v-checkbox :ripple="!disableAnimations" v-model="disableAnimations" @click.stop="updateDisableAnimations"/>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Disable animations</v-list-tile-title>

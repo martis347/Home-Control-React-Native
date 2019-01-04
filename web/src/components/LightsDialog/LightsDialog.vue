@@ -3,9 +3,9 @@
     <v-card class="card">
       <v-layout v-if="loading">
         <v-progress-circular
+          :size="80"
           style="margin: auto;"
           class="my-5"
-          :size="80"
           color="primary"
           indeterminate
         />
@@ -15,44 +15,44 @@
           <v-slider
             v-if="lightsState.mode !== 'Off'"
             :value="lightsState.brightness"
-            @input="updateBrightness"
             label="Brightness"
             step="20"
             max="255"
             thumb-label="always"
-          ></v-slider>
+            @input="updateBrightness"
+          />
           <v-layout wrap class="mt-0 pt-0">
             <v-flex xs4 md2>
-              <v-radio-group class="mt-0" :value="lightsState.mode" @change="updateMode">
+              <v-radio-group :value="lightsState.mode" class="mt-0" @change="updateMode">
                 <v-radio
                   v-for="option in options"
                   :key="option"
                   :label="option"
                   :value="option"
-                ></v-radio>
+                />
               </v-radio-group>
             </v-flex>
-            <v-flex xs5 md3 v-if="lightsState.mode === 'Palette'">
-              <v-select label="Palette" :value="lightsState.palette" @input="updatePalette" :items="palettes"/>
+            <v-flex v-if="lightsState.mode === 'Palette'" xs5 md3>
+              <v-select :value="lightsState.palette" :items="palettes" label="Palette" @input="updatePalette"/>
             </v-flex>
-            <v-flex xs3 md2 v-if="lightsState.mode === 'Palette'">
+            <v-flex v-if="lightsState.mode === 'Palette'" xs3 md2>
               <v-select
-                label="Speed"
                 :value="lightsState.speed"
-                @input="updateSpeed"
                 :items="speeds"
+                label="Speed"
                 item-text="label"
-                item-value="value"/>
+                item-value="value"
+                @input="updateSpeed"/>
             </v-flex>
-            <v-flex xs3 md2 v-if="lightsState.mode === 'Palette' && lightsState.palette === 'Custom'">
-              <v-select label="Palette Size" :value="lightsState.customPaletteSize" @input="updateCustomPaletteSize" :items="paletteSizes"/>
+            <v-flex v-if="lightsState.mode === 'Palette' && lightsState.palette === 'Custom'" xs3 md2>
+              <v-select :value="lightsState.customPaletteSize" :items="paletteSizes" label="Palette Size" @input="updateCustomPaletteSize"/>
             </v-flex>
-            <v-flex xs12 v-if="lightsState.mode === 'Palette' && lightsState.palette === 'Custom'">
-              <custom-palette :value="lightsState.customPaletteColors" @input="updateCustomPaletteColors" :count="+lightsState.customPaletteSize"/>
+            <v-flex v-if="lightsState.mode === 'Palette' && lightsState.palette === 'Custom'" xs12>
+              <custom-palette :value="lightsState.customPaletteColors" :count="+lightsState.customPaletteSize" @input="updateCustomPaletteColors"/>
             </v-flex>
           </v-layout>
         </v-container>
-        <div class="px-4 pb-4" v-if="lightsState.mode === 'Canvas'" >
+        <div v-if="lightsState.mode === 'Canvas'" class="px-4 pb-4" >
           <my-canvas :width="width - 48"/>
         </div>
       </template>
@@ -73,10 +73,6 @@ export default {
   props: {
     value: Boolean,
   },
-  computed: {
-    ...mapState('lightsStrip', ['lightsState', 'loading']),
-    ...mapState(['disableAnimations']),
-  },
   data: () => ({
     show: false,
     width: 1000,
@@ -85,6 +81,10 @@ export default {
     palettes: ['Christmas', 'Christmas2', 'Rainbow', 'Red', 'Green', 'Blue', 'Strobe', 'Custom'],
     paletteSizes: ['4', '8', '16'],
   }),
+  computed: {
+    ...mapState('lightsStrip', ['lightsState', 'loading']),
+    ...mapState(['disableAnimations']),
+  },
   watch: {
     show(newV) {
       this.$emit('input', newV);

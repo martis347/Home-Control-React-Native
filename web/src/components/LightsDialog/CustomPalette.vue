@@ -11,10 +11,10 @@
     </v-icon>
     <picker
       v-if="selectedColor !== null"
-      @input="colorUpdated"
       :width="100"
       :height="100"
-      :value="getColor(selectedColor)"></picker>
+      :value="getColor(selectedColor)"
+      @input="colorUpdated"/>
   </div>
 </template>
 
@@ -22,12 +22,12 @@
 import ColorPicker from 'vue-color-picker-wheel';
 
 export default {
+  components: {
+    Picker: ColorPicker,
+  },
   props: {
     value: Array,
     count: Number,
-  },
-  components: {
-    Picker: ColorPicker,
   },
   data: () => ({
     selectedColor: null,

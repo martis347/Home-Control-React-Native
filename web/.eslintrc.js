@@ -13,6 +13,7 @@ module.exports = {
     'linebreak-style': 0,
     'max-len': 0,
     'func-names': 0,
+    'vue/require-default-prop': 0,
     "vue/max-attributes-per-line": ["error", {
       "singleline": 4,
       "multiline": {
