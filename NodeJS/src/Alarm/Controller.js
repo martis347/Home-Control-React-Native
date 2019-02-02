@@ -35,7 +35,7 @@ class AlarmController {
 						YoutubeController.startYoutube(data.items[0].id.videoId);
 					});
 			}
-		});
+		}, 60 * 1000);
 	}
 
 	async sync(data) {
