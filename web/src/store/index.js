@@ -6,6 +6,7 @@ import radio from './modules/radio';
 import lightning from './modules/lightning';
 import weather from './modules/weather';
 import lightsStrip from './modules/lightsStrip';
+import alarm from './modules/alarm';
 
 Vue.use(Vuex);
 
@@ -22,6 +23,7 @@ export default new Vuex.Store({
     lightning,
     weather,
     lightsStrip,
+    alarm,
   },
   actions: {
     updateDisableAnimations({ commit, state }) {

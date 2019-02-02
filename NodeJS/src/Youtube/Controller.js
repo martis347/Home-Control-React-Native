@@ -40,12 +40,12 @@ class BrowserController {
 	}
 
 	async playVideo(video) {
-			this.state.currentlyPlaying = video;
-			this.state.history.push(video);
+		this.state.currentlyPlaying = video;
+		this.state.history.push(video);
 
-			await this.currentPage.evaluate((id) => {
-				window.playVideo(id);
-			}, video.id);
+		await this.currentPage.evaluate((id) => {
+			window.playVideo(id);
+		}, video.id);
 	}
 
 	async startYoutube(videoId) {
@@ -58,6 +58,10 @@ class BrowserController {
 		await this.currentPage.evaluate(() => {
 			window.stopPlaying();
 		});
+	}
+
+	async restart() {
+		await this.currentPage.reload();
 	}
 
 	async startBrowser(self) {

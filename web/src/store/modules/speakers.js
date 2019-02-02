@@ -11,15 +11,19 @@ export default {
     mute() {
       makeRequest(149389439);
     },
-    volumeDown() {
-      makeRequest(149369039);
-      makeRequest(149369039);
-      makeRequest(149369039);
+    async volumeDown() {
+      await makeRequest(149369039);
+      await makeRequest(149369039);
+      await makeRequest(149369039);
+      await makeRequest(149369039);
+      await makeRequest(149369039);
     },
-    volumeUp() {
-      makeRequest(149393519);
-      makeRequest(149393519);
-      makeRequest(149393519);
+    async volumeUp() {
+      await makeRequest(149393519);
+      await makeRequest(149393519);
+      await makeRequest(149393519);
+      await makeRequest(149393519);
+      await makeRequest(149393519);
     },
     bluetoothMode() {
       makeRequest(149385359);

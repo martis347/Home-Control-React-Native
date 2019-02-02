@@ -4,14 +4,14 @@
       <div class="pt-3">
         <v-layout>
           <v-flex xs6>
-            <v-text-field v-model="searchQueryString" class="ml-3" @keyup.enter.native="search" label="Search"/>
+            <v-text-field v-model="searchQueryString" class="ml-3" label="Search" @keyup.enter.native="search"/>
           </v-flex>
           <v-flex>
             <v-btn
+              :loading="searching"
               color="primary"
               fab
               small
-              :loading="searching"
               @click="search">
               <v-icon>search</v-icon>
             </v-btn>
@@ -40,30 +40,30 @@
       <v-layout wrap>
         <v-flex xs12 lg6>
           <videos-list
+            :videos="searchResults"
+            :actions="['play', 'findRelatedVideos', 'addToQueue']"
             title="Search Results"
             icon="search"
             show-clear
-            :videos="searchResults"
-            :actions="['play', 'findRelatedVideos', 'addToQueue']"
             @action="data => onAction(data)"
             @clear="clearSearchResults"
           />
         </v-flex>
         <v-flex xs12 lg6>
           <videos-list
-            title="Play Queue"
-            icon="queue_music"
             :height="200"
             :videos="playQueue"
             :actions="['play', 'findRelatedVideos', 'removeFromQueue', 'moveToTopOfTheQueue']"
+            title="Play Queue"
+            icon="queue_music"
             @action="data => onAction(data)"
           />
           <videos-list
-            title="Play History"
-            icon="history"
             :height="200"
             :videos="playHistory"
             :actions="['play', 'findRelatedVideos', 'addToQueue']"
+            title="Play History"
+            icon="history"
             @action="data => onAction(data)"
           />
         </v-flex>
@@ -86,17 +86,6 @@ export default {
   data: () => ({
     show: false,
   }),
-  watch: {
-    show(newV) {
-      this.$emit('input', newV);
-    },
-    value(newV) {
-      this.show = newV;
-      if (newV) {
-        this.syncState({ readOnly: true });
-      }
-    },
-  },
   computed: {
     ...mapState('youtube', ['searchQuery', 'syncing', 'searchResults', 'playQueue', 'playHistory', 'currentlyPlaying', 'searching']),
     searchQueryString: {
@@ -107,6 +96,17 @@ export default {
     },
     smallView() {
       return this.$vuetify.breakpoint.smAndDown;
+    },
+  },
+  watch: {
+    show(newV) {
+      this.$emit('input', newV);
+    },
+    value(newV) {
+      this.show = newV;
+      if (newV) {
+        this.syncState({ readOnly: true });
+      }
     },
   },
   methods: {

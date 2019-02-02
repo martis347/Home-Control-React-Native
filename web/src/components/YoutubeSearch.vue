@@ -6,15 +6,15 @@
     <span class="grey--text">
       <v-layout>
         <v-flex xs8 md6>
-          <v-text-field v-model="searchQueryString" class="ml-3" @keyup.enter.native="search" label="Youtube Search"/>
+          <v-text-field v-model="searchQueryString" class="ml-3" label="Youtube Search" @keyup.enter.native="search"/>
         </v-flex>
         <v-flex>
           <v-btn
             :ripple="!disableAnimations"
+            :loading="searching"
             color="primary"
             fab
             small
-            :loading="searching"
             @click="search">
             <v-icon>search</v-icon>
           </v-btn>
@@ -43,13 +43,13 @@
               v-if="startingVideoId === result.id"
               indeterminate
               color="primary"
-            ></v-progress-circular>
+            />
             <img v-else :src="result.thumbnail">
           </v-list-tile-avatar>
 
           <v-list-tile-content>
-            <v-list-tile-title v-html="result.title"></v-list-tile-title>
-            <v-list-tile-sub-title v-html="result.description"></v-list-tile-sub-title>
+            <v-list-tile-title v-html="result.title"/>
+            <v-list-tile-sub-title v-html="result.description"/>
           </v-list-tile-content>
         </v-list-tile>
         <v-divider :key="`divider-${result.id}`"/>

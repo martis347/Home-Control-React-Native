@@ -19,10 +19,10 @@ class GoogleAssistantController {
 			console.log('everythingOff');
 			this.everythingOff();
 			return;
-		} else if(action === 'back home' || (lowercaseContent.includes('back') && lowercaseContent.includes('home')) || (lowercaseContent.includes('everything') && lowercaseContent.includes('on'))) {
+		} else if (action === 'back home' || (lowercaseContent.includes('back') && lowercaseContent.includes('home')) || (lowercaseContent.includes('everything') && lowercaseContent.includes('on'))) {
 			console.log('backHome');
 			this.backHome();
-		} else if(action === 'play') {
+		} else if (action === 'play') {
 			console.log('play');
 			this.play(lowercaseContent);
 		} else if (this.lightningWords.some(w => lowercaseContent.includes(w))) {
@@ -40,7 +40,7 @@ class GoogleAssistantController {
 	async play(name) {
 		const { data } = await axios.get(`https://content.googleapis.com/youtube/v3/search?maxResults=10&type=video&q=${name}&part=snippet&key=AIzaSyDfLd9pl_DpU84NvwXznFkmUsjM9kiiAiI`);
 		const videoToPlay = data.items[0];
-		
+
 		YoutubeController.playVideo({
 			id: videoToPlay.id.videoId,
 			title: videoToPlay.snippet.title,
@@ -115,23 +115,30 @@ class GoogleAssistantController {
 		}
 
 		const volumeDownWords = ['down', 'lower', 'smaller', 'small', 'low'];
-		const newValue = volumeDownWords.some(w => content.includes(w)) ? false : true;
-		let howManyTimes = 5;
+		const volumeUpWords = ['up', 'higher', 'bigger', 'high', 'big', 'louder', 'loud'];
+		const volumeDown = volumeDownWords.some(w => content.includes(w));
+		const volumeUp = volumeUpWords.some(w => content.includes(w));
+
+		if (volumeDown && volumeUp) {
+			return;
+		}
+
+		let howManyTimes = 7;
 
 		const wordsThatMeanMuch = ['lot', 'much', 'many']
 		if (wordsThatMeanMuch.some(w => content.includes(w))) {
-			howManyTimes = 10;
+			howManyTimes = 15;
 		}
 
 		const wordsThatMeanlittle = ['little', 'small', 'not much']
 		if (wordsThatMeanlittle.some(w => content.includes(w))) {
-			howManyTimes = 3;
+			howManyTimes = 5;
 		}
-		
+
 		for (let index = 0; index < howManyTimes; index++) {
-			if (newValue) {
+			if (volumeUp) {
 				RadioController.transmitIR(149393519);
-			} else {
+			} else if (volumeDown) {
 				RadioController.transmitIR(149369039);
 			}
 		}

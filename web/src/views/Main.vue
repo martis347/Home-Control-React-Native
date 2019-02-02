@@ -2,7 +2,7 @@
   <v-app :dark="isDark" :key="iteration">
     <v-content>
       <v-layout :column="smallView" :class="smallView ? 'mt-3' : 'asd'">
-        <v-flex xs3 column :class="`${smallView ? `mx-${padding}` : `ml-${padding}`}`">
+        <v-flex :class="`${smallView ? `mx-${padding}` : `ml-${padding}`}`" xs3 column>
           <v-flex>
             <speakers-controls :class="'mb-3'"/>
           </v-flex>
@@ -21,7 +21,7 @@
             <v-flex md4>
               <week-weather-list style="height: 300px;" />
             </v-flex>
-            <v-flex md8 v-if="!smallView">
+            <v-flex v-if="!smallView" md8>
               <clock-with-date :class="`ml-${padding}`" style="height: 300px;"/>
             </v-flex>
           </v-layout>
@@ -35,6 +35,7 @@
       <settings-dialog v-model="showSettingsDialog"/>
       <lights-dialog v-model="showLightsDialog"/>
       <youtube-dialog v-model="showYoutubeDialog"/>
+      <alarm-dialog v-model="showAlarmDialog"/>
       <v-speed-dial
         :value="true"
         color="primary"
@@ -69,6 +70,15 @@
         >
           <v-icon>play_arrow</v-icon>
         </v-btn>
+        <v-btn
+          fab
+          color="teal"
+          dark
+          small
+          @click.stop="showAlarmDialog = !showAlarmDialog"
+        >
+          <v-icon>alarm</v-icon>
+        </v-btn>
       </v-speed-dial>
     </v-content>
   </v-app>
@@ -86,6 +96,7 @@ import WeatherChart from '../components/WeatherChart.vue';
 import LightningCard from '../components/LightningCard.vue';
 import LightsDialog from '../components/LightsDialog/LightsDialog.vue';
 import YoutubeDialog from '../components/YoutubeDialog/YoutubeDialog.vue';
+import AlarmDialog from '../components/AlarmDialog/AlarmDialog.vue';
 
 export default {
   name: 'App',
@@ -100,13 +111,24 @@ export default {
     LightningCard,
     LightsDialog,
     YoutubeDialog,
+    AlarmDialog,
   },
   data: () => ({
     iteration: 0,
     showSettingsDialog: false,
     showLightsDialog: false,
     showYoutubeDialog: false,
+    showAlarmDialog: false,
   }),
+  computed: {
+    ...mapState(['isDark']),
+    smallView() {
+      return this.$vuetify.breakpoint.smAndDown;
+    },
+    padding() {
+      return this.smallView ? 1 : 3;
+    },
+  },
   mounted() {
     this.loadWeatherData();
     setInterval(() => {
@@ -116,15 +138,6 @@ export default {
   },
   methods: {
     ...mapActions('weather', ['loadWeatherData']),
-  },
-  computed: {
-    ...mapState(['isDark']),
-    smallView() {
-      return this.$vuetify.breakpoint.smAndDown;
-    },
-    padding() {
-      return this.smallView ? 1 : 3;
-    },
   },
 };
 </script>

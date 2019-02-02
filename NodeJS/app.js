@@ -3,6 +3,7 @@ import GoogleAssistantModule from './src/GoogleAssistant/Module';
 import RadioModule from './src/Radio/Module';
 import YoutubeModule from './src/Youtube/Module';
 import LightsStripModule from './src/LightsStrip/Module';
+import AlarmModule from './src/Alarm/Module';
 import express from 'express';
 import cors from 'cors';
 import axios from 'axios';
@@ -18,6 +19,7 @@ RadioModule.initialize(app);
 YoutubeModule.initialize(app);
 LightsStripModule.initialize(app);
 GoogleAssistantModule.initialize(app);
+AlarmModule.initialize(app);
 
 app.listen(3001, () => console.log('Listening on Port 3001'));
 setTimeout(() => {

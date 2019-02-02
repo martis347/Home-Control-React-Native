@@ -5,12 +5,12 @@
     </v-layout>
     <v-flex>
       <v-btn
+        :ripple="!disableAnimations"
         color="red"
         small
         flat
         fab
         outline
-        :ripple="!disableAnimations"
         @click="switchPower">
         <v-icon>power_settings_new</v-icon>
       </v-btn>
@@ -24,7 +24,7 @@
         @click="mute">
         <v-icon>volume_mute</v-icon>
       </v-btn>
-      <span class="mx-3" v-if="$vuetify.breakpoint.lgAndUp"/>
+      <span v-if="$vuetify.breakpoint.lgAndUp" class="mx-3"/>
       <v-btn
         :ripple="!disableAnimations"
         color="primary"
@@ -32,7 +32,8 @@
         flat
         fab
         outline
-        @click="volumeDown">
+        @click="volumeDown"
+      >
         <v-icon>volume_down</v-icon>
       </v-btn>
       <v-btn
@@ -53,7 +54,8 @@
         flat
         fab
         outline
-        @click="bluetoothMode">
+        @click="bluetoothMode"
+      >
         <v-icon>bluetooth</v-icon>
       </v-btn>
       <v-btn
@@ -84,14 +86,22 @@
 import { mapActions, mapState } from 'vuex';
 
 export default {
-  methods: {
-    ...mapActions('speakers', ['switchPower', 'mute', 'volumeDown', 'volumeUp', 'bluetoothMode', 'radioMode', 'tvMode']),
-  },
   computed: {
     ...mapState(['disableAnimations']),
     smallView() {
       return this.$vuetify.breakpoint.smAndDown;
     },
+  },
+  methods: {
+    ...mapActions('speakers', [
+      'switchPower',
+      'mute',
+      'volumeDown',
+      'volumeUp',
+      'bluetoothMode',
+      'radioMode',
+      'tvMode',
+    ]),
   },
 };
 </script>

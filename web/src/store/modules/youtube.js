@@ -2,7 +2,7 @@ import axios from 'axios';
 import apiService from '@/services/api-service';
 
 const getRandomInt = (min, max) => {
-  const result = Math.floor(Math.random() * ((max - min) + 1)) + min;
+  const result = Math.floor(Math.random() * (max - min + 1)) + min;
   return result;
 };
 
@@ -32,7 +32,11 @@ export default {
     },
     async findRelatedVideos({ commit }, video) {
       commit('searching');
-      const { data } = await axios.get(`https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=${video.id}&type=video&key=AIzaSyDfLd9pl_DpU84NvwXznFkmUsjM9kiiAiI`);
+      const { data } = await axios.get(
+        `https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=${
+          video.id
+        }&type=video&key=AIzaSyDfLd9pl_DpU84NvwXznFkmUsjM9kiiAiI`,
+      );
       const searchResults = data.items.map(item => ({
         id: item.id.videoId,
         title: item.snippet.title,
@@ -45,10 +49,12 @@ export default {
       commit('sync');
       const { data } = await apiService.post('', {
         controller: 'youtube/syncState',
-        data: readOnly ? {} : {
-          currentlyPlaying: state.currentlyPlaying,
-          queue: state.playQueue,
-        },
+        data: readOnly
+          ? {}
+          : {
+            currentlyPlaying: state.currentlyPlaying,
+            queue: state.playQueue,
+          },
       });
       commit('syncState', data);
     },
@@ -94,6 +100,9 @@ export default {
     },
     clearSearchResults({ commit }) {
       commit('clearSearchResults');
+    },
+    restartService() {
+      apiService.post('youtube/restart');
     },
   },
   mutations: {
