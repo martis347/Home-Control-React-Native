@@ -12,10 +12,14 @@
       </v-layout>
       <v-layout v-else column>
         <v-flex>
-          <v-checkbox :value="!!alarmTime" label="Alarm Enabled" @change="onCheckboxClick"/>
+          <v-checkbox v-model="alarmEnabled" label="Alarm Enabled"/>
         </v-flex>
         <v-flex class="picker">
-          <v-time-picker :value="alarmTime" :landscape="$vuetify.breakpoint.mdAndUp" @change="setAlarm"/>
+          <v-time-picker
+            :value="alarmTime"
+            :landscape="$vuetify.breakpoint.mdAndUp"
+            format="24hr"
+            @change="setAlarm"/>
         </v-flex>
         <v-flex v-if="!!alarmTime">
           <v-select
@@ -27,7 +31,7 @@
             multiple
             label="Features"
             return-object
-            @change="updateFeatures"
+            @input="updateFeatures"
           />
         </v-flex>
         <v-flex v-if="!!alarmTime && features.find(f => f.name === 'youtube')">
@@ -51,6 +55,15 @@ export default {
   }),
   computed: {
     ...mapState('alarm', ['alarmTime', 'features', 'youtubeVideo', 'loading']),
+    alarmEnabled: {
+      get() {
+        console.log(!!this.alarmTime);
+        return !!this.alarmTime;
+      },
+      set(newValue) {
+        this.onCheckboxClick(newValue);
+      },
+    },
   },
   watch: {
     show(newV) {

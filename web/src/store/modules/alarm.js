@@ -12,7 +12,7 @@ export default {
   actions: {
     async load({ commit }) {
       commit('loadingStarted');
-      const data = await apiService.post('alarm/sync');
+      const { data } = await apiService.post('alarm/sync');
       commit('loadingEnd', data);
     },
     async disableAlarm({ commit, dispatch }) {
