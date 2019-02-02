@@ -18,24 +18,25 @@ class AlarmController {
 			}
 			console.log('It"s a match!');
 
-			if (this.features.includes('lights.ceiling')) {
+			const featuresNames = this.features.map(f => f.name);
+			if (featuresNames.includes('lights.ceiling')) {
 				console.log('lights.ceiling');
 				LightningController.switchCeiling(true);
 			}
 
-			if (this.features.includes('lights.wall')) {
+			if (featuresNames.includes('lights.wall')) {
 				console.log('lights.wall');
 				LightningController.switchWall(true);
 			}
 
-			if (this.features.includes('radio')) {
+			if (featuresNames.includes('radio')) {
 				console.log('radio');
 				YoutubeController.stopYoutube();
 				RadioController.turnOnRadio('m1');
 				RadioController.transmitIR(149356799);
 			}
 
-			if (this.features.includes('youtube')) {
+			if (featuresNames.includes('youtube')) {
 				console.log('youtube');
 				RadioController.turnOffRadio();
 				axios.get(`https://content.googleapis.com/youtube/v3/search?maxResults=1&type=video&q=${state.searchQuery}&part=snippet&key=AIzaSyDfLd9pl_DpU84NvwXznFkmUsjM9kiiAiI`)
