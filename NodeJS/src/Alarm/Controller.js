@@ -1,3 +1,4 @@
+import axios from 'axios';
 import LightningController from '../Lightning/Controller';
 import RadioController from '../Radio/Controller';
 import YoutubeController from '../Youtube/Controller';
@@ -39,7 +40,7 @@ class AlarmController {
 			if (featuresNames.includes('youtube')) {
 				console.log('youtube');
 				RadioController.turnOffRadio();
-				axios.get(`https://content.googleapis.com/youtube/v3/search?maxResults=1&type=video&q=${state.searchQuery}&part=snippet&key=AIzaSyDfLd9pl_DpU84NvwXznFkmUsjM9kiiAiI`)
+				axios.get(`https://content.googleapis.com/youtube/v3/search?maxResults=1&type=video&q=${this.youtubeVideo}&part=snippet&key=AIzaSyDfLd9pl_DpU84NvwXznFkmUsjM9kiiAiI`)
 					.then(({ data }) => {
 						YoutubeController.startYoutube(data.items[0].id.videoId);
 					});

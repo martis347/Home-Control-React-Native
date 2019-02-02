@@ -11,32 +11,27 @@
         />
       </v-layout>
       <v-layout v-else column>
-        <v-flex>
-          <v-checkbox v-model="alarmEnabled" label="Alarm Enabled"/>
-        </v-flex>
-        <v-flex class="picker">
+        <v-checkbox v-model="alarmEnabled" label="Alarm Enabled"/>
+        <div class="picker">
           <v-time-picker
             :value="alarmTime"
             :landscape="$vuetify.breakpoint.mdAndUp"
             format="24hr"
             @change="setAlarm"/>
-        </v-flex>
-        <v-flex v-if="!!alarmTime">
-          <v-select
-            :value="features"
-            :items="featuresList"
-            chips
-            item-text="label"
-            item-value="name"
-            multiple
-            label="Features"
-            return-object
-            @input="updateFeatures"
-          />
-        </v-flex>
-        <v-flex v-if="!!alarmTime && features.find(f => f.name === 'youtube')">
-          <v-text-field :value="youtubeVideo" label="Youtube Video to play" @input="updateYoutubeVideo"/>
-        </v-flex>
+        </div>
+        <v-select
+          v-if="!!alarmTime"
+          :value="features"
+          :items="featuresList"
+          chips
+          item-text="label"
+          item-value="name"
+          multiple
+          label="Features"
+          return-object
+          @input="updateFeatures"
+        />
+        <v-text-field v-if="!!alarmTime && features.find(f => f.name === 'youtube')" :value="youtubeVideo" label="Youtube Video to play" @input="updateYoutubeVideo"/>
       </v-layout>
     </v-card>
   </v-dialog>
@@ -94,7 +89,7 @@ export default {
     box-shadow: none !important;
   }
 
-  .dialog-wrapper {
-    width: auto;
+  .picker >>> .v-time-picker-title > div {
+    margin: auto;
   }
 </style>
