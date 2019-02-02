@@ -31,7 +31,7 @@
           />
         </v-flex>
         <v-flex v-if="!!alarmTime && features.find(f => f.name === 'youtube')">
-          <v-text-field :value="youtubeVideoTitle" label="Youtube Video to play" @input="updateYoutubeVideo"/>
+          <v-text-field :value="youtubeVideo" label="Youtube Video to play" @input="updateYoutubeVideo"/>
         </v-flex>
       </v-layout>
     </v-card>

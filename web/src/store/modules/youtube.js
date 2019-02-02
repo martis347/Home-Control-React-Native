@@ -102,7 +102,9 @@ export default {
       commit('clearSearchResults');
     },
     restartService() {
-      apiService.post('youtube/restart');
+      apiService.post('', {
+        controller: 'youtube/restart',
+      });
     },
   },
   mutations: {

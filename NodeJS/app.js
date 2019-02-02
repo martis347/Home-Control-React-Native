@@ -22,6 +22,6 @@ GoogleAssistantModule.initialize(app);
 AlarmModule.initialize(app);
 
 app.listen(3001, () => console.log('Listening on Port 3001'));
-setTimeout(() => {
-    axios.post('https://home-control2.azurewebsites.net/api/radio/status'); // call server every 10 minutes to keep it from falling asleep (when it falls asleep, http call become slow)
-}, 10 * 60 * 1000);
+setInterval(() => {
+    axios.post('https://home-control2.azurewebsites.net/api/radio/status'); // call server every minute to keep it from falling asleep (when it falls asleep, http call become slow)
+}, 60 * 1000);

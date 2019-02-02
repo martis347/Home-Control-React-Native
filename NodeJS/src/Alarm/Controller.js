@@ -38,13 +38,13 @@ class AlarmController {
 		}, 60 * 1000);
 	}
 
-	async sync(data) {
+	sync(data) {
 		this.alarmTime = data.alarmTime;
 		this.features = data.features;
 		this.youtubeVideo = data.youtubeVideo;
 	}
 
-	async getState() {
+	getState() {
 		return {
 			alarmTime: this.alarmTime,
 			features: this.features,

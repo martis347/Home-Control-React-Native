@@ -6,14 +6,13 @@ export default {
   state: {
     alarmTime: undefined,
     features: [],
-    youtubeVideoId: undefined,
-    youtubeVideoTitle: undefined,
+    youtubeVideo: undefined,
     loading: false,
   },
   actions: {
     async load({ commit }) {
       commit('loadingStarted');
-      const data = await apiService.get('alarm/sync');
+      const data = await apiService.post('alarm/sync');
       commit('loadingEnd', data);
     },
     async disableAlarm({ commit, dispatch }) {
@@ -28,17 +27,20 @@ export default {
       commit('updateFeatures', features);
       await dispatch('sync');
     },
-    async updateYoutubeVideo({ commit, dispatch }, { id, title }) {
-      commit('updateYoutubeVideo', { id, title });
+    async updateYoutubeVideo({ commit, dispatch }, name) {
+      commit('updateYoutubeVideo', name);
       await dispatch('sync');
     },
     sync({ state }) {
       clearTimeout(debounceTimeout);
       debounceTimeout = setTimeout(() => {
         apiService.post('alarm/sync', {
-          alarmTime: state.alarmTime,
-          features: state.features,
-          youtubeVideoId: state.youtubeVideoId,
+          controller: 'alarm/sync',
+          data: {
+            alarmTime: state.alarmTime,
+            features: state.features,
+            youtubeVideo: state.youtubeVideo,
+          },
         });
       }, 800);
     },
@@ -53,15 +55,14 @@ export default {
     updateFeatures(state, features) {
       state.features = features;
     },
-    updateYoutubeVideo(state, { id, title }) {
-      state.youtubeVideoId = id;
-      state.youtubeVideoTitle = title;
+    updateYoutubeVideo(state, name) {
+      state.youtubeVideo = name;
     },
     loadingStarted(state) {
       state.loading = true;
     },
     loadingEnd(state, data) {
-      Object.assign(state, data);
+      Object.assign(state, data, { loading: false });
     },
   },
 };
