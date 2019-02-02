@@ -42,6 +42,7 @@ class AlarmController {
 				RadioController.turnOffRadio();
 				axios.get(`https://content.googleapis.com/youtube/v3/search?maxResults=1&type=video&q=${this.youtubeVideo}&part=snippet&key=AIzaSyDfLd9pl_DpU84NvwXznFkmUsjM9kiiAiI`)
 					.then(({ data }) => {
+						RadioController.transmitIR(149356799);
 						YoutubeController.startYoutube(data.items[0].id.videoId);
 					});
 			}
