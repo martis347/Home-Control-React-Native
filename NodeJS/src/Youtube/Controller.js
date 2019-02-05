@@ -56,8 +56,6 @@ class BrowserController {
 
 	async restart() {
 		await this.chrome.close();
-		await this.startBrowser(this);
-		await this.playVideo(this.state.currentlyPlaying.id);
 	}
 
 	async startBrowser(self) {
@@ -67,6 +65,10 @@ class BrowserController {
 		const page = await chrome.newPage();
 		this.currentPage = page;
 		await this.currentPage.goto('https://home-control2.azurewebsites.net/player');
+
+		if (this.state.currentlyPlaying) {
+			await this.playVideo(this.state.currentlyPlaying.id);
+		}
 	}
 }
 
