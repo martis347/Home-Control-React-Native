@@ -11,13 +11,12 @@ class AlarmController {
 
 		setInterval(() => {
 			const currentDate = new Date();
-			const timeMatches = this.alarmTime === `${currentDate.getHours()}:${currentDate.getMinutes()}`;
+			const currentTime = `${currentDate.getHours() < 10 ? `0${currentDate.getHours()}` : currentDate.getHours()}:${currentDate.getMinutes()}`;
 
-			console.log(`${this.alarmTime} === ${currentDate.getHours()}:${currentDate.getMinutes()}`);
-			if (!timeMatches) {
+			console.log(`${this.alarmTime} === ${currentTime}`);
+			if (!currentTime === this.alarmTime) {
 				return;
 			}
-			console.log('It"s a match!');
 
 			const featuresNames = this.features.map(f => f.name);
 			if (featuresNames.includes('lights.ceiling')) {

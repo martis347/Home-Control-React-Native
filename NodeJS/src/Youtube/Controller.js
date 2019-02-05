@@ -1,14 +1,5 @@
 const puppeteer = require('puppeteer-core');
 
-class Video {
-	constructor(id, title, description, thumbnail) {
-		this.id = id;
-		this.title = title;
-		this.description = description;
-		this.thumbnail = thumbnail;
-	}
-}
-
 class BrowserController {
 	constructor() {
 		this.state = {
@@ -16,6 +7,9 @@ class BrowserController {
 			history: [],
 			queue: [],
 		};
+
+		this.currentPage = undefined;
+		this.chrome = undefined;
 
 		this.startBrowser(this);
 	}
@@ -61,11 +55,14 @@ class BrowserController {
 	}
 
 	async restart() {
-		await this.currentPage.reload();
+		await this.chrome.close();
+		await this.startBrowser(self);
+		await this.playVideo(this.state.currentlyPlaying.id);
 	}
 
 	async startBrowser(self) {
 		const chrome = await puppeteer.launch({ headless: false, executablePath: '/usr/bin/chromium-browser' });
+		this.chrome = chrome;
 		chrome.on('disconnected', () => self.startBrowser(self));
 		const page = await chrome.newPage();
 		this.currentPage = page;
