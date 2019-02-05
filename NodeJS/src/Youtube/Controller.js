@@ -56,7 +56,7 @@ class BrowserController {
 
 	async restart() {
 		await this.chrome.close();
-		await this.startBrowser(self);
+		await this.startBrowser(this);
 		await this.playVideo(this.state.currentlyPlaying.id);
 	}
 
@@ -66,7 +66,7 @@ class BrowserController {
 		chrome.on('disconnected', () => self.startBrowser(self));
 		const page = await chrome.newPage();
 		this.currentPage = page;
-		this.currentPage.goto('https://home-control2.azurewebsites.net/player');
+		await this.currentPage.goto('https://home-control2.azurewebsites.net/player');
 	}
 }
 

@@ -14,7 +14,7 @@ class AlarmController {
 			const currentTime = `${currentDate.getHours() < 10 ? `0${currentDate.getHours()}` : currentDate.getHours()}:${currentDate.getMinutes()}`;
 
 			console.log(`${this.alarmTime} === ${currentTime}`);
-			if (!currentTime === this.alarmTime) {
+			if (currentTime !== this.alarmTime) {
 				return;
 			}
 
