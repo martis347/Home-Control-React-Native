@@ -10,8 +10,16 @@ class AlarmController {
 		this.youtubeVideo = undefined;
 
 		setInterval(() => {
+			const adjustTime = (number) => {
+				if (number < 10) {
+					return `0${number}`;
+				}
+
+				return number;
+			}
+
 			const currentDate = new Date();
-			const currentTime = `${currentDate.getHours() < 10 ? `0${currentDate.getHours()}` : currentDate.getHours()}:${currentDate.getMinutes()}`;
+			const currentTime = `${adjustTime(currentDate.getHours())}:${adjustTime(currentDate.getMinutes())}`;
 
 			console.log(`${this.alarmTime} === ${currentTime}`);
 			if (currentTime !== this.alarmTime) {
