@@ -47,7 +47,13 @@ void loop() {
     
     else if (results.value == 0x8E7708F) {
        Serial.println("Bluetooth");
+    } else {
+      uint32_t low = results.value % 0xFFFFFFFF;
+      uint32_t high = (results.value>> 32) % 0xFFFFFFFF;
+      Serial.println(high, HEX);
+      Serial.println(high);
+      Serial.println(low, HEX);
+      Serial.println(low);
     }
   }
 }
-

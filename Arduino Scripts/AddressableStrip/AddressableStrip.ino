@@ -7,7 +7,6 @@
 #include <WiFiClient.h>
 #include <WebSocketsServer.h>
 #include <ArduinoJson.h>
-#include <QueueArray.h>
 
 #define LED_PIN     5
 #define NUM_LEDS    100
@@ -16,8 +15,8 @@
 CRGB leds[NUM_LEDS];
 
 #define UPDATES_PER_SECOND 100
-const char* ssid = "2 Guys 1 Router";
-const char* password = "admin01ADF";
+const char* ssid = "Free WiFi 2.4GHz";
+const char* password = "16aukstas16";
 
 ESP8266WebServer server(80);
 WebSocketsServer webSocket = WebSocketsServer(81);
@@ -86,9 +85,9 @@ void loop() {
       handleChristmas2();
     } else if (palette == "Strobe") {
       handleStrobe();
-    } else if (palette == "Rain") {
+    } /*else if (palette == "Rain") {
       handleRain();
-    } else {
+    } */ else {
       startIndex = startIndex + 1;
       handlePalette(startIndex);
     }
@@ -275,7 +274,7 @@ struct CHSV_drop {
   int index;
 };
 
-QueueArray <CHSV_drop> rainValues;
+/*QueueArray <CHSV_drop> rainValues;
 void handleRain() {
   CHSV_drop drop;
   drop.color = CHSV(random(256), 255, 255);
@@ -294,7 +293,7 @@ void handleRain() {
   }
 
   FastLED.delay(5000 / speed);
-}
+}*/
 
 void SetupRedPalette()
 {

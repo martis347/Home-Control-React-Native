@@ -5,8 +5,8 @@
 #include <ESP8266WebServer.h>
 #include <WiFiClient.h>
 
-const char* ssid = "2 Guys 1 Router";
-const char* password = "admin01ADF";
+const char* ssid = "Free WiFi 2.4GHz";
+const char* password = "16aukstas16";
 
 ESP8266WebServer server(80);   //instantiate server at port 80 (http port)
 int pin = 5;
@@ -25,7 +25,7 @@ void setup() {
     delay(5000);
     ESP.restart();
   }
-  ArduinoOTA.setHostname("NodeMCU_LightsRelay"); // 192.168.31.243 - Wall & 192.168.31.244 - Ceiling
+  ArduinoOTA.setHostname("NodeMCU_LightsRelay"); // 192.168.0.152 - Ceiling & 192.168.0.138 - Wall
   ArduinoOTA.onStart([]() {
     Serial.println("Start");
   });

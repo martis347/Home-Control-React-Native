@@ -5,15 +5,14 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
-#include <IRsend.h>
- 
+#include <stdlib.h>
+
 // Replace with your network credentials
-const char* ssid = "2 Guys 1 Router";
-const char* password = "admin01ADF";
+const char* ssid = "Free WiFi 2.4GHz";
+const char* password = "16aukstas16";
  
 ESP8266WebServer server(80);
 IRsend irsend(4);  // An IR LED is controlled by GPIO pin 4 (D2)
-
 int IR_PIN = 2;
 void setup(void){
   delay(1000);
@@ -52,16 +51,32 @@ void setup(void){
   Serial.println(WiFi.localIP());
   irsend.begin();
   server.on("/transmit", [](){
-    server.send(200);
+    int count = server.arg("count").toInt();
     Serial.println(server.arg("code"));
-    irsend.sendNEC(server.arg("code").toInt(), 32);
+    uint64_t code = StringToLongLongInt(server.arg("code"));
+    
+    for (int i = 0; i < count; i++) 
+    {
+      irsend.sendSAMSUNG(code, 32);
+      irsend.sendNEC(code, 32);
+      delay(100);
+    }
+    server.send(200);
   });
   server.begin();
   Serial.println("Web server started!");
+}
+
+uint64_t StringToLongLongInt(String text) {
+  int n = text.length(); 
+  char charArray[n + 1];
+  strcpy(charArray, text.c_str());
+  uint64_t value = atoll(charArray);
+
+  return value;
 }
 
 void loop() {
   ArduinoOTA.handle();
   server.handleClient();
 }
-
