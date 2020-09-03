@@ -19,7 +19,7 @@
     "greenlock-express": "^2.3.2",
     "mplayer": "^2.1.0",
     "node-mplayer": "0.0.6",
-    "puppeteer": "^1.8.0",
+    "puppeteer": "^1.13.0",
     "puppeteer-core": "^1.8.0"
   },
   "devDependencies": {
